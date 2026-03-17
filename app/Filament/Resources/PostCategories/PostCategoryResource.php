@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class PostCategoryResource extends Resource
@@ -45,8 +46,11 @@ class PostCategoryResource extends Resource
     {
         return [
             'index' => ListPostCategories::route('/'),
-            'create' => CreatePostCategory::route('/create'),
-            'edit' => EditPostCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withCount('posts');
     }
 }
