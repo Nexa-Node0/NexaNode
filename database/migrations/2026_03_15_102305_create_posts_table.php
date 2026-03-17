@@ -20,9 +20,9 @@ return new class extends Migration
             $table->boolean('is_headline')->default(false);
             $table->json('tags')->nullable();
             $table->enum('status', ["Published", "Unpublished", "Draft"])->default("Published");
-            $table->datetime('pubslihed_date')->default(now());
+            $table->datetime('published_date')->default(now());
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('post_category_id')->constrained('post_categories_tbl')->cascadeOnDelete();
+            $table->foreignId('post_category_id')->constrained('post_categories')->cascadeOnDelete();
             $table->timestamps();
         });
     }
