@@ -67,7 +67,7 @@ class UserForm
                 Section::make('Information')
                     ->schema([
                         TextInput::make('name')
-                            ->autocapitalize()
+                            ->autocapitalize('words')
                             ->required(),
                         TextInput::make('email')
                             ->label('Email address')
@@ -100,7 +100,7 @@ class UserForm
                         TextInput::make('password_confirmation')
                             ->label('Confirm Password')
                             ->password()
-                            ->required(),
+                            ->required(fn($context)=> $context == 'create'),
                     ]),
             ]);
     }
