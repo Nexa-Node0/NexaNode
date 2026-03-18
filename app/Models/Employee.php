@@ -38,6 +38,18 @@ class Employee extends Model
         return $this->belongsTo(User::class);
     }
 
+    //has
+    public function addresses(){
+        return $this->hasOneThrough(
+            Address::class,
+            User::class,
+            'id',
+            'user_id',
+            'user_id',
+            'id'
+        );
+    }
+
     //Attribute functions
     public function getIsActiveAttribute()
     {

@@ -42,19 +42,26 @@ class UsersTable
             ])
             ->recordActions([
                 Action::make('verify')
-                    ->label('Verify')
+                    ->label(fn(User $user) => $user->email_verified_at === null ? 'Verify' : 'Unverify')
                     ->requiresConfirmation()
                     ->action(function (User $record) {
-                        // Update the model
-                        $record->markEmailAsVerified();
 
-                        // Show toast notification
-                        Notification::make()
-                            ->title('User verified successfully')
-                            ->success()
-                            ->send();
-                    })
-                    ->visible(fn(User $user) => $user->email_verified_at === null),
+                        $Notification = Notification::make()
+                            ->success();
+
+                        if ($record->email_verified_at === null) {
+                            $record->markEmailAsVerified();
+
+                            $Notification->title('User verified successfully')
+                                ->send();
+                        } else {
+                            $record->email_verified_at = null;
+                            $record->save();
+
+                            $Notification->title('User unverified successfully')
+                                ->send();
+                        }
+                    }),
                 EditAction::make(),
             ])
             ->toolbarActions([

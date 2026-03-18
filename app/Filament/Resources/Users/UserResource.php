@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Symfony\Component\Mime\Part\Multipart\RelatedPart;
 
 class UserResource extends Resource
 {
@@ -37,6 +38,7 @@ class UserResource extends Resource
         return [
             //
             'information' => RelationManagers\EmployeesRelationManager::class,
+            'address'     => RelationManagers\AddressRelationManager::class,
         ];
     }
 

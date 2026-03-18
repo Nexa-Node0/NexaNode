@@ -44,6 +44,7 @@ class EmployeeResource extends Resource
     {
         return [
             //
+            'address' => RelationManagers\AddressesRelationManager::class,
         ];
     }
 
