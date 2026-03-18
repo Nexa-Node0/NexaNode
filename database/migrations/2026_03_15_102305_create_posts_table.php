@@ -22,7 +22,7 @@ return new class extends Migration
             $table->enum('status', ["Published", "Unpublished", "Draft"])->default("Published");
             $table->datetime('pubslihed_date')->default(now());
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('post_category_id')->constrained('post_categories_tbl')->cascadeOnDelete();
+            $table->foreignId('post_category_id')->constrained('post_categories')->cascadeOnDelete();
             $table->timestamps();
         });
     }
