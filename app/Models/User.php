@@ -8,6 +8,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+// use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -31,6 +32,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'email_verified_at'
     ];
 
     /**
@@ -61,10 +63,19 @@ class User extends Authenticatable implements FilamentUser
     }
 
     public function canAccessPanel(Panel $panel): bool
-    {   
+    {
         return match($panel->getId()){
              'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
              default   => false
         };
+    //relations
+    //has
+    }
+    public function employee(){
+        return $this->hasOne(Employee::class);
+    }
+
+    public function address(){
+        return $this->hasOne(Address::class);
     }
 }
