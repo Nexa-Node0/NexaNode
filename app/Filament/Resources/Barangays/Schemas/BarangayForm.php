@@ -18,7 +18,7 @@ class BarangayForm
                 Select::make('country_id')
                     ->label('Country')
                     ->prefixIcon(Heroicon::GlobeAsiaAustralia)
-                    ->options(fn()=>Country::query()->pluck('name','id'))
+                    ->options(fn()=>Country::query()->orderBy('name')->pluck('name','id'))
                     ->searchable()
                     ->reactive()
                     ->afterStateUpdated(function($state, callable $set){
@@ -39,7 +39,7 @@ class BarangayForm
                     ->prefixIcon(Heroicon::BuildingOffice2)
                     ->options(function(callable $get){
                         $countryId = $get('country_id');
-                        return $countryId ? State::whereCountryId($countryId)->pluck('name','id') : [];
+                        return $countryId ? State::whereCountryId($countryId)->orderBy('name')->pluck('name','id') : [];
                     })
                     ->searchable()
                     ->reactive()
@@ -58,7 +58,7 @@ class BarangayForm
                     ->prefixIcon(Heroicon::HomeModern)
                     ->options(function(callable $get){
                         $stateId = $get('state_id');
-                        return $stateId ? City::whereStateId($stateId)->pluck('name','id') : [];
+                        return $stateId ? City::whereStateId($stateId)->orderBy('name')->pluck('name','id') : [];
                     })
                     ->reactive()
                     ->searchable()

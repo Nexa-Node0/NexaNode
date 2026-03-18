@@ -17,7 +17,7 @@ class CityForm
                 Select::make('country_id')
                     ->label('Country')
                     ->prefixIcon(Heroicon::GlobeAsiaAustralia)
-                    ->options(Country::pluck('name', 'id'))
+                    ->options(Country::orderBy('name')->pluck('name', 'id'))
                     ->reactive()
                     ->afterStateHydrated(function ($state, callable $set, $record) {
                         if ($record && $record->state) {
@@ -31,7 +31,7 @@ class CityForm
                 Select::make('state_id')
                     ->label('State')
                     ->prefixIcon(Heroicon::BuildingOffice2)
-                    ->options(fn(callable $get) => State::where('country_id', $get('country_id'))->pluck('name', 'id'))
+                    ->options(fn(callable $get) => State::where('country_id', $get('country_id'))->orderBy('name')->pluck('name', 'id'))
                     ->reactive()
                     ->searchable()
                     ->searchingMessage('Fetching available cities...')

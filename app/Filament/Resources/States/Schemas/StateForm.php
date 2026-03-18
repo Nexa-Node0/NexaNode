@@ -17,7 +17,9 @@ class StateForm
                 Select::make('country_id')
                     ->label('Country')
                     ->noOptionsMessage('Select A Country')
-                    ->relationship('country','name')
+                    ->relationship('country','name', modifyQueryUsing: function($query){
+                        $query->orderBy('name');
+                    })
                     ->preload()
                     ->searchable(),
                 TextInput::make('psgc_code'),
