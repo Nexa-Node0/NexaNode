@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\SkuGeneratorService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,6 +35,20 @@ class Product extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->sku)) {
+                $model->sku = SkuGeneratorService::generate();
+            }
+        });
+    }
 
     /**
      * Get the category this product belongs to.
