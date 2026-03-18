@@ -19,7 +19,7 @@ class UserLastSeen
         if(Auth::check()){
             $user = Auth::user();
 
-            $user->employee()->last_seen = now()->toDateTime();
+            $user->employee()->update(['last_seen'=>now()->toDateTime()]);
             // dd(now()->toDateTime());
         }
         return $next($request);

@@ -41,7 +41,7 @@ class Employee extends Model
     //Attribute functions
     public function getIsActiveAttribute()
     {
-        return $this->last_seen?->diffInMinutes(now()) > 5;
+        return $this->last_seen?->diffInMinutes(now()) < 5;
     }
 
     public function getFullnameAttribute(){
