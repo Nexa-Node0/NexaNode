@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\PostCategories;
 
-use App\Filament\Resources\PostCategories\Pages\CreatePostCategory;
-use App\Filament\Resources\PostCategories\Pages\EditPostCategory;
 use App\Filament\Resources\PostCategories\Pages\ListPostCategories;
 use App\Filament\Resources\PostCategories\Schemas\PostCategoryForm;
 use App\Filament\Resources\PostCategories\Tables\PostCategoriesTable;
@@ -18,13 +16,15 @@ use UnitEnum;
 
 class PostCategoryResource extends Resource
 {
+
     protected static ?string $model = PostCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'PostCategory';
+
     protected static string|UnitEnum|null $navigationGroup = 'Blog';
-    protected static ?string $navigationLabel = 'Categories';
+
     public static function form(Schema $schema): Schema
     {
         return PostCategoryForm::configure($schema);

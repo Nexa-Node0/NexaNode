@@ -28,8 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->authGuard('web')
             ->login()
-            ->plugins([FilamentShieldPlugin::make(),])
+            ->plugins([FilamentShieldPlugin::make()])
             ->plugin(FilamentShieldPlugin::make())
             ->colors([
                 'primary' => Color::Blue,

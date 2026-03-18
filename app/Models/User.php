@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -59,11 +60,11 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    // public function canAccessPanel(Panel $panel): bool
-    // {
-    //     return match($panel->getId()){
-    //         'super_admin'  => $this->hasAnyRole(['admin', 'super_admin']),    
-    //         'editor'       => $this->hasAnyRole(['author', 'junior_dev'])
-    //     };
-    // }
+    public function canAccessPanel(Panel $panel): bool
+    {   
+        return match($panel->getId()){
+             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
+             default   => false
+        };
+    }
 }

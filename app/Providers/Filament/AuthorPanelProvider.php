@@ -27,7 +27,7 @@ class AuthorPanelProvider extends PanelProvider
             ->id('author')
             ->path('author')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Author/Resources'), for: 'App\Filament\Author\Resources')
             ->discoverPages(in: app_path('Filament/Author/Pages'), for: 'App\Filament\Author\Pages')
