@@ -8,11 +8,13 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 
 class PostCategoriesTable
@@ -56,24 +58,19 @@ class PostCategoriesTable
                             ->send();
                     }),
                     
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Created At')
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Last modified at')
                     ->date('M d, Y')
                     ->sortable()
                     ->toggleable(true),
-                
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated At')
-                    ->date('M d, Y')
-                    ->sortable()
-                    ->toggleable(true)
+            
             ])
             
             ->defaultSort('created_at', 'desc')
             ->emptyStateIcon(Heroicon::Tag)
             ->emptyStateHeading('No categories yet')
             ->filters([
-                TernaryFilter::make('is_visible')->label('Active Status'),
+                TernaryFilter::make('is_visible')->label('Active Status')->default(true),
             ])
             ->recordActions([
                 ActionGroup::make([
