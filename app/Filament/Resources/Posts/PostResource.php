@@ -19,12 +19,14 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Bookmark;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentChartBar;
 
     protected static ?string $recordTitleAttribute = 'Post';
 
     protected static string|UnitEnum|null $navigationGroup = 'Blog';
     
+    protected static ?int $navigationSort = 1;
+
     public static function form(Schema $schema): Schema
     {
         return PostForm::configure($schema);
