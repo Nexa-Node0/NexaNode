@@ -1,6 +1,7 @@
 <?php
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -101,6 +102,15 @@ class UserForm
                             ->label('Confirm Password')
                             ->password()
                             ->required(fn($context)=> $context == 'create'),
+                    ]),
+
+
+                Section::make('roles')
+                    ->schema([
+                        Select::make('roles')
+                            ->required()
+                            ->relationship('roles','name')
+                            ->preload(),
                     ]),
             ]);
     }
