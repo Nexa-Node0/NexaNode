@@ -44,7 +44,8 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('projects')
                     ->label('View Projects')
                     ->icon(Heroicon::CalendarDateRange)
-                    ->url(fn()=>route('filament.project.pages.dashboard')),
+                    ->url(fn()=>route('filament.project.pages.dashboard'))
+                    ->visible(fn()=>auth()->user()->can('Navigation:ViewProjects')),
             ])
             ->pages([
                 Dashboard::class,
