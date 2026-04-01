@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Tenancy\RegisterTeam;
 use App\Http\Middleware\ProjectPanelMiddleware;
+use App\Models\Project;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -34,7 +36,8 @@ class ProjectPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->plugins([
-                FilamentShieldPlugin::make(),
+                FilamentShieldPlugin::make()
+                    ->scopeToTenant(false),
             ])
             ->navigationItems([
                 NavigationItem::make('return')
@@ -68,6 +71,9 @@ class ProjectPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            //tenants configuration
+            ->tenant(Project::class)
+            ->tenantRegistration(RegisterTeam::class);
     }
 }

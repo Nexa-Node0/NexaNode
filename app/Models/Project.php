@@ -2,12 +2,27 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\HasCurrentTenantLabel;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class Project extends Model  implements HasCurrentTenantLabel, HasName
 {
     use SoftDeletes;
+
+    //tenancy
+    public function getCurrentTenantLabel(): string
+    {
+        return $this->title;
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->title;
+    }
+
+
     //
     protected $fillable = [
         'title',
@@ -65,7 +80,7 @@ class Project extends Model
 
     // relationships
 
-    public function users(){
+    public function users(){//also tenant
         return $this->belongsToMany(User::class);
     }
 

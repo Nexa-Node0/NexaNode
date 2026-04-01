@@ -1,11 +1,13 @@
 <?php
-
 namespace App\Filament\Project\Resources\Projects\Tables;
 
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -63,7 +65,27 @@ class ProjectsTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+
+                ActionGroup::make([
+                    EditAction::make(),
+                    Action::make('join')
+                        ->label(fn($record) => $record->users()->whereKey(auth()->id())->exists() ? 'Leave' : 'Join')
+                        ->color(fn($record) => $record->users()->whereKey(auth()->id())->exists() ? 'danger' : 'success')
+                        ->action(function($record) {
+                            $user = auth()->user();
+                            $notif = Notification::make()->success();
+
+                            if ($record->users()->whereKey($user)->exists()) {
+                                $record->users()->detach($user);
+                                $notif->title('Successfully left the project');
+                            } else {
+                                $record->users()->attach($user);
+                                $notif->title('Successfully joined the project');
+                            }
+
+                            $notif->send();
+                        }),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

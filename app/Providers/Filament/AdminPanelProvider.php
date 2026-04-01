@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Facades\Filament;
 // use App\Http\Middleware\UserLastSeen;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -44,7 +45,11 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('projects')
                     ->label('View Projects')
                     ->icon(Heroicon::CalendarDateRange)
-                    ->url(fn()=>route('filament.project.pages.dashboard'))
+                    ->url(fn() =>
+                        ($tenant = Filament::getTenant() ?? auth()->user()?->projects()->first())
+                            ? route('filament.project.pages.dashboard', ['tenant' => $tenant])
+                            : '#'
+                        )
                     ->visible(fn()=>auth()->user()->can('Navigation:ViewProjects')),
             ])
             ->pages([
