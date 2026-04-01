@@ -48,6 +48,8 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 AdminStatsWidget::class,
             ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('10s')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
