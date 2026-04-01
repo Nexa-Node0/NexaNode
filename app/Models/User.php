@@ -67,4 +67,8 @@ class User extends Authenticatable implements FilamentUser
              default   => false
         };
     }
+
+    public function posts(){
+        return $this->hasMany(Post::class, 'user_id');
+    }
 }

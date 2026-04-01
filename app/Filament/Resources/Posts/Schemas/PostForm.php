@@ -23,7 +23,6 @@ class PostForm
                         ->afterStateUpdated(fn (Set $set, ?string $state) => 
                             $set('slug', Str::slug($state ?? ''))
                         ),
-                    
                     Forms\Components\TextInput::make('slug')
                         ->required()
                         ->columnSpanFull()

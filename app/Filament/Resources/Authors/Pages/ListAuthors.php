@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Authors\Pages;
 use App\Filament\Resources\Authors\AuthorsResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-
+use App\Filament\Widgets\TopAuthorWidget;
 class ListAuthors extends ListRecords
 {
     protected static string $resource = AuthorsResource::class;
@@ -14,6 +14,13 @@ class ListAuthors extends ListRecords
     {
         return [
             CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return[
+            TopAuthorWidget::class
         ];
     }
 }

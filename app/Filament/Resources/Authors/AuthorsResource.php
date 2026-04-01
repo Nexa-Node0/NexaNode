@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class AuthorsResource extends Resource
@@ -53,5 +54,10 @@ class AuthorsResource extends Resource
             'create' => CreateAuthors::route('/create'),
             'edit' => EditAuthors::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return User::role('author');
     }
 }

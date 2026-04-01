@@ -5,7 +5,7 @@ namespace App\Filament\Resources\PostCategories\Pages;
 use App\Filament\Resources\PostCategories\PostCategoryResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-
+use App\Filament\Widgets\PostCategoriesWidget;
 class ListPostCategories extends ListRecords
 {
     protected static string $resource = PostCategoryResource::class;
@@ -17,6 +17,13 @@ class ListPostCategories extends ListRecords
                 ->icon('heroicon-o-plus')
                 ->label('Add New Category')
             ,
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            PostCategoriesWidget::class
         ];
     }
 }
