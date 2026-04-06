@@ -4,14 +4,18 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AdminStatsWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Facades\Filament;
+// use App\Http\Middleware\UserLastSeen;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -40,6 +44,17 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            ->navigationItems([
+                NavigationItem::make('projects')
+                    ->label('View Projects')
+                    ->icon(Heroicon::CalendarDateRange)
+                    ->url(fn() =>
+                        ($tenant = Filament::getTenant() ?? auth()->user()?->projects()->first())
+                            ? route('filament.project.pages.dashboard', ['tenant' => $tenant])
+                            : '#'
+                        )
+                    ->visible(fn()=>auth()->user()->can('Navigation:ViewProjects')),
+            ])
             ->pages([
                 Dashboard::class,
             ])
@@ -60,6 +75,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                'update_last_seen',
             ])
             ->authMiddleware([
                 Authenticate::class,

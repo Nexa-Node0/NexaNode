@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -7,14 +6,18 @@ namespace App\Models;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasCurrentTenantLabel;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -31,6 +34,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'email_verified_at',
     ];
 
     /**
@@ -61,11 +65,39 @@ class User extends Authenticatable implements FilamentUser
     }
 
     public function canAccessPanel(Panel $panel): bool
-    {   
-        return match($panel->getId()){
-             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
-             default   => false
+    {
+        return match ($panel->getId()) {
+            'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
+            'project' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
+            default => false
         };
+        //relations
+        //has
+    }
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
+
+    //Tenants Project
+    public function projects(){
+        return $this->belongsToMany(Project::class);
+    }
+
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->projects;
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->projects()->whereKey($tenant)->exists();
     }
 
     public function posts(){

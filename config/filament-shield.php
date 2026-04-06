@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 return [
 
@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'shield_resource' => [
-        'slug' => 'shield/roles',
+    'shield_resource'      => [
+        'slug'            => 'shield/roles',
         'show_model_path' => true,
-        'cluster' => null,
-        'tabs' => [
-            'pages' => true,
-            'widgets' => true,
-            'resources' => true,
-            'custom_permissions' => false,
+        'cluster'         => null,
+        'tabs'            => [
+            'pages'              => true,
+            'widgets'            => true,
+            'resources'          => true,
+            'custom_permissions' => true,
         ],
     ],
 
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'tenant_model' => null,
+    'tenant_model'         => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'auth_provider_model' => 'App\\Models\\User',
+    'auth_provider_model'  => 'App\\Models\\User',
 
     /*
     |--------------------------------------------------------------------------
@@ -64,12 +64,12 @@ return [
     |
     */
 
-    'super_admin' => [
-        'enabled' => true,
-        'name' => 'super_admin',
-        'define_via_gate' => false,
-        'intercept_gate' => 'before',
-    ],
+        'super_admin'          => [
+            'enabled'         => true,
+            'name'            => 'super_admin',
+            'define_via_gate' => true,
+            'intercept_gate'  => 'before',
+        ],
 
     /*
     |--------------------------------------------------------------------------
@@ -82,9 +82,9 @@ return [
     |
     */
 
-    'panel_user' => [
+    'panel_user'           => [
         'enabled' => true,
-        'name' => 'panel_user',
+        'name'    => 'panel_user',
     ],
 
     /*
@@ -100,12 +100,11 @@ return [
     |
     */
 
-    'permissions' => [
+    'permissions'          => [
         'separator' => ':',
-        'case' => 'pascal',
-        'generate' => true,
+        'case'      => 'pascal',
+        'generate'  => true,
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Policies
@@ -117,11 +116,11 @@ return [
     |
     */
 
-    'policies' => [
-        'path' => app_path('Policies'),
-        'merge' => true,
-        'generate' => true,
-        'methods' => [
+    'policies'             => [
+        'path'                     => app_path('Policies'),
+        'merge'                    => true,
+        'generate'                 => true,
+        'methods'                  => [
             'viewAny', 'view', 'create', 'update', 'delete', 'restore',
             'forceDelete', 'forceDeleteAny', 'restoreAny', 'replicate', 'reorder',
         ],
@@ -146,9 +145,9 @@ return [
     |
     */
 
-    'localization' => [
+    'localization'         => [
         'enabled' => false,
-        'key' => 'filament-shield::filament-shield.resource_permission_prefixes_labels',
+        'key'     => 'filament-shield::filament-shield.resource_permission_prefixes_labels',
     ],
 
     /*
@@ -162,9 +161,9 @@ return [
     |
     */
 
-    'resources' => [
+    'resources'            => [
         'subject' => 'model',
-        'manage' => [
+        'manage'  => [
             \BezhanSalleh\FilamentShield\Resources\Roles\RoleResource::class => [
                 'viewAny',
                 'view',
@@ -189,9 +188,9 @@ return [
     |
     */
 
-    'pages' => [
+    'pages'                => [
         'subject' => 'class',
-        'prefix' => 'view',
+        'prefix'  => 'view',
         'exclude' => [
             \Filament\Pages\Dashboard::class,
         ],
@@ -208,9 +207,9 @@ return [
     |
     */
 
-    'widgets' => [
+    'widgets'              => [
         'subject' => 'class',
-        'prefix' => 'view',
+        'prefix'  => 'view',
         'exclude' => [
             \Filament\Widgets\AccountWidget::class,
             \Filament\Widgets\FilamentInfoWidget::class,
@@ -228,7 +227,10 @@ return [
     |
     */
 
-    'custom_permissions' => [],
+    'custom_permissions'   => [
+        'Navigation:ViewProjects' => "Navigation View Projects",
+        'Navigation:ReturnAdmin' => 'Return Admin Panel'
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -241,10 +243,10 @@ return [
     |
     */
 
-    'discovery' => [
-        'discover_all_resources' => false,
-        'discover_all_widgets' => false,
-        'discover_all_pages' => false,
+    'discovery'            => [
+        'discover_all_resources' => true,
+        'discover_all_widgets'   => true,
+        'discover_all_pages'     => true,
     ],
 
     /*
