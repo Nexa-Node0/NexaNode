@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DepartmentResource extends Resource
 {
@@ -21,7 +22,7 @@ class DepartmentResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::QueueList;
 
     protected static ?string $recordTitleAttribute = 'name';
-
+    protected static string|UnitEnum|null $navigationGroup = "HR";
     public static function form(Schema $schema): Schema
     {
         return DepartmentForm::configure($schema);
