@@ -34,14 +34,14 @@ class InventoryStatsWidget extends BaseWidget
                 ->descriptionIcon($lowStockCount > 0 ? 'heroicon-m-exclamation-triangle' : 'heroicon-m-check-circle')
                 ->color($lowStockCount > 0 ? 'danger' : 'success'),
 
-            Stat::make('Inventory Value', '$' . Number::format($totalValue, precision: 2))
+            Stat::make('Inventory Value', '₱' . Number::format($totalValue, precision: 2))
                 ->description('Total stock value')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('warning'),
 
             Stat::make('Movements (This Month)', $thisMonthMovements)
                 ->description('Stock transactions')
-                ->descriptionIcon('heroicon-m-arrow-right-left')
+                ->descriptionIcon('heroicon-m-arrow-path')
                 ->color('primary'),
         ];
     }
