@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
-use App\Models\ProductCategory;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ProductForm
@@ -15,7 +14,7 @@ class ProductForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
-            ->schema([
+            ->components([
                 Section::make('Basic Information')
                     ->schema([
                         TextInput::make('name')
