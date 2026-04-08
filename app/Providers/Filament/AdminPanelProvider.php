@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandLogo(Storage::url('logos/nexa_node_transparent.png'))
             ->brandLogoHeight('80px')
+            ->favicon(Storage::url('logos/nexa_node_darkmode.png'))
             ->brandName('Nexa Node')
             ->authGuard('web')
             ->login()

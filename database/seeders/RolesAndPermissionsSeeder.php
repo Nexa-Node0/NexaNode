@@ -7,6 +7,9 @@ use Illuminate\Database\Seeder;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 class RolesAndPermissionsSeeder extends Seeder
 {
     /**
@@ -16,17 +19,28 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $super_admin = Role::updateOrCreate(['name' => 'super_admin'])->givePermissionTo(Permission::all());
-        
-        $super_admin_user = \App\Models\User::inRandomOrder()->first();
+        $defaultRoles = [
+            ['super_admin', 0], 
+            ['admin', 1], 
+            ['author', 2]
+        ];
+       
+        foreach($defaultRoles as $roleData){
 
-        $super_admin_user->update([
-            'name' => 'super_admin',
-            'email' => 'super_admin@gmail.com'
-        ]);
+            $role = $roleData[0];
+            $accessLevel = $roleData[1];
 
-        $super_admin_user->assignRole('super_admin');
-
-        \App\Models\User::findOrFail(2)?->assignRole('author');
+            $rolePermission = Role::updateOrCreate(['name' => $role]);
+            
+            if($accessLevel == 0){
+                $rolePermission->givePermissionTo(Permission::all());
+            }
+            
+           User::create([
+                'name'     => $role,
+                'email'    => "$role@nexanode.com",
+                'password' => Hash::make('password')
+            ])->assignRole($role);
+        }
     }
 }
