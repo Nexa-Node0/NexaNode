@@ -2,11 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::redirect('/','/admin/login');
-Route::get('login',function(){
-    return redirect()->route('filament.admin.auth.login');
-})->name('login');
+Route::get('/', App\Livewire\Homepage::class)->name('homepage');
+Route::get('/blogs', App\Livewire\Blog\PostIndex::class)->name('blogs.index');

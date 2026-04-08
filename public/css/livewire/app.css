@@ -1,0 +1,167 @@
+html,
+body {
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: smooth;
+}
+
+:root {
+    --secondary-color: #3f3e3e;
+    --primary-font: inter;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+* {
+    user-select: none;
+    -webkit-user-select: none;
+}
+.primary-font {
+    font-family: "Inter";
+}
+.secondary-font {
+    font-family: "Bricolage Grotesque";
+}
+
+.photos-grid {
+    grid-template-areas:
+        "photo_1 photo_2"
+        "photo_1 photo_3";
+    grid-template-columns: repeat(2, 1fr);
+}
+
+button,
+a,
+input {
+    cursor: pointer;
+    font-family: var(--primary-font);
+}
+
+.staggerRight {
+    opacity: 0;
+    transform: translateX(40px);
+}
+.staggerRight {
+    transition: none;
+}
+
+.services-grid {
+    grid-template-rows: 50px 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "col-1"
+        "col-3"
+        "col-2";
+}
+
+@media screen and (min-width: 1024px) {
+    .photos-grid {
+        grid-template-areas:
+            "photo_1 photo_2"
+            "photo_1 photo_3";
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .services-grid {
+        grid-template-areas: "col-1 col-2 col-3";
+        grid-template-columns: 0.5fr 1fr 0.5fr;
+        grid-template-rows: 1fr;
+    }
+}
+
+@media screen and (min-width: 499px) and (max-width: 799px) {
+    .services-grid {
+        grid-template-columns: 1fr 0.5fr;
+        grid-template-rows: 30px 1fr;
+        grid-template-areas:
+            "col-1 col-1"
+            "col-2 col-3";
+    }
+}
+
+@media screen and (min-width: 460px) and (max-width: 1023px) {
+    .photos-grid {
+        grid-template-areas: "photo_1 photo_2 photo_3";
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@font-face {
+    font-display: block;
+    font-family: Mori;
+    font-style: normal;
+    font-weight: 600;
+    src: url(https://assets.codepen.io/16327/PPMori-Regular.woff) format("woff");
+}
+
+.text-scramble__content {
+    max-width: 40ch;
+    font-size: max(2rem, min(5.69579vw + 0.665049rem, 3rem));
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-top: max(2rem, min(2.0712vw + 1.51456rem, 4rem));
+    padding-bottom: 1.1em;
+    position: relative;
+}
+
+.text-scramble__text {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.text-scramble__text span {
+    word-break: break-word;
+}
+
+.text-scramble__text img {
+    display: inline-block;
+    height: 0.9em;
+    width: auto;
+}
+
+.introduction-thumbnail-1 {
+    background-image: url("/images/thumbnails/introduction-card-1.jpg");
+}
+
+.introduction-thumbnail-2 {
+    background-image: url("/images/thumbnails/introduction-card-2.jpg");
+}
+.introduction-thumbnail-3 {
+    background-image: url("/images/thumbnails/introduction-card-3.jpg ");
+}
+
+.insight-thumbnail-1 {
+    background-image: url("/images/thumbnails/insights-card-1.jpg");
+}
+
+.insight-thumbnail-2 {
+    background-image: url("/images/thumbnails/insights-card-2.jpg");
+}
+
+.insight-thumbnail-3 {
+    background-image: url("/images/thumbnails/insights-card-3.jpg");
+}
+
+.dev-profile-jose {
+    background-image: url("/images/profiles/jose.png");
+}
+
+.dev-profile-dharjay {
+    background-image: url("/images/profiles/dj.png");
+}
+
+.dev-profile-jericho {
+    background-image: url("/images/profiles/jericho.png");
+}
+
+.dev-profile-rj {
+    background-image: url("/images/profiles/rj.png");
+}

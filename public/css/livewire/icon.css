@@ -1,0 +1,23 @@
+.icon-laravel {
+    background-image: url("/images/icons/laravel.png");
+}
+
+.icon-repo {
+    background-image: url("/images/icons/repo.png");
+}
+
+.icon-github {
+    background-image: url("/images/icons/github.png");
+}
+
+.icon-js {
+    background-image: url("/images/icons/js.png");
+}
+
+.icon-mysql {
+    background-image: url("/images/icons/mysql.png");
+}
+
+.icon-tailwind {
+    background-image: url("/images/icons/tailwind.png");
+}
