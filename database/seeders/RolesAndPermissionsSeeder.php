@@ -18,15 +18,15 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $super_admin = Role::updateOrCreate(['name' => 'super_admin'])->givePermissionTo(Permission::all());
         
-        // $super_admin_user = \App\Models\User::inRandomOrder()->first();
+        $super_admin_user = \App\Models\User::inRandomOrder()->first();
 
-        // $super_admin_user->update([
-        //     'name' => 'super_admin',
-        //     'email' => 'super_admin@gmail.com'
-        // ]);
+        $super_admin_user->update([
+            'name' => 'super_admin',
+            'email' => 'super_admin@gmail.com'
+        ]);
 
-        // $super_admin_user->assignRole('super_admin');
+        $super_admin_user->assignRole('super_admin');
 
-        \App\Models\User::findOrFail(2)?->assignRole('author');
+        // \App\Models\User::findOrFail(1)?->assignRole('super_admin');
     }
 }
