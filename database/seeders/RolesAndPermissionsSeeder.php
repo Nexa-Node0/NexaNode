@@ -27,6 +27,6 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $super_admin_user->assignRole('super_admin');
 
-        // \App\Models\User::findOrFail(2)?->assignRole('author');
+        \App\Models\User::findOrFail(2)?->assignRole('author');
     }
 }
