@@ -27,6 +27,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Support\Facades\Storage;
+use Outerweb\FilamentSettings\SettingsPlugin;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -40,14 +42,14 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(Storage::url('logos/nexa_node_darkmode.png'))
             ->brandName('Nexa Node')
             ->authGuard('web')
-            ->navigationGroups([
-                'Dashboard',
-                'Filament Shield',
-                'HR',
-                'Inventory',
-                'Location',
-                'Blog'
-            ])
+            // ->navigationGroups([
+            //     'Dashboard',
+            //     'Filament Shield',
+            //     'HR',
+            //     'Inventory',
+            //     'Location',
+            //     'Blog'
+            // ])
             ->login()
             ->plugins([
                 FilamentShieldPlugin::make()
@@ -59,7 +61,8 @@ class AdminPanelProvider extends PanelProvider
                     ->checkboxListColumns([
                         'default' => 1,
                         'lg' => 2
-                    ])
+                    ]),
+                SettingsPlugin::make()
             ])
             ->colors([
                 'primary' => Color::Blue,
