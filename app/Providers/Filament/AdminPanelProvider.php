@@ -3,6 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AdminStatsWidget;
+use App\Filament\Widgets\InventoryStatsWidget;
+use App\Filament\Widgets\LowStockProductsWidget;
+use App\Filament\Widgets\RecentStockMovementsWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Facades\Filament;
 // use App\Http\Middleware\UserLastSeen;
@@ -61,7 +64,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                InventoryStatsWidget::class,
                 AccountWidget::class,
+                LowStockProductsWidget::class,
+                RecentStockMovementsWidget::class,
                 AdminStatsWidget::class,
             ])
             ->databaseNotifications()
