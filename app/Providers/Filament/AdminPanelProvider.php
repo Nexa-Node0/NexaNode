@@ -40,9 +40,27 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(Storage::url('logos/nexa_node_darkmode.png'))
             ->brandName('Nexa Node')
             ->authGuard('web')
+            ->navigationGroups([
+                'Dashboard',
+                'Filament Shield',
+                'HR',
+                'Inventory',
+                'Location',
+                'Blog'
+            ])
             ->login()
-            ->plugins([FilamentShieldPlugin::make()])
-            ->plugin(FilamentShieldPlugin::make())
+            ->plugins([
+                FilamentShieldPlugin::make()
+                    ->gridColumns([
+                        'default' => 1,
+                        'lg' => 2
+                    ])
+                    ->sectionColumnSpan(1)
+                    ->checkboxListColumns([
+                        'default' => 1,
+                        'lg' => 2
+                    ])
+            ])
             ->colors([
                 'primary' => Color::Blue,
             ])

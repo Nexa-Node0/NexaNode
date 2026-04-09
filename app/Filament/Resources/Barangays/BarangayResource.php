@@ -22,7 +22,7 @@ class BarangayResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Home;
 
     protected static ?string $recordTitleAttribute = 'name';
-
+    protected static ?string $label = "Streets";
     protected static string|UnitEnum|null $navigationGroup = 'Location';
     protected static ?int $navigationSort = 4;
 

@@ -15,4 +15,12 @@ class ListStockMovements extends ListRecords
             \Filament\Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Widgets\RecentStockMovementsWidget::class,
+            \App\Filament\Widgets\LowStockProductsWidget::class
+        ];
+    }
 }

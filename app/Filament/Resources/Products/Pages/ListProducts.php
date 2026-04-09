@@ -15,4 +15,11 @@ class ListProducts extends ListRecords
             \Filament\Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+             \App\Filament\Widgets\InventoryStatsWidget::class
+        ];  
+    }
 }

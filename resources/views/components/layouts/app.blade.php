@@ -6,11 +6,6 @@
 
     <title>{{ config('app.name', 'Nexa Node') }}</title>
     <link rel="shortcut icon" href="{{ Storage::url('logos/nexa_node_darkmode.png') }}" type="image/x-icon">
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css"
-      rel="stylesheet"
-      type="text/css"
-    />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,17 +19,16 @@
     />
 
     <!-- Styles / Scripts -->
-    <link rel="stylesheet" href="{{ asset('css/livewire/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/livewire/overflow.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/livewire/icon.css') }}">
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
+    <link rel="stylesheet" href="{{ asset('css/livewire/app.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/livewire/overflow.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/livewire/icon.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/livewire/daisyui.css') }}" type="text/css" />
 
     @livewireStyles
 </head>
 
 <body>
+
     @include('includes.navbar')
     {{ $slot }}
     @include('includes.footer')
