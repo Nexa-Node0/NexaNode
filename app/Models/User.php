@@ -78,4 +78,13 @@ class User extends Authenticatable implements FilamentUser
     public function address(){
         return $this->hasOne(Address::class);
     }
+
+    public function projects(){
+        return $this->belongsToMany(Project::class)
+            ->withTimestamps();
+    }
+
+    public function project(){
+        return $this->hasMany(Project::class,'supervisor_id',);
+    }
 }
