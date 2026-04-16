@@ -13,20 +13,24 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Section;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProjectsTable
 {
@@ -42,6 +46,10 @@ class ProjectsTable
                                 $q->where('users.id', $user->id);
                             });
                     });
+                } else {
+                    $query->withoutGlobalScopes([
+                        SoftDeletingScope::class,
+                    ]);
                 }
                 return $query->orderByDesc('id');
             })
@@ -111,6 +119,14 @@ class ProjectsTable
                     ->color(fn($state) => $state->color()),
             ])
             ->filters([
+                //filter for trash
+                TrashedFilter::make()
+                    ->visible(function (): bool {
+                        $user = auth()->user();
+
+                        return $user->can('ForceDelete:Project') || $user->can('Restore:Project');
+                    }),
+
                 //filter for statuses
                 SelectFilter::make('status')
                     ->multiple()
@@ -195,16 +211,21 @@ class ProjectsTable
             ])
             ->recordActions([
 
+                ForceDeleteAction::make()
+                    ->requiresConfirmation(),
+                RestoreAction::make()
+                    ->requiresConfirmation(),
+
                 ActionGroup::make([
                     EditAction::make(),
                     DeleteAction::make()
                         ->requiresConfirmation(),
                     Action::make('approve_status')
                         ->label('Approve Project')
-                        ->action(function($record){
-                            $notif =  Notification::make();
+                        ->action(function ($record) {
+                            $notif  = Notification::make();
                             $status = $record->approved_status;
-                            if($status == ApprovedStatus::Approved){
+                            if ($status == ApprovedStatus::Approved) {
                                 $notif->warning()
                                     ->title('This Project is already approved')
                                     ->send();
@@ -219,25 +240,24 @@ class ProjectsTable
                                 ->title('Project has been approved!!')
                                 ->send();
                         })
-                        ->color(fn($record)=>$record->approved_status == ApprovedStatus::Approved ? 'danger' : 'info'),
-                        // ->hidden(fn($record): bool => $record->approved_status !== ApprovedStatus::Approved),
+                        ->color(fn($record) => $record->approved_status == ApprovedStatus::Approved ? 'danger' : 'info'),
+                    // ->hidden(fn($record): bool => $record->approved_status !== ApprovedStatus::Approved),
                     Action::make('change_status')
                         ->label('Change Status')
                         ->requiresConfirmation()
                         ->form([
                             Select::make('status')
-                                ->options(fn()=>EnumHelper::toArray(ProjectStatus::class))
-                                ->default(fn($record)=>$record->status)
-                                ->selectablePlaceholder(false)
+                                ->options(fn() => EnumHelper::toArray(ProjectStatus::class))
+                                ->default(fn($record) => $record->status)
+                                ->selectablePlaceholder(false),
                         ])
-                        ->action(function($record, array $data){
+                        ->action(function ($record, array $data) {
                             $old = $record->status;
                             $new = $data['status'];
 
                             $notif = Notification::make();
 
-                            if($old->value == $new)
-                            {
+                            if ($old->value == $new) {
                                 $notif->warning()
                                     ->title('Unchanged')
                                     ->body('Please pick a different status from before')
@@ -250,7 +270,7 @@ class ProjectsTable
 
                             $notif->success()
                                 ->title('Status Updated')
-                                ->body('Staus changed from '.$old->value.' to '.$new)
+                                ->body('Staus changed from ' . $old->value . ' to ' . $new)
                                 ->send();
                         }),
 
@@ -259,16 +279,16 @@ class ProjectsTable
                         ->requiresConfirmation()
                         ->form([
                             Select::make('priority')
-                                ->options(fn()=>EnumHelper::toArray(Priority::class))
-                                ->default(fn($record)=>$record->priority)
-                                ->selectablePlaceholder(false)
+                                ->options(fn() => EnumHelper::toArray(Priority::class))
+                                ->default(fn($record) => $record->priority)
+                                ->selectablePlaceholder(false),
                         ])
-                        ->action(function($record, array $data){
+                        ->action(function ($record, array $data) {
                             $old = $record->priority;
                             $new = $data['priority'];
 
                             $notif = Notification::make();
-                            if($old->value == $new){
+                            if ($old->value == $new) {
                                 $notif->warning()
                                     ->title('Please select another priority')
                                     ->send();
@@ -281,7 +301,7 @@ class ProjectsTable
 
                             $notif->success()
                                 ->title('Priority successfully changed')
-                                ->body('Priority changed from '.$old->value.' to '.$new)
+                                ->body('Priority changed from ' . $old->value . ' to ' . $new)
                                 ->send();
                         }),
 
@@ -290,16 +310,16 @@ class ProjectsTable
                         ->requiresConfirmation()
                         ->form([
                             Select::make('approved_status')
-                                ->options(fn()=>EnumHelper::toArray(ApprovedStatus::class))
-                                ->default(fn($record)=>$record->approved_status)
-                                ->selectablePlaceholder(false)
+                                ->options(fn() => EnumHelper::toArray(ApprovedStatus::class))
+                                ->default(fn($record) => $record->approved_status)
+                                ->selectablePlaceholder(false),
                         ])
-                        ->action(function($record, array $data){
+                        ->action(function ($record, array $data) {
                             $old = $record->approved_status;
                             $new = $data['approved_status'];
 
                             $notif = Notification::make();
-                            if($old->value == $new){
+                            if ($old->value == $new) {
                                 $notif->warning()
                                     ->title('Please select another status')
                                     ->send();
@@ -312,75 +332,22 @@ class ProjectsTable
 
                             $notif->success()
                                 ->title('Approved status successfully changed')
-                                ->body('Approved status changed from '.$old->value.' to '.$new)
+                                ->body('Approved status changed from ' . $old->value . ' to ' . $new)
                                 ->send();
-                        })
+                        }),
                 ])
-                    ->icon('heroicon-m-cog'),
+                    ->icon('heroicon-m-cog')
+                    ->visible(fn($record): bool => $record->deleted_at == null),
 
-                Action::make('viewDetails')
-                    ->label('View')
-                    ->icon(Heroicon::OutlinedEye)
-                    ->modalHeading(fn($record) => $record->title)
-                    ->infolist([
-                        Section::make()
-                            ->schema([
-                                TextEntry::make('description')
-                                    ->columnSpanFull(),
-                            ]),
-
-                        Section::make()
-                            ->columns(3)
-                            ->schema([
-                                TextEntry::make('status')
-                                    ->badge()
-                                    ->icon(fn($state) => $state->icon())
-                                    ->color(fn($state) => $state->color()),
-                                TextEntry::make('priority')
-                                    ->badge()
-                                    ->color(fn($state) => $state->color()),
-                                TextEntry::make('approved_status')
-                                    ->label('Approval')
-                                    ->icon(fn($state) => $state->icon())
-                                    ->formatStateUsing(fn($state, $record) => $state == ApprovedStatus::Approved ? $state->name . " : " . Carbon::parse($record->approved_at)->format('D M d, Y h:i A') : $state->name)
-                                    ->badge()
-                                    ->color(fn($state) => $state->color()),
-                            ]),
-
-                        Section::make()
-                            ->columns(3)
-                            ->schema([
-                                TextEntry::make('start_date')
-                                    ->date(),
-                                TextEntry::make('supervisor')
-                                    ->label('Supervisor')
-                                    ->formatStateUsing(fn($state) => $state->name)
-                                    ->url(fn($state) => \App\Filament\Resources\Users\UserResource::getUrl('edit', ['record' => $state->id])),
-                                TextEntry::make('users_count')
-                                    ->label('Team Members')
-                                    ->state(fn($record) => $record->users->count()),
-                            ]),
-
-                        Section::make('Financials')
-                            ->columns(2)
-                            ->schema([
-                                TextEntry::make('budget_amount')
-                                    ->label('Budget')
-                                    ->money('PHP')
-                                    ->color('success'),
-                                TextEntry::make('actual_cost')
-                                    ->label('Actual Cost')
-                                    ->money('PHP')
-                                    ->color('danger'),
-                            ]),
-                    ])
-                    ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Close'),
-
+                ViewAction::make(),
             ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make()
+                        ->requiresConfirmation(),
+                    RestoreBulkAction::make()
+                        ->requiresConfirmation(),
                 ]),
             ]);
     }

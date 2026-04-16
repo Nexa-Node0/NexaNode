@@ -23,7 +23,7 @@ return [
             'pages' => true,
             'widgets' => true,
             'resources' => true,
-            'custom_permissions' => false,
+            'custom_permissions' => true,
         ],
     ],
 
@@ -228,7 +228,15 @@ return [
     |
     */
 
-    'custom_permissions' => [],
+    'custom_permissions' => [
+        'viewAny:Task' => 'Task | View Any',
+        'view:Task' => 'Task | View',
+        'create:Task' => 'Task | Create',
+        'update:Task' => 'Task | Update',
+        'delete:Task' => 'Task | Delete',
+        'restore:Task' => 'Task | Restore',
+        'forceDelete:Task' => 'Task | Force Delete',
+    ],
 
     /*
     |--------------------------------------------------------------------------

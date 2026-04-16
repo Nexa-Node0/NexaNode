@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             PSGCSeeder::class,
             ProjectSeeder::class,
+            TaskSeeder::class,
         ]);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Enums;
 
+use App\Helpers\EnumHelper;
+
 enum ProjectStatus: string {
     case Completed  = 'completed';
     case OnProgress = 'on_progress';
@@ -34,5 +36,10 @@ enum ProjectStatus: string {
             self::Failed     => 'danger',
             self::Draft      => 'secondary',
         };
+    }
+
+    public static function toArray(): array
+    {
+        return EnumHelper::toArray(self::class);
     }
 }

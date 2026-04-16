@@ -10,6 +10,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 // use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -86,5 +87,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function project(){
         return $this->hasMany(Project::class,'supervisor_id',);
+    }
+
+    public function tasks(): HasMany{
+        return $this->hasMany(Task::class,'assigned_to');
     }
 }

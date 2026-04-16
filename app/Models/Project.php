@@ -6,6 +6,7 @@ use App\Enums\Priority;
 use App\Enums\ProjectStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -64,7 +65,8 @@ class Project extends Model
             }
 
             if ($project->approved_status === ApprovedStatus::Approved) {
-                $project->approved_at = now();
+                if($project->isDirty('status'))
+                    $project->approved_at = now();
             } else {
                 $project->approved_at = null;
             }
@@ -102,5 +104,9 @@ class Project extends Model
 
     public function usersCount(){
         return $this->users()->count();
+    }
+
+    public function tasks(): HasMany{
+        return $this->hasMany(Task::class);
     }
 }
