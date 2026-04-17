@@ -28,28 +28,30 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Support\Facades\Storage;
 use Outerweb\FilamentSettings\SettingsPlugin;
-
+use Outerweb\Settings\Facades\Setting;
 class AdminPanelProvider extends PanelProvider
 {
+
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandLogo(Storage::url('logos/nexa_node_transparent.png'))
+            ->brandLogo(Storage::url(Setting::get('general.brand_logo')))
+            ->favicon(Storage::url(Setting::get('general.favicon')))
+            ->brandName(Setting::get('general.brand_name', config('app.name')))
             ->brandLogoHeight('80px')
-            ->favicon(Storage::url('logos/nexa_node_darkmode.png'))
-            ->brandName('Nexa Node')
             ->authGuard('web')
-            // ->navigationGroups([
-            //     'Dashboard',
-            //     'Filament Shield',
-            //     'HR',
-            //     'Inventory',
-            //     'Location',
-            //     'Blog'
-            // ])
+            ->navigationGroups([
+                'Dashboard',
+                'Filament Shield',
+                'HR',
+                'Inventory',
+                'Location',
+                'Blog',
+                'Settings'
+            ])
             ->login()
             ->plugins([
                 FilamentShieldPlugin::make()
