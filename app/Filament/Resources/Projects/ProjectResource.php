@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Projects;
 
 use App\Filament\Resources\ProjectResource\Pages\ViewProject;
@@ -10,7 +9,6 @@ use App\Filament\Resources\Projects\Schemas\ProjectForm;
 use App\Filament\Resources\Projects\Tables\ProjectsTable;
 use App\Models\Project;
 use BackedEnum;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -45,10 +43,17 @@ class ProjectResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListProjects::route('/'),
+            'index'  => ListProjects::route('/'),
             'create' => CreateProject::route('/create'),
-            'edit' => EditProject::route('/{record}/edit'),
-            'view'=> ViewProject::route('/{record}/view'),
+            'edit'   => EditProject::route('/{record}/edit'),
+            'view'   => ViewProject::route('/{record}/view'),
         ];
     }
+
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         ProjectStatWidget::class,
+    //     ];
+    // }
 }
