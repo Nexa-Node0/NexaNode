@@ -34,12 +34,15 @@ class AdminPanelProvider extends PanelProvider
 
     public function panel(Panel $panel): Panel
     {
+        $brandLogo = Setting::get('general.brand_logo');
+        $favicon = Setting::get('general.favicon');
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandLogo(Storage::url(Setting::get('general.brand_logo')))
-            ->favicon(Storage::url(Setting::get('general.favicon')))
+            ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
+            ->favicon($favicon ? Storage::url($favicon) : null)
             ->brandName(Setting::get('general.brand_name', config('app.name')))
             ->brandLogoHeight('80px')
             ->authGuard('web')
