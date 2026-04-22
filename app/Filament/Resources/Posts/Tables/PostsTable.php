@@ -2,11 +2,19 @@
 
 namespace App\Filament\Resources\Posts\Tables;
 
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Table;
+use Filament\Tables;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Storage;
 
 class PostsTable
 {
@@ -14,13 +22,64 @@ class PostsTable
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\ImageColumn::make('thumbnail')
+                    ->label('Thumbnail')
+                    ->disk('public')
+                    ->imageSize(50),
+
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Title')
+                    ->searchable()
+                    ->sortable()
+                    ->weight(FontWeight::Bold),
+                
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Author')
+                    ->searchable()
+                    ->sortable()
+                    ->color('gray'),
+
+                Tables\Columns\TextColumn::make('published_date')
+                    ->label('Publishing date')
+                    ->sortable()
+                    ->date('M d, Y')
+                    ->color('gray'),
+
+                Tables\Columns\SelectColumn::make('status')
+                    ->options(\App\Enums\PostStatus::options())
+                    ->selectablePlaceholder(false)
+                    ->afterStateUpdated(function ($record, $state) {
+                        $record->save();
+
+                        Notification::make()
+                            ->success()
+                            ->body('Record updated successfully to ' . $state)
+                            ->send();
+                    }),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'Draft'     => 'Draft',
+                        'Published' => 'Published',
+                        'Archived'  => 'Archived'
+                    ])
+                    ->default('Published')
+                    ->multiple(),
+
+                SelectFilter::make('user_id')
+                    ->label('Author')
+                    ->relationship('user', 'name')
+                    ->preload()
+
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make()
+                ])
             ])
             ->defaultSort('created_at', 'desc')
             ->emptyStateIcon(Heroicon::Bookmark)
