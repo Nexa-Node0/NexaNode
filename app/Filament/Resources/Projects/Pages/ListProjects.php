@@ -3,6 +3,7 @@ namespace App\Filament\Resources\Projects\Pages;
 
 use App\Filament\Resources\Projects\ProjectResource;
 use App\Filament\Resources\Projects\Widgets\ProjectStatWidget;
+use App\Filament\Resources\Projects\Widgets\StatusDonutWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
@@ -21,6 +22,13 @@ class ListProjects extends ListRecords
     {
         return [
             ProjectStatWidget::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            StatusDonutWidget::class,
         ];
     }
 }
