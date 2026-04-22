@@ -36,14 +36,14 @@ class AdminPanelProvider extends PanelProvider
     {
         $brandLogo = Setting::get('general.brand_logo');
         $favicon = Setting::get('general.favicon');
-
+        $brandName = Setting::get('general.brand_name', config('app.name'));
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
             ->favicon($favicon ? Storage::url($favicon) : null)
-            ->brandName(Setting::get('general.brand_name', config('app.name')))
+            ->brandName($brandName)
             ->brandLogoHeight('80px')
             ->authGuard('web')
             ->navigationGroups([
