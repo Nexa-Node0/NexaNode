@@ -2,6 +2,7 @@
 namespace App\Filament\Resources\Projects\Pages;
 
 use App\Filament\Resources\Projects\ProjectResource;
+use App\Filament\Resources\Projects\Widgets\ProjectCreationBarWidget;
 use App\Filament\Resources\Projects\Widgets\ProjectStatWidget;
 use App\Filament\Resources\Projects\Widgets\StatusDonutWidget;
 use Filament\Actions\CreateAction;
@@ -29,6 +30,7 @@ class ListProjects extends ListRecords
     {
         return [
             StatusDonutWidget::class,
+            ProjectCreationBarWidget::class,
         ];
     }
 }
