@@ -10,7 +10,7 @@ class BreadcrumbsHelper
         $baseClass = strtolower(class_basename($model) . "s");
         return [
              url("/admin/{$baseClass}/") => ucfirst($baseClass),
-             url("/admin/{$baseClass}" . $model->id) => $title,
+             url("/admin/{$baseClass}/" . $model->id) => $title,
              '' => $action
         ];
     }

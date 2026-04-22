@@ -15,8 +15,8 @@ class PostCategoriesWidget extends StatsOverviewWidget
         $mostUsedCategory = $this->getMostUsedCategory();
 
         return [
-            Stat::make('Most used category', number_format($mostUsedCategory->posts_count))
-                ->description($mostUsedCategory->name)
+            Stat::make('Most used category', number_format($mostUsedCategory->posts_count ?? 0))
+                ->description($mostUsedCategory->name ?? 'No category has been used')
                 ->icon('heroicon-o-tag')
                 ->color('success'),
 

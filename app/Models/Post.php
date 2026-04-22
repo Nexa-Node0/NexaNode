@@ -26,7 +26,8 @@ class Post extends Model
 
     protected $casts = [
         "tags"           => "array",
-        "published_date" => "date"  
+        "published_date" => "date",
+        "status"         => \App\Enums\PostStatus::class
     ];
 
 

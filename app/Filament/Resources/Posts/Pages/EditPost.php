@@ -18,7 +18,7 @@ class EditPost extends EditRecord
         return BreadcrumbsHelper::generateBreadcrumbsURL($this->record, $this->record->title, 'Edit');
     }
 
-     public function getSubNavigation(): array
+    public function getSubNavigation(): array
     {
         return[
             NavigationItem::make('View')

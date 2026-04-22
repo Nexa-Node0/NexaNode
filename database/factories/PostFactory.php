@@ -26,7 +26,7 @@ class PostFactory extends Factory
             'thumbnail'        => $this->faker->imageUrl(),
             'is_headline'      => $this->faker->boolean(20),
             'tags'             => implode(',', $this->faker->words(3)),
-            'status'           => $this->faker->randomElement(['Published', 'Unpublished', 'Draft']),
+            'status'           => $this->faker->randomElement(\App\Enums\PostStatus::options()),
             'published_date'   => $this->faker->dateTimeBetween('-1 year', 'now'),
             'user_id'          => \App\Models\User::inRandomOrder()->value('id'),
             'post_category_id' => \App\Models\PostCategory::inRandomOrder()->value('id')
