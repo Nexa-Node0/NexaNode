@@ -10,7 +10,11 @@ class EditPost extends EditRecord
 {
     protected static string $resource = PostResource::class;
 
+<<<<<<< HEAD
     protected function getHeaderActions(): array
+=======
+    public function getSubNavigation(): array
+>>>>>>> 310109f0ebe242ce81c079cee55f9e3bf858c50b
     {
         return [
             DeleteAction::make(),

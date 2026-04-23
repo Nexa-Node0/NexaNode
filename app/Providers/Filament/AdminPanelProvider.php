@@ -20,16 +20,43 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+<<<<<<< HEAD
 
+=======
+use Illuminate\Support\Facades\Storage;
+use Outerweb\FilamentSettings\SettingsPlugin;
+use Outerweb\Settings\Facades\Setting;
+>>>>>>> 310109f0ebe242ce81c079cee55f9e3bf858c50b
 class AdminPanelProvider extends PanelProvider
 {
+
     public function panel(Panel $panel): Panel
     {
+        $brandLogo = Setting::get('general.brand_logo');
+        $favicon = Setting::get('general.favicon');
+        $brandName = Setting::get('general.brand_name', config('app.name'));
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
+<<<<<<< HEAD
             ->authGuard('web')
+=======
+            ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
+            ->favicon($favicon ? Storage::url($favicon) : null)
+            ->brandName($brandName)
+            ->brandLogoHeight('80px')
+            ->authGuard('web')
+            ->navigationGroups([
+                'Dashboard',
+                'Filament Shield',
+                'HR',
+                'Inventory',
+                'Location',
+                'Blog',
+                'Settings'
+            ])
+>>>>>>> 310109f0ebe242ce81c079cee55f9e3bf858c50b
             ->login()
             ->plugins([FilamentShieldPlugin::make()])
             ->plugin(FilamentShieldPlugin::make())
