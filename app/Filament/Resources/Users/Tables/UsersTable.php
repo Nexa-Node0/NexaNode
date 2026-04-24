@@ -7,9 +7,10 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
+use Spatie\Permission\Models\Role;
 // use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class UsersTable
@@ -28,6 +29,25 @@ class UsersTable
                     ->sortable()
                     ->placeholder('Unverified')
                     ->color('success'),
+
+                SelectColumn::make('role')
+                    ->label('Role')
+                    ->selectablePlaceholder(false)
+                    ->options(fn () => Role::query()->pluck('name', 'id')->toArray())
+                    ->searchable()
+                    ->getStateUsing(fn ($record) => $record->roles->first()?->id)
+                    ->updateStateUsing(function ($record, $state) {
+                       $role = Role::find($state);
+                        if($role){
+                            $record->syncRoles([$role]);
+                            Notification::make()
+                                ->title('Role has been updated')
+                                ->body('User role has been updated successfully')
+                                ->success()
+                                ->send();
+                                }
+                    }),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
