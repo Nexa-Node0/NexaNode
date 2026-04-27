@@ -20,6 +20,8 @@ class ViewProject extends ViewRecord
         ];
     }
 
+/* ||Kindly add this section to the EditProject.php if you want it to render also there
+ */
     protected function getHeaderWidgets(): array
     {
         return [
