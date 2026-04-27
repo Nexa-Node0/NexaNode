@@ -50,6 +50,11 @@ class ProjectSeeder extends Seeder
             ->create();
 
         foreach ($projects as $project) {
+
+            $users = User::take(5)->pluck('id')->toArray();
+
+            $project->users()->attach($users);
+
             $this->command->line(
                 "Project created: {$project->title} (supervisor: {$project->supervisor?->name})"
             );
