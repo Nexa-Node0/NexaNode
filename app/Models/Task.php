@@ -88,11 +88,11 @@ class Task extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'assigned_to')->chaperone();
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function project():BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class)->chaperone();
+        return $this->belongsTo(Project::class);
     }
 }
