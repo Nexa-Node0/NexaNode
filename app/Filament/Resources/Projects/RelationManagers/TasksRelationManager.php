@@ -182,11 +182,19 @@ class TasksRelationManager extends RelationManager
                 // AssociateAction::make(),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->hiddenLabel(true)
+                    ->tooltip('Edit'),
                 // DissociateAction::make(),
-                DeleteAction::make(),
-                ForceDeleteAction::make(),
-                RestoreAction::make(),
+                DeleteAction::make()
+                    ->hiddenLabel(true)
+                    ->tooltip('Delete'),
+                ForceDeleteAction::make()
+                    ->hiddenLabel(true)
+                    ->tooltip('Permanent Delete'),
+                RestoreAction::make()
+                    ->hiddenLabel(true)
+                    ->tooltip('Restore'),
 
                 //change status
                 ActionGroup::make([
@@ -219,7 +227,8 @@ class TasksRelationManager extends RelationManager
                                 ->send();
                         }),
                 ])
-                    ->icon('heroicon-m-cog'),
+                    ->icon('heroicon-m-cog')
+                    ->tooltip('Additional Actions'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

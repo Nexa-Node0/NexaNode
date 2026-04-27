@@ -337,9 +337,11 @@ class ProjectsTable
                         }),
                 ])
                     ->icon('heroicon-m-cog')
-                    ->visible(fn($record): bool => $record->deleted_at == null),
+                    ->visible(fn($record): bool => $record->deleted_at == null)
+                    ->tooltip('Additional Actions'),
 
-                ViewAction::make(),
+                ViewAction::make()
+                    ->color('info'),
             ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
