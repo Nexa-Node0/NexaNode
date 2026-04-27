@@ -40,7 +40,7 @@ enum Priority: string {
         return ucwords(implode(' ', $parts));
     }
 
-    public function options(): array
+    public static function options(): array
     {
         return collect(self::cases())
             ->mapWithKeys(fn($case) => [$case->value => $case->label()])

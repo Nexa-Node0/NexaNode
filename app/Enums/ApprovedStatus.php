@@ -28,16 +28,15 @@ enum ApprovedStatus: string {
 
     public function icon(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::Approved => 'heroicon-m-check-circle',
-            self::Pending => 'heroicon-m-clock',
+            self::Pending  => 'heroicon-m-clock',
             self::Rejected => 'heroicon-m-x-circle',
-            default=>'heroicon-m-minus-circle'
+            default        => 'heroicon-m-minus-circle'
         };
     }
 
-    public function options(): array
+    public static function options(): array
     {
         return collect(self::cases())
             ->mapWithKeys(fn($case) => [$case->value => $case->label()])
