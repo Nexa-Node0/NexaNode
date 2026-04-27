@@ -14,18 +14,16 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('code');
             $table->string('slug');
+            $table->string('code');
             $table->text('description');
-            $table->enum('status', [
-                'completed', 'on_progress', 'archived', 'pending', 'cancelled', 'failed', 'draft',
-            ])->default('draft');
-            $table->enum('priority', ['low', 'medium', 'high', 'critical'])->default('medium');
+            $table->string('status');
+            $table->string('priority');
             $table->dateTime('start_date');
             $table->decimal('budget_amount', 12, 2); // up to billions
             $table->decimal('actual_cost', 12, 2);
             $table->boolean('requires_approval')->default(true);
-            $table->enum('approved_status', ['approved', 'pending', 'rejected'])->default('pending');
+            $table->string('approved_status');
             $table->dateTime('approved_at')->nullable();
             $table->foreignId('supervisor_id')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();

@@ -11,6 +11,8 @@ use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -84,23 +86,37 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->hasOne(Address::class);
     }
 
-
-    //Tenants Project
-    public function projects(){
-        return $this->belongsToMany(Project::class);
-    }
-
-    public function getTenants(Panel $panel): Collection
-    {
-        return $this->projects;
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->projects()->whereKey($tenant)->exists();
-    }
-
     public function posts(){
         return $this->hasMany(Post::class, 'user_id');
     }
+
+    public function project(): HasMany//same as handledproject
+    {
+        return $this->hasMany(Project::class, 'supervisor_id');
+    }
+
+    public function handledProjects(): HasMany//same as project better naming
+    {
+        return $this->hasMany(Project::class, 'supervisor_id');
+    }
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    // //Tenants Project
+    // public function projects(){
+    //     return $this->belongsToMany(Project::class);
+    // }
+
+    // public function getTenants(Panel $panel): Collection
+    // {
+    //     return $this->projects;
+    // }
+
+    // public function canAccessTenant(Model $tenant): bool
+    // {
+    //     return $this->projects()->whereKey($tenant)->exists();
+    // }
 }
