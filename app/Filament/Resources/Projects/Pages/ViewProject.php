@@ -2,6 +2,7 @@
 namespace App\Filament\Resources\Projects\Pages;
 
 use App\Filament\Resources\Projects\ProjectResource;
+use App\Filament\Resources\Projects\Widgets\ProjectCreationBarWidget;
 use App\Filament\Resources\Projects\Widgets\ProjectPrioritiesDoughnutWidget;
 use App\Filament\Resources\Projects\Widgets\ProjectStatWidget;
 use App\Filament\Resources\Projects\Widgets\StatusDoughnutWidget;
@@ -30,6 +31,7 @@ class ViewProject extends ViewRecord
     {
         return [
             StatusDoughnutWidget::class,
+            ProjectCreationBarWidget::class,
             ProjectPrioritiesDoughnutWidget::class,
         ];
     }
