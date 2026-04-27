@@ -89,6 +89,13 @@ class Project extends Model
         return $slug;
     }
 
+    //attrib costumization
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     //relationships
     public function supervisor(): BelongsTo
     {
