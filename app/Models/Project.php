@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Enums\ApprovedStatus;
 use App\Enums\Priority;
 use App\Enums\ProjectStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     //default
     protected $table = 'projects';
@@ -87,7 +88,6 @@ class Project extends Model
 
         return $slug;
     }
-
 
     //relationships
     public function supervisor(): BelongsTo

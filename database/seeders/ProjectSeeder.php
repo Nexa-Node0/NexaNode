@@ -4,7 +4,6 @@ namespace Database\Seeders;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class ProjectSeeder extends Seeder
 {
@@ -13,32 +12,49 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        //initialize super admin user
-        $user = User::whereName('super_admin')->first();
+        $count = (int) $this->command->ask(
+            'How many Projects do you want to create?',
+            5
+        );
 
-        //get the first user if null
-        if ($user == null) {
-            $user = User::first();
+        if ($count <= 0) {
+            $this->command->info('Process Skipped: No Project Created');
+            return;
         }
 
-        //Creating Project
-        $project = Project::create([
-            'title' => 'Seeded Project',
-            'code' => Str::random(10),
-            'slug' => 'seeded-project',
-            'description' => 'Project Description',
-            'status' => 'draft',
-            'priority' => 'medium',
-            'start_date' => now()->addWeek(),
-            'budget_amount' => 10000,
-            'actual_cost' => 10000,
-            'requires_approval' => false,
-            'approved_status' => 'pending',
-            'supervisor_id' => $user->id,
-        ]);
+        $useSuperAdmin = false;
+        $user          = null;
 
-        //attach user to the project
-        $user->projects()->attach($project->id);
+        if (User::exists()) {
+            $useSuperAdmin = $this->command->confirm(
+                'Assign Super Admin (or first user) as supervisor?',
+                true
+            );
+
+            if ($useSuperAdmin) {
+                $user = User::where('name', 'super_admin')->first() ?? User::first();
+
+                $this->command->info(
+                    "Selected user: {$user->name} - {$user->email}"
+                );
+            }
+        }
+
+        // CREATE PROJECTS (single source of truth)
+        $projects = Project::factory($count)
+            ->when($useSuperAdmin && $user, function ($factory) use ($user) {
+                return $factory->state([
+                    'supervisor_id' => $user->id,
+                ]);
+            })
+            ->create();
+
+        foreach ($projects as $project) {
+            $this->command->line(
+                "Project created: {$project->title} (supervisor: {$project->supervisor?->name})"
+            );
+        }
+
+        $this->command->newLine();
     }
 }
