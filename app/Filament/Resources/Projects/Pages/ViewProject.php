@@ -3,6 +3,7 @@ namespace App\Filament\Resources\Projects\Pages;
 
 use App\Filament\Resources\Projects\ProjectResource;
 use App\Filament\Resources\Projects\Widgets\ProjectStatWidget;
+use App\Filament\Resources\Projects\Widgets\StatusDoughnutWidget;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -21,6 +22,13 @@ class ViewProject extends ViewRecord
     {
         return [
             ProjectStatWidget::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            StatusDoughnutWidget::class,
         ];
     }
 
