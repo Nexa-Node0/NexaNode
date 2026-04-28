@@ -1,33 +1,28 @@
 <?php
-
 namespace App\Models;
 
-use Filament\Models\Contracts\HasCurrentTenantLabel;
-use Filament\Models\Contracts\HasName;
+use App\Enums\ApprovedStatus;
+use App\Enums\Priority;
+use App\Enums\ProjectStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-class Project extends Model  implements HasCurrentTenantLabel, HasName
+class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
-    //tenancy
-    public function getCurrentTenantLabel(): string
-    {
-        return $this->title;
-    }
+    //default
+    protected $table = 'projects';
 
-    public function getFilamentName(): string
-    {
-        return $this->title;
-    }
-
-
-    //
     protected $fillable = [
         'title',
-        'code',
         'slug',
+        'code',
         'description',
         'status',
         'priority',
@@ -41,34 +36,34 @@ class Project extends Model  implements HasCurrentTenantLabel, HasName
     ];
 
     protected $casts = [
-        'status'            => 'string',
-        'priority'          => 'string',
-        'start_date'        => 'datetime',
-        'budget_amount'     => 'decimal:2',
-        'actual_cost'       => 'decimal:2',
-        'requires_approval' => 'boolean',
-        'approved_status'   => 'string',
-        'approved_at'       => 'datetime',
+        'status'          => ProjectStatus::class,
+        'priority'        => Priority::class,
+        'start_date'      => 'datetime',
+        'budget_amount'   => 'decimal:2',
+        'actual_cost'     => 'decimal:2',
+        'approved_status' => ApprovedStatus::class,
+        'approved_at'     => 'datetime',
     ];
 
-    //Model attributes
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
-    //booted functions
-    public static function booted()
+    //booted functions, for slug and approved date
+    protected static function booted()
     {
         static::creating(function ($project) {
-            if ($project->approved_status === 'approved' && $project->approved_at === null) {
+            $project->slug = self::generateSlug($project->title);
+
+            if ($project->approved_status === ApprovedStatus::Approved) {
                 $project->approved_at = now();
             }
         });
 
         static::updating(function ($project) {
-            if ($project->approved_status === 'approved') {
-                if ($project->approved_at === null) {
+
+            if ($project->isDirty('title')) {
+                $project->slug = self::generateSlug($project->title, $project->id);
+            }
+
+            if ($project->approved_status === ApprovedStatus::Approved) {
+                if ($project->isDirty('status')) {
                     $project->approved_at = now();
                 }
             } else {
@@ -77,14 +72,43 @@ class Project extends Model  implements HasCurrentTenantLabel, HasName
         });
     }
 
+    private static function generateSlug(string $title, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug($title);
+        $slug     = $baseSlug;
+        $count    = 1;
 
-    // relationships
+        while (
+            Project::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $count++;
+        }
 
-    public function users(){//also tenant
+        return $slug;
+    }
+
+    //attrib costumization
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    //relationships
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    public function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class);
     }
 
-    public function supervisor(){
-        return $this->belongsTo(User::class);
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 }
