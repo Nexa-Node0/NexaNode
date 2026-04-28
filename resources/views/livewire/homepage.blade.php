@@ -145,28 +145,8 @@
         </dialog>
     -->
     <!-- Logout Confirm Modal -->
-
-    <!-- loader -->
     <div
-      id="loader"
-      class="fixed inset-0 z-[9999] bg-[#080d10] flex items-center justify-center"
-    >
-      <div class="flex items-center gap-3">
-        <span
-          id="loader-count"
-          class="text-white font-['Bricolage_Grotesque'] font-bold text-[40px] lg:text-[120px] leading-none tabular-nums"
-          >0</span
-        >
-        <span
-          class="text-[#88898B] font-['Bricolage_Grotesque'] font-bold text-[40px] lg:text-[60px] leading-none"
-          >%</span
-        >
-      </div>
-    </div>
-    <!-- loader -->
-
-    <div
-      class="bg-[#080d10] w-full max-w-[1920px] grid grid-cols-1 grid-rows-[768px_.5fr_.5fr_1fr_.7fr_.8fr_.3fr] md:grid-rows-[768px_.6fr_1.5fr_1fr_.8fr_.5fr_.3fr] 2xl:grid-rows-[1fr_.9fr_1.8fr_1.4fr_1fr_.8fr_.4fr]"
+      class="bg-[#080d10] w-full max-w-[1920px] grid grid-cols-1 grid-rows-[1fr.5fr_.5fr_1fr_.7fr_.8fr_.3fr] md:grid-rows-[768px_.6fr_1.5fr_1fr_.8fr_.5fr_.3fr] 2xl:grid-rows-[1fr_.9fr_1.8fr_1.4fr_1fr_.8fr_.4fr]"
     >
       <!-- hero section -->
       <div
@@ -359,7 +339,7 @@
               style="grid-area: col-2"
               class="text-[20px] lg:text-[25px] 2xl:text-[30px] primary-font flex flex-col justify-between"
             >
-              <h2>
+              <h2 class="text-black">
                 Building a website requires strategy, design, and development
                 working together. Our team helps turn your ideas into a fully
                 functional digital experience—designed to look great, perform
@@ -394,7 +374,7 @@
               class="text-[20px] lg:text-[25px] 2xl:text-[30px] primary-font flex flex-col justify-between"
               style="grid-area: col-2"
             >
-              <h2>
+              <h2 class="text-black">
                 Transforming concepts into real platforms takes the right mix of
                 creativity and technical expertise. We design and develop
                 scalable web solutions that bring your vision to life and help
@@ -429,7 +409,7 @@
               class="text-[20px] lg:text-[25px] 2xl:text-[30px] primary-font flex flex-col justify-between"
               style="grid-area: col-2"
             >
-              <h2>
+              <h2 class="text-black">
                 Building a website requires strategy, design, and development
                 working together. Our team helps turn your ideas into a fully
                 functional digital experience—designed to look great, perform
@@ -704,10 +684,10 @@
             <h4 class="text-[#3F3E3E] primary-font mb-3">
               CODE THAT LAST BEYOND TRENDS
             </h4>
-            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl">
+            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl text-black">
               We don't chase the hype. We build websites that stay relevant
             </h1>
-            <h5 class="primary-font 2xl:text-2xl font-light">
+            <h5 class="primary-font 2xl:text-2xl font-light text-black">
               Our work performs sharply today and scales seamlessly tomorrow —
               engineered around long-term value. Clean architecture, consistent
               structure, and smart development that grows with your business.
@@ -722,10 +702,10 @@
             >
               DEVELOPMENT THAT'S LAUNCH READY
             </h4>
-            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl">
+            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl text-black">
               We build for the real world, not just the demo.
             </h1>
-            <h5 class="primary-font 2xl:text-2xl font-light">
+            <h5 class="primary-font 2xl:text-2xl font-light text-black">
               Every line of code is written with performance and maintainability
               in mind: reusable components, accessibility, scalability, and
               real-world constraints. We collaborate closely with your team,
@@ -742,10 +722,10 @@
             >
               LOCAL PRESENCE, GLOBAL DELIVERY
             </h4>
-            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl">
+            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl text-black">
               Work directly with the builders — not a chain of account managers.
             </h1>
-            <h5 class="primary-font 2xl:text-2xl font-light">
+            <h5 class="primary-font 2xl:text-2xl font-light text-black">
               Our senior development teams in Philippines deliver fast,
               consistent results. We integrate into your tools and workflow,
               working as part of your team — from a single embedded developer to
@@ -761,10 +741,10 @@
             >
               CONNECT WITH YOUR AUDIENCE
             </h4>
-            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl">
+            <h1 class="primary-font text-[20px] md:text-[25px] 2xl:text-3xl text-black">
               Your website should speak before you do.
             </h1>
-            <h5 class="primary-font 2xl:text-2xl font-light">
+            <h5 class="primary-font 2xl:text-2xl font-light text-black">
               From landing pages to full web experiences, we craft designs where
               every element serves a purpose — intuitive layouts, cohesive
               visuals, and interfaces that guide users naturally toward action.

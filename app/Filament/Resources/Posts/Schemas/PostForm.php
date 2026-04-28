@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Enums\PostStatus;
 use Filament\Forms;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Illuminate\Support\Str;
-
+use Illuminate\Validation\Rules\Enum;
 class PostForm
 {
     public static function configure(Schema $schema): Schema
@@ -93,12 +94,8 @@ class PostForm
                         ])
                         ->columnSpan(1),
                     Forms\Components\Select::make('status')
-                        ->options([
-                            'Published' => 'Published',
-                            'Unpublished' => 'Unpublished',
-                            'Draft' => 'Draft'
-                        ])
-                        ->default('Draft')
+                        ->options(PostStatus::options())
+                        ->default(PostStatus::Archived->value)
                 ]),        
         ]);
     }

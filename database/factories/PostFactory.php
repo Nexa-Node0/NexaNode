@@ -23,10 +23,10 @@ class PostFactory extends Factory
             'title'            => $title,
             'slug'             => Str::slug($title),
             'content'          => $this->faker->paragraph(4),
-            'thumbnail'        => $this->faker->imageUrl(),
+            'thumbnail'        => asset('images/logos/NEXANODE_LOGO.png'), // placeholder
             'is_headline'      => $this->faker->boolean(20),
-            'tags'             => implode(',', $this->faker->words(3)),
-            'status'           => $this->faker->randomElement(\App\Enums\PostStatus::options()),
+            'tags'             => $this->faker->words(3),
+            'status'           => $this->faker->randomElement(\App\Enums\PostStatus::cases())->value,
             'published_date'   => $this->faker->dateTimeBetween('-1 year', 'now'),
             'user_id'          => \App\Models\User::inRandomOrder()->value('id'),
             'post_category_id' => \App\Models\PostCategory::inRandomOrder()->value('id')

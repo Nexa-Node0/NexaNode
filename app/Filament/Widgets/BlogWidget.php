@@ -6,6 +6,7 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\Post;
 use Carbon\Carbon;
+use App\Enums\PostStatus;
 
 class BlogWidget extends StatsOverviewWidget
 {
@@ -17,14 +18,14 @@ class BlogWidget extends StatsOverviewWidget
         $postTrend = $this->getPostPerDay();
 
 
-        $totalPublishedPost = Post::where('status', 'Published')->count();
+        $totalPublishedPost = Post::where('status', PostStatus::Published->value)->count();
         $publishedGrowth = $this->getPublishedPostGrowth();
 
-        $draftPosts = Post::where('status', 'Draft')->count();
-        $unpublishedPosts = Post::where('status', 'Unpublished')->count();
+        $draftPosts = Post::where('status',  PostStatus::Draft->value)->count();
+        $unpublishedPosts = Post::where('status', PostStatus::Archived->value)->count();
 
         return [
-                Stat::make('Total Posts', number_format($totalPost))
+                Stat::make('Total', number_format($totalPost))
                     ->description($postGrowth . '% from last month')
                     ->descriptionIcon($postGrowth > 0 
                         ? 'heroicon-m-arrow-trending-up' 
@@ -34,24 +35,27 @@ class BlogWidget extends StatsOverviewWidget
                     ->color($postGrowth > 0 ? 'success' : 'danger')
                     ->url(route('filament.admin.resources.posts.index')),
                 
-                Stat::make('Total Published Post', number_format($totalPublishedPost))
+                Stat::make('Published', number_format($totalPublishedPost))
                     ->description($publishedGrowth . '% from last month')
                     ->descriptionIcon($publishedGrowth > 0
                         ? 'heroicon-m-arrow-trending-up' 
                         : 'heroicon-m-arrow-trending-down')
-                    ->icon('heroicon-o-rocket-launch'),
+                    ->icon('heroicon-o-rocket-launch')
+                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' =>  PostStatus::Published->value])),
 
-                Stat::make('Draft Posts', number_format($draftPosts))
+
+                Stat::make('Draft', number_format($draftPosts))
                     ->description('Posts awaiting publication')
                     ->icon('heroicon-o-pencil-square')
                     ->color('danger')
-                    ->url(route('filament.admin.resources.posts.index', ['tableFilters[status][value]' => 'Draft'])),
+                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' =>  PostStatus::Draft->value])),
                 
-                    Stat::make('Draft Posts', number_format($unpublishedPosts))
+                Stat::make('Archived', number_format($unpublishedPosts))
                     ->description('Total posts not yet published')
                     ->icon('heroicon-o-clock')
                     ->color('warning')
-                    ->url(route('filament.admin.resources.posts.index', ['tableFilters[status][value]' => '!=Published'])),
+                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' => PostStatus::Archived->value])),
+                
                 
         ];
     }

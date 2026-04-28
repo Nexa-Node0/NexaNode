@@ -15,7 +15,7 @@ use Filament\Tables;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Storage;
-
+use App\Enums\PostStatus;
 class PostsTable
 {
     public static function configure(Table $table): Table
@@ -46,7 +46,7 @@ class PostsTable
                     ->color('gray'),
 
                 Tables\Columns\SelectColumn::make('status')
-                    ->options(\App\Enums\PostStatus::options())
+                    ->options(PostStatus::options())
                     ->selectablePlaceholder(false)
                     ->afterStateUpdated(function ($record, $state) {
                         $record->save();
@@ -61,12 +61,8 @@ class PostsTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Status')
-                    ->options([
-                        'Draft'     => 'Draft',
-                        'Published' => 'Published',
-                        'Archived'  => 'Archived'
-                    ])
-                    ->default('Published')
+                    ->options(PostStatus::options())
+                    ->default(PostStatus::Published->value)
                     ->multiple(),
 
                 SelectFilter::make('user_id')
