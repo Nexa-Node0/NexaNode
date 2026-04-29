@@ -33,7 +33,7 @@ class BlogWidget extends StatsOverviewWidget
                     ->icon('heroicon-o-document-text')
                     ->chart($postTrend)
                     ->color($postGrowth > 0 ? 'success' : 'danger')
-                    ->url(route('filament.admin.resources.posts.index')),
+                    ->url(route('filament.admin.resources.blog.posts.index')),
                 
                 Stat::make('Published', number_format($totalPublishedPost))
                     ->description($publishedGrowth . '% from last month')
@@ -41,20 +41,20 @@ class BlogWidget extends StatsOverviewWidget
                         ? 'heroicon-m-arrow-trending-up' 
                         : 'heroicon-m-arrow-trending-down')
                     ->icon('heroicon-o-rocket-launch')
-                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' =>  PostStatus::Published->value])),
+                    ->url(route('filament.admin.resources.blog.posts.index', ['filters[status][values][0]' =>  PostStatus::Published->value])),
 
 
                 Stat::make('Draft', number_format($draftPosts))
                     ->description('Posts awaiting publication')
                     ->icon('heroicon-o-pencil-square')
                     ->color('danger')
-                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' =>  PostStatus::Draft->value])),
+                    ->url(route('filament.admin.resources.blog.posts.index', ['filters[status][values][0]' =>  PostStatus::Draft->value])),
                 
                 Stat::make('Archived', number_format($unpublishedPosts))
                     ->description('Total posts not yet published')
                     ->icon('heroicon-o-clock')
                     ->color('warning')
-                    ->url(route('filament.admin.resources.posts.index', ['filters[status][values][0]' => PostStatus::Archived->value])),
+                    ->url(route('filament.admin.resources.blog.posts.index', ['filters[status][values][0]' => PostStatus::Archived->value])),
                 
                 
         ];

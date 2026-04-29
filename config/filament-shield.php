@@ -227,10 +227,7 @@ return [
     |
     */
 
-    'custom_permissions'   => [
-        'Navigation:ViewProjects' => "Navigation View Projects",
-        'Navigation:ReturnAdmin' => 'Return Admin Panel'
-    ],
+    'custom_permissions'   => [],
 
     /*
     |--------------------------------------------------------------------------

@@ -12,13 +12,19 @@ use Filament\Support\Icons\Heroicon;
 use Outerweb\FilamentSettings\Pages\Settings;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
-
+use App\Enums\NavigationOptions;
+use Override;
 use UnitEnum;
 
 class GeneralSettings extends Settings
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Cog6Tooth;
-    protected static string|UnitEnum|null $navigationGroup = 'Settings';
+    
+    #[Override]
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        return NavigationOptions::Settings->getLabel();
+    }
     public function form(Schema $schema): Schema
     {
         return $schema

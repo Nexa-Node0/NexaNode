@@ -54,7 +54,7 @@ class ProjectInfolist
                         TextEntry::make('supervisor')
                             ->label('Supervisor')
                             ->formatStateUsing(fn($state) => $state->name)
-                            ->url(fn($state) => \App\Filament\Resources\Users\UserResource::getUrl('edit', ['record' => $state->id])),
+                            ->url(fn($state) => \App\Filament\Resources\HR\UserResource::getUrl('edit', ['record' => $state->id])),
                         TextEntry::make('users_count')
                             ->label('Team Members')
                             ->state(fn($record) => $record->users->count() . ' members')

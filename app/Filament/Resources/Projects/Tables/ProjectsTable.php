@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProjectsTable
 {
+
     public static function configure(Table $table): Table
     {
         return $table
