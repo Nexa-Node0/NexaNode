@@ -26,19 +26,24 @@ use Illuminate\Support\Facades\Storage;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use Outerweb\Settings\Facades\Setting;
 use App\Enums\NavigationOptions;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         $brandLogo = Setting::get('general.brand_logo');
+        $darkModeLogo = Setting::get('general.dark_mode_brand_logo');
         $favicon = Setting::get('general.favicon');
         $brandName = Setting::get('general.brand_name', config('app.name'));
+        $panelBackground = Setting::get('general.admin_empty_panel_background');
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
+            ->darkModeBrandLogo(Storage::url($darkModeLogo))
             ->favicon($favicon ? Storage::url($favicon) : null)
             ->brandName($brandName)
             ->brandLogoHeight('80px')
@@ -56,11 +61,19 @@ class AdminPanelProvider extends PanelProvider
                         'default' => 1,
                         'lg' => 2
                     ]),
-                SettingsPlugin::make()
+                SettingsPlugin::make(),
+                AuthUIEnhancerPlugin::make()
+                        ->showEmptyPanelOnMobile(false)
+                        ->formPanelPosition('right')
+                        ->formPanelWidth('40%')
+                        ->emptyPanelBackgroundImageOpacity('70%')
+                        ->emptyPanelBackgroundImageUrl(Storage::url($panelBackground))
             ])
+           
             ->colors([
                 'primary' => Color::Blue,
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
