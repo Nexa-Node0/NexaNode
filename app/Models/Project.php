@@ -24,7 +24,9 @@ class Project extends Model
         'slug',
         'code',
         'description',
+        'display', //added
         'status',
+        'completed_at', //added
         'priority',
         'start_date',
         'budget_amount',
@@ -37,6 +39,7 @@ class Project extends Model
 
     protected $casts = [
         'status'          => ProjectStatus::class,
+        'completed_at'    => 'datetime', //added
         'priority'        => Priority::class,
         'start_date'      => 'datetime',
         'budget_amount'   => 'decimal:2',
@@ -44,6 +47,25 @@ class Project extends Model
         'approved_status' => ApprovedStatus::class,
         'approved_at'     => 'datetime',
     ];
+
+    //added attributes
+    // with icon display placeholder
+    public function getTableDisplayAttribute(): string
+    {
+        return $this->display ?: 'images/bin/placeholder_1.png';
+    }
+
+    //with Image display Placeholder
+    public function getWebDisplayAttribute(): string
+    {
+        return $this->display ?: 'images/bin/placeholder.png';
+    }
+
+    //Image Display placeholder in storage container
+    public function getStorageWebDisplayAttribute(): string
+    {
+        return $this->display ?: 'storage/images/bin/placeholder.png';
+    }
 
     //booted functions, for slug and approved date
     protected static function booted()
@@ -54,6 +76,11 @@ class Project extends Model
             if ($project->approved_status === ApprovedStatus::Approved) {
                 $project->approved_at = now();
             }
+
+            //auto fill completed when the status is completed
+            if ($project->status === ProjectStatus::Completed) {
+                $project->completed_at = now();
+            }
         });
 
         static::updating(function ($project) {
@@ -63,12 +90,22 @@ class Project extends Model
             }
 
             if ($project->approved_status === ApprovedStatus::Approved) {
-                if ($project->isDirty('status')) {
+                if ($project->isDirty('approved_status')) { //changed from status to approved status
                     $project->approved_at = now();
                 }
             } else {
                 $project->approved_at = null;
             }
+
+            //auto update completed when the status is completed
+            if ($project->status === ProjectStatus::Completed) {
+                if ($project->isDirty('status')) {
+                    $project->completed_at = now();
+                }
+            } else {
+                $project->completed_at = null;
+            }
+
         });
     }
 

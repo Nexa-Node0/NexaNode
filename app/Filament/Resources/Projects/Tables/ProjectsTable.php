@@ -21,6 +21,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Filters\Filter;
@@ -70,6 +71,9 @@ class ProjectsTable
                     ->toggleable()
                     ->toggledHiddenByDefault(true),
 
+                ImageColumn::make('table_display')
+                    ->disk('public'),
+
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
@@ -83,10 +87,13 @@ class ProjectsTable
                 TextColumn::make('status')
                     ->icon(fn($state) => $state->icon())
                     ->badge()
-                    ->color(fn($state) => $state->color()),
+                    ->formatStateUsing(fn($state) => $state->label()) //fixed to get the label
+                    ->color(fn($state) => $state->color())
+                    ->tooltip(fn($state, $record) => $state == ProjectStatus::Completed ? $record->completed_at->format('D - M d, Y') : 'Project ' . $state->label()),
 
                 TextColumn::make('priority')
                     ->badge()
+                    ->formatStateUsing(fn($state) => $state->label()) //fixed to get the label
                     ->color(fn($state) => $state->color()),
 
                 TextColumn::make('start_date')
@@ -116,6 +123,7 @@ class ProjectsTable
                             return 'Waiting to be Approved';
                         }
                     })
+                    ->formatStateUsing(fn($state) => $state->label()) //fixed to get the label
                     ->color(fn($state) => $state->color())
                     ->icon(fn($state) => $state->icon()),
             ])

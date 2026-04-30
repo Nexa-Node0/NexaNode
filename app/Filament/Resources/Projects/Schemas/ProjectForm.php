@@ -5,6 +5,7 @@ use App\Models\Project;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -56,6 +57,13 @@ class ProjectForm
                                             }
                                         },
                                     ]),
+
+                                FileUpload::make('display')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('images/projects/display')
+                                    ->imageEditor()
+                                    ->columnSpanFull(),
 
                                 MarkdownEditor::make('description')
                                     ->required()
