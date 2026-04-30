@@ -1,6 +1,7 @@
 <?php
 namespace App\Filament\Resources\Clients;
 
+use App\Enums\NavigationOptions;
 use App\Filament\Resources\Clients\Pages\CreateClient;
 use App\Filament\Resources\Clients\Pages\EditClient;
 use App\Filament\Resources\Clients\Pages\ListClients;
@@ -23,8 +24,12 @@ class ClientResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Work Management';
-    protected static ?int $navigationSort                      = 2;
+    #[Override]
+    public static function getNavigationGroup(): string | UnitEnum | null
+    {
+        return NavigationOptions::HR->getLabel();
+    }
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

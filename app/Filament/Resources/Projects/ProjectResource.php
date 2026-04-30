@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Projects;
 use App\Filament\Resources\Projects\Pages\CreateProject;
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Projects\Pages\ListProjects;
+use App\Filament\Resources\Projects\Pages\ManageProjectDetails;
 use App\Filament\Resources\Projects\Pages\ViewProject;
 use App\Filament\Resources\Projects\RelationManagers\TasksRelationManager;
 use App\Filament\Resources\Projects\Schemas\ProjectForm;
@@ -52,10 +53,11 @@ class ProjectResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListProjects::route('/'),
-            'create' => CreateProject::route('/create'),
-            'view'   => ViewProject::route('/{record}'),
-            'edit'   => EditProject::route('/{record}/edit'),
+            'index'   => ListProjects::route('/'),
+            'create'  => CreateProject::route('/create'),
+            'view'    => ViewProject::route('/{record}'),
+            'edit'    => EditProject::route('/{record}/edit'),
+            'details' => ManageProjectDetails::route('/{record}/details'),
         ];
     }
 

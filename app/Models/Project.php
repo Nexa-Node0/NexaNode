@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -147,5 +149,22 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function details(): HasOne
+    {
+        return $this->hasOne(ProjectDetail::class);
+    }
+
+    public function client(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Client::class,        // final model
+            ProjectDetail::class, // intermediate model
+            'project_id',         // FK on project_details → projects.id
+            'id',                 // PK on clients (target key)
+            'id',                 // PK on projects
+            'client_id'           // FK on project_details → clients.id
+        );
     }
 }

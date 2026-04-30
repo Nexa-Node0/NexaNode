@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Filament\Resources\Projects\Pages;
 
 use App\Filament\Resources\Projects\ProjectResource;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
@@ -20,6 +20,10 @@ class EditProject extends EditRecord
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
+            Action::make('manageDetails')
+                ->label('Details')
+                ->url(fn($record) => ProjectResource::getUrl('details', ['record' => $record]))
+                ->icon('heroicon-o-document-text'),
         ];
     }
 }
