@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <x-filament::section>
-        <x-slot name="heading">Project Details</x-slot>
+        <x-slot name="heading">Project Summary</x-slot>
 
         <form wire:submit="save">
             {{ $this->form }}

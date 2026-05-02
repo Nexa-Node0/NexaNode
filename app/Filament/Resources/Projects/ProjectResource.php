@@ -5,6 +5,7 @@ use App\Filament\Resources\Projects\Pages\CreateProject;
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Projects\Pages\ListProjects;
 use App\Filament\Resources\Projects\Pages\ManageProjectDetails;
+use App\Filament\Resources\Projects\Pages\ManageProjectSummary;
 use App\Filament\Resources\Projects\Pages\ViewProject;
 use App\Filament\Resources\Projects\RelationManagers\TasksRelationManager;
 use App\Filament\Resources\Projects\Schemas\ProjectForm;
@@ -58,6 +59,7 @@ class ProjectResource extends Resource
             'view'    => ViewProject::route('/{record}'),
             'edit'    => EditProject::route('/{record}/edit'),
             'details' => ManageProjectDetails::route('/{record}/details'),
+            'summary' => ManageProjectSummary::route('/{record}/summary'),
         ];
     }
 

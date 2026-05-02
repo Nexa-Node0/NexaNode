@@ -167,4 +167,9 @@ class Project extends Model
             'client_id'           // FK on project_details → clients.id
         );
     }
+
+    public function summary(): HasOne
+    {
+        return $this->hasOne(ProjectSummary::class);
+    }
 }

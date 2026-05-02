@@ -78,6 +78,9 @@ class ProjectsTable
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('client.name')
+                    ->placeholder('No Client Specified'),
+
                 TextColumn::make('slug')
                     ->badge()
                     ->searchable()
