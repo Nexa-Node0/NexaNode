@@ -18,12 +18,14 @@ class ViewProject extends ViewRecord
                 ->label('Summary')
                 ->color(fn($record) => $record->summary ? 'info' : 'danger')
                 ->url(fn($record) => ProjectResource::getUrl('summary', ['record' => $record]))
-                ->icon(fn($record) => $record->summary ? 'heroicon-o-document-magnifying-glass' : 'heroicon-o-exclamation-circle'),
+                ->icon(fn($record) => $record->summary ? 'heroicon-o-document-magnifying-glass' : 'heroicon-o-exclamation-circle')
+                ->visible(fn($record) => auth()->user()->can('update', $record)),
             Action::make('manageDetails')
                 ->label('Details')
                 ->color(fn($record) => $record->details ? 'info' : 'danger')
                 ->url(fn($record) => ProjectResource::getUrl('details', ['record' => $record]))
-                ->icon(fn($record) => $record->details ? 'heroicon-o-document-text' : 'heroicon-o-exclamation-circle'),
+                ->icon(fn($record) => $record->details ? 'heroicon-o-document-text' : 'heroicon-o-exclamation-circle')
+                ->visible(fn($record) => auth()->user()->can('update', $record)),
         ];
     }
 
