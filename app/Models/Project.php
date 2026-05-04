@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -171,5 +172,11 @@ class Project extends Model
     public function summary(): HasOne
     {
         return $this->hasOne(ProjectSummary::class);
+    }
+
+    //morph relationship, so that other model can access filestorage table
+    public function files(): MorphMany
+    {
+        return $this->morphMany(FileStorage::class, 'fileable');
     }
 }

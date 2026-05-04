@@ -7,6 +7,7 @@ use App\Filament\Resources\Projects\Pages\ListProjects;
 use App\Filament\Resources\Projects\Pages\ManageProjectDetails;
 use App\Filament\Resources\Projects\Pages\ManageProjectSummary;
 use App\Filament\Resources\Projects\Pages\ViewProject;
+use App\Filament\Resources\Projects\RelationManagers\FilesRelationManager;
 use App\Filament\Resources\Projects\RelationManagers\TasksRelationManager;
 use App\Filament\Resources\Projects\Schemas\ProjectForm;
 use App\Filament\Resources\Projects\Schemas\ProjectInfolist;
@@ -48,6 +49,7 @@ class ProjectResource extends Resource
         return [
             //
             TasksRelationManager::class,
+            FilesRelationManager::class,
         ];
     }
 
