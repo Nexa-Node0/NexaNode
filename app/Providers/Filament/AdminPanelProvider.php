@@ -67,7 +67,7 @@ class AdminPanelProvider extends PanelProvider
                         ->formPanelPosition('right')
                         ->formPanelWidth('40%')
                         ->emptyPanelBackgroundImageOpacity('70%')
-                        ->emptyPanelBackgroundImageUrl(Storage::url($panelBackground))
+                        ->emptyPanelView('filament.pages.login-left-panel')
             ])
            
             ->colors([
