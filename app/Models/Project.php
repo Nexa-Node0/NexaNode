@@ -179,4 +179,9 @@ class Project extends Model
     {
         return $this->morphMany(FileStorage::class, 'fileable');
     }
+
+    public function feedbacks(): HasMany
+    {
+        return $this->hasMany(ProjectFeedback::class);
+    }
 }
