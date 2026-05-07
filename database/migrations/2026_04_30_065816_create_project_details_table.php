@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->foreignId('client_id')->constrained()->cascadeOnDelete();
             $table->string('abstract');
+            $table->json('services');
             $table->json('tags');
             $table->softDeletes();
             $table->timestamps();

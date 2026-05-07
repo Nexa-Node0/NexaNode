@@ -3,12 +3,14 @@ namespace App\Filament\Resources\Projects\Schemas;
 
 use App\Enums\TechStacksEnum;
 use App\Models\Project;
+use App\Models\ProjectDetail;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -170,6 +172,10 @@ class ProjectForm
                                                 ->label('Client')
                                                 ->options(\App\Models\Client::pluck('name', 'id'))
                                                 ->searchable()
+                                                ->required(),
+
+                                            TagsInput::make('services')
+                                                ->suggestions(ProjectDetail::getCommonServices())
                                                 ->required(),
 
                                             TextInput::make('abstract')

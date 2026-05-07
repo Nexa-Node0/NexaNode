@@ -19,11 +19,13 @@ class ProjectDetail extends Model
         'project_id',
         'client_id',
         'abstract',
+        'services',
         'tags',
     ];
 
     protected $casts = [
-        'tags' => 'array',
+        'services' => 'array',
+        'tags'     => 'array',
     ];
 
     //attributes
@@ -43,5 +45,16 @@ class ProjectDetail extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+                                                     //extra
+    public static function getCommonServices(): array//register your services here
+    {
+        return [ //register services here
+            'UX Auidit',
+            'Product Design',
+            'Web Development',
+            'Team Extention',
+        ];
     }
 }
