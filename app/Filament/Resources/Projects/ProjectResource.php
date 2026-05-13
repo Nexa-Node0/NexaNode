@@ -21,6 +21,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Override;
 
 class ProjectResource extends Resource
 {
@@ -33,6 +34,20 @@ class ProjectResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return ProjectForm::configure($schema);
+    }
+
+    #[Override]
+    public static function getNavigationBadge(): ?string
+    {
+        return Project::whereDoesntHave('details')
+            ->orWhereDoesntHave('summary')
+            ->count();
+    }
+
+    #[Override]
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'danger';
     }
 
     public static function infolist(Schema $schema): Schema

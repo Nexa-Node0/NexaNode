@@ -353,7 +353,30 @@ class ProjectsTable
                     ->tooltip('Additional Actions'),
 
                 ViewAction::make()
-                    ->color('info'),
+                    ->color(fn($record) =>
+                        $record->details == null ||
+                        $record->summary == null
+                            ? 'danger'
+                            : 'info'
+                    )
+                    ->tooltip(function ($record) {
+
+                        $messages = [];
+
+                        if ($record->details == null) {
+                            $messages[] = 'no given PROJECT DETAILS';
+                        }
+
+                        if ($record->summary == null) {
+                            $messages[] = 'no given PROJECT SUMMARY';
+                        }
+
+                        if (empty($messages)) {
+                            return 'View Project';
+                        }
+
+                        return implode(' and ', $messages);
+                    })
             ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
