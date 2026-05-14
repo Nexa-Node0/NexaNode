@@ -50,12 +50,14 @@ class AdminPanelProvider extends BasePanelProvider
                     ]),
                 SettingsPlugin::make(),
                 AuthUIEnhancerPlugin::make()
-                        ->showEmptyPanelOnMobile(false)
-                        ->formPanelPosition('right')
-                        ->formPanelWidth('40%')
-                        ->emptyPanelBackgroundImageOpacity('70%')
-                        ->emptyPanelView('filament.pages.auth.admin-panel')
+                    ->showEmptyPanelOnMobile(false)
+                    ->formPanelPosition('right')
+                    ->formPanelWidth('50%')
+                    ->emptyPanelBackgroundImageOpacity('70%')
+                    ->emptyPanelBackgroundColor(['500' => '#0d1418'])
+                    ->emptyPanelView('filament.pages.login-left-panel')
             ])
+
             ->colors([
                 'primary' => Color::Blue,
             ])
