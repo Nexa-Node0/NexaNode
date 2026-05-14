@@ -1,14 +1,19 @@
 <?php
 namespace App\Filament\Resources\Projects\Schemas;
 
+use App\Enums\TechStacksEnum;
 use App\Models\Project;
+use App\Models\ProjectDetail;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -23,7 +28,7 @@ class ProjectForm
             ->components([
                 //
                 Tabs::make()
-                    ->schema([
+                    ->schema(fn(string $operation) => [
                         Tab::make('Project Information')
                             ->schema([
                                 TextInput::make('title')
@@ -56,6 +61,13 @@ class ProjectForm
                                             }
                                         },
                                     ]),
+
+                                FileUpload::make('display')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('images/projects/display')
+                                    ->imageEditor()
+                                    ->columnSpanFull(),
 
                                 MarkdownEditor::make('description')
                                     ->required()
@@ -148,6 +160,49 @@ class ProjectForm
                                     ->preload()
                                     ->searchable(),
                             ]),
+
+                        //functions that only available in create
+                         ...($operation === 'create' ? [
+                            Tab::make('Details')
+                                ->schema([
+                                    Section::make()
+                                        ->relationship('details')
+                                        ->schema([
+                                            Select::make('client_id')
+                                                ->label('Client')
+                                                ->options(\App\Models\Client::pluck('name', 'id'))
+                                                ->searchable()
+                                                ->required(),
+
+                                            TagsInput::make('services')
+                                                ->suggestions(ProjectDetail::getCommonServices())
+                                                ->required(),
+
+                                            TextInput::make('abstract')
+                                                ->required(),
+
+                                            Select::make('tags')
+                                                ->options(TechStacksEnum::options())
+                                                ->multiple()
+                                                ->required(),
+                                        ]),
+                                ]),
+
+                            Tab::make('Summary')
+                                ->schema([
+                                    Section::make()
+                                        ->relationship('summary')
+                                        ->schema([
+                                            MarkdownEditor::make('description')
+                                                ->label('Tell me more about this Project')
+                                                ->required(),
+
+                                            MarkdownEditor::make('goals')
+                                                ->label('What is the Goal of this Project?')
+                                                ->required(),
+                                        ]),
+                                ]),
+                        ] : []),
                     ])
                     ->columnSpanFull(),
             ]);

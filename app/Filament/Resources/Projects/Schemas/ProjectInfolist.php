@@ -3,6 +3,7 @@ namespace App\Filament\Resources\Projects\Schemas;
 
 use App\Enums\ApprovedStatus;
 use Carbon\Carbon;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -21,8 +22,15 @@ class ProjectInfolist
                         TextEntry::make('description')
                         // ->hiddenLabel()
                             ->markdown()
-                            ->columnSpanFull(),
-                    ]),
+                            ->columnSpan(2),
+
+                        ImageEntry::make('web_display')
+                            ->label('Media')
+                            ->hiddenLabel(fn($record) => $record->display == null)
+                            ->circular()
+                            ->disk('public'),
+                    ])
+                    ->columns(3),
 
                 // Status row
                 Section::make('Status & Approval')

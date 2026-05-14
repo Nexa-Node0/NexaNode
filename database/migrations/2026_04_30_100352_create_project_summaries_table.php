@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->string('status')->default(App\Enums\PostStatus::Archived->value)->change();
+        Schema::create('project_summaries', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->text('description');
+            $table->text('goals');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->enum('status', ["Published", "Unpublished", "Draft"])->default("Published")->change();
-        });
+        Schema::dropIfExists('project_summaries');
     }
 };
