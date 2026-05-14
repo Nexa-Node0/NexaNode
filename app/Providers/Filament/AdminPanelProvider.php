@@ -55,7 +55,11 @@ class AdminPanelProvider extends BasePanelProvider
                     ->formPanelWidth('50%')
                     ->emptyPanelBackgroundImageOpacity('70%')
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
+<<<<<<< HEAD
                     ->emptyPanelView('filament.pages.auth.admin-panel')
+=======
+                    ->emptyPanelView('filament.pages.auth.portal-panel')
+>>>>>>> bcccf3ffa9d786521c12cd4d7daeeb91357cf4b3
             ])
 
             ->colors([
