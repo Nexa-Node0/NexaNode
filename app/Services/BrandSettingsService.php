@@ -24,7 +24,6 @@ class BrandSettingsService
                 'dark_mode_logo'   => Setting::get('general.dark_mode_brand_logo'),
                 'favicon'          => Setting::get('general.favicon'),
                 'brand_name'       => Setting::get('general.brand_name', config('app.name')),
-                'panel_background' => Setting::get('general.admin_empty_panel_background'),
             ];
         } catch (\Throwable $e) {
             // Catches any unexpected DB/driver errors during boot.
