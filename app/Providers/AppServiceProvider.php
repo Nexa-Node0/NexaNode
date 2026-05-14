@@ -20,6 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-         StockMovement::observe(StockMovementObserver::class);
+        StockMovement::observe(StockMovementObserver::class);
     }
 }

@@ -2,53 +2,37 @@
 
 namespace App\Providers\Filament;
 
-use App\Enums\NavigationOptions;
 use App\Filament\Widgets\AdminStatsWidget;
 use App\Filament\Widgets\InventoryStatsWidget;
 use App\Filament\Widgets\LowStockProductsWidget;
 use App\Filament\Widgets\RecentStockMovementsWidget;
-use App\Http\Middleware\BootstrapMailSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
-use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\BootstrapMailSettings;
 use Outerweb\FilamentSettings\SettingsPlugin;
-use Outerweb\Settings\Facades\Setting;
+use App\Enums\NavigationOptions;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 
-class AdminPanelProvider extends PanelProvider
+class AdminPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $brandLogo = Setting::get('general.brand_logo');
-        $darkModeLogo = Setting::get('general.dark_mode_brand_logo');
-        $favicon = Setting::get('general.favicon');
-        $brandName = Setting::get('general.brand_name', config('app.name'));
-        $panelBackground = Setting::get('general.admin_empty_panel_background');
-
-        return $panel
-            ->default()
+        $panel
             ->id('admin')
             ->path('admin')
-            ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
-            ->darkModeBrandLogo(Storage::url($darkModeLogo))
-            ->favicon($favicon ? Storage::url($favicon) : null)
-            ->brandName($brandName)
             ->brandLogoHeight('80px')
             ->authGuard('web')
             ->navigationGroups(NavigationOptions::getNavigations())
@@ -109,5 +93,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+
+        return $this->applyBrandSettings($panel);
     }
 }
