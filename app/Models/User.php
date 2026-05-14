@@ -66,7 +66,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return match ($panel->getId()) {
             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
-            'project' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
+            
             default => false
         };
         //relations

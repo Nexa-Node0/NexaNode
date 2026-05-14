@@ -19,8 +19,10 @@ class ListPosts extends ListRecords
             CreateAction::make()
                 ->icon('heroicon-o-plus')
                 ->label('Add New Post')
-                ->modalWidth(Width::SevenExtraLarge)
-        ];
+                ->modalWidth(Width::SevenExtraLarge),
+            
+           
+            ];
     }
 
     protected function getHeaderWidgets(): array

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\PostCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 /**
  * @extends Factory<PostCategory>
  */
@@ -18,12 +19,31 @@ class PostCategoryFactory extends Factory
     public function definition(): array
     {
 
-        $name = $this->faker->unique()->words(rand(1,3), true);
+        // Predefined realistic categories
+        $categories = [
+            'Technology', 
+            'Health & Wellness', 
+            'Travel', 
+            'Food & Recipes',
+            'Business', 
+            'Lifestyle', 
+            'Education', 
+            'Entertainment',
+            'Sports', 
+            'Science',
+            'Politics', 
+            'Finance',
+            'Art & Culture', 
+            'Environment', 
+            'Fashion',
+        ];
+        
+        $category = fake()->unique()->randomElement($categories);
 
         return [
-            'name' => ucwords($name),
-            'slug' => Str::slug($name),
-            'description' => $this->faker->paragraph(),
+            'name' => $category,
+            'slug' => Str::slug($category),
+            'description' => fake()->sentence(10)
         ];
     }
 }
