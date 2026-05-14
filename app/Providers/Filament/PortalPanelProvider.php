@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
+use Faker\Provider\Base;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -19,22 +21,33 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AuthorPanelProvider extends PanelProvider
+class PortalPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
-            ->id('author')
-            ->path('author')
+         $panel
+            ->default()
+            ->id('portal')
+            ->path('portal')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Author/Resources'), for: 'App\Filament\Author\Resources')
-            ->discoverPages(in: app_path('Filament/Author/Pages'), for: 'App\Filament\Author\Pages')
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->discoverResources(in: app_path('Filament/Portal/Resources'), for: 'App\Filament\Portal\Resources')
+            ->discoverPages(in: app_path('Filament/Portal/Pages'), for: 'App\Filament\Portal\Pages')
+            ->discoverWidgets(in: app_path('Filament/Portal/Widgets'), for: 'App\Filament\Portal\Widgets')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Author/Widgets'), for: 'App\Filament\Author\Widgets')
+            ->login()
+            ->plugins([
+                AuthUIEnhancerPlugin::make()
+                    ->showEmptyPanelOnMobile()
+                    ->formPanelPosition('left')
+                    ->formPanelWidth('40%')
+                    ->emptyPanelBackgroundImageOpacity('70%')
+                    ->emptyPanelView('filament.pages.auth.portal-panel')
+            ])
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
@@ -53,5 +66,7 @@ class AuthorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+        
+        return $this->applyBrandSettings($panel);
     }
 }

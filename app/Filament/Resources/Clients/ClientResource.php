@@ -1,7 +1,6 @@
 <?php
 namespace App\Filament\Resources\Clients;
 
-use App\Enums\NavigationOptions;
 use App\Filament\Resources\Clients\Pages\CreateClient;
 use App\Filament\Resources\Clients\Pages\EditClient;
 use App\Filament\Resources\Clients\Pages\ListClients;
@@ -16,7 +15,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Override;
-use UnitEnum;
 
 class ClientResource extends Resource
 {
@@ -24,11 +22,6 @@ class ClientResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
-    #[Override]
-    public static function getNavigationGroup(): string | UnitEnum | null
-    {
-        return NavigationOptions::HR->getLabel();
-    }
     protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -65,9 +58,7 @@ class ClientResource extends Resource
     {
         return [
             'index'  => ListClients::route('/'),
-            'create' => CreateClient::route('/create'),
             'view'   => ViewClient::route('/{record}'),
-            'edit'   => EditClient::route('/{record}/edit'),
         ];
     }
 }

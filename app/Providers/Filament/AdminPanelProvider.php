@@ -13,7 +13,6 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
-use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -23,30 +22,17 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\BootstrapMailSettings;
-use Illuminate\Support\Facades\Storage;
 use Outerweb\FilamentSettings\SettingsPlugin;
-use Outerweb\Settings\Facades\Setting;
 use App\Enums\NavigationOptions;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 
-class AdminPanelProvider extends PanelProvider
+class AdminPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $brandLogo = Setting::get('general.brand_logo');
-        $darkModeLogo = Setting::get('general.dark_mode_brand_logo');
-        $favicon = Setting::get('general.favicon');
-        $brandName = Setting::get('general.brand_name', config('app.name'));
-        $panelBackground = Setting::get('general.admin_empty_panel_background');
-
-        return $panel
-            ->default()
+        $panel
             ->id('admin')
             ->path('admin')
-            ->brandLogo($brandLogo ? Storage::url($brandLogo) : null)
-            ->darkModeBrandLogo(Storage::url($darkModeLogo))
-            ->favicon($favicon ? Storage::url($favicon) : null)
-            ->brandName($brandName)
             ->brandLogoHeight('80px')
             ->authGuard('web')
             ->navigationGroups(NavigationOptions::getNavigations())
@@ -68,9 +54,8 @@ class AdminPanelProvider extends PanelProvider
                         ->formPanelPosition('right')
                         ->formPanelWidth('40%')
                         ->emptyPanelBackgroundImageOpacity('70%')
-                        ->emptyPanelView('filament.pages.login-left-panel')
+                        ->emptyPanelView('filament.pages.auth.admin-panel')
             ])
-           
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -106,5 +91,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+
+        return $this->applyBrandSettings($panel);
     }
 }
