@@ -55,7 +55,7 @@ class AdminPanelProvider extends BasePanelProvider
                     ->formPanelWidth('50%')
                     ->emptyPanelBackgroundImageOpacity('70%')
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
-                    ->emptyPanelView('filament.pages.login-left-panel')
+                    ->emptyPanelView('filament.pages.auth.admin-panel')
             ])
 
             ->colors([
