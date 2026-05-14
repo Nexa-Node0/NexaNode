@@ -17,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'update_last_seen' => UserLastSeen::class,
         ]);
+
+        $middleware->append(\App\Http\Middleware\BootstrapMailSettings::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\BootstrapMailSettings;
 use Illuminate\Support\Facades\Storage;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use Outerweb\Settings\Facades\Setting;
@@ -67,7 +68,7 @@ class AdminPanelProvider extends PanelProvider
                         ->formPanelPosition('right')
                         ->formPanelWidth('40%')
                         ->emptyPanelBackgroundImageOpacity('70%')
-                        ->emptyPanelBackgroundImageUrl(Storage::url($panelBackground))
+                        ->emptyPanelView('filament.pages.login-left-panel')
             ])
            
             ->colors([
@@ -99,6 +100,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                BootstrapMailSettings::class,
                 'update_last_seen',
             ])
             ->authMiddleware([
