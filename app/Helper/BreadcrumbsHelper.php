@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class BreadcrumbsHelper
 {
     public static function generateBreadcrumbsURL(Model $model, string $title, string $action){
-        $baseClass = strtolower(class_basename($model) . "s");
+
+        $baseSegment = method_exists($model, 'adminBasePath')
+            ? $model->adminBasePath()
+            : strtolower(class_basename($model) . "s");
+
+        $label = ucfirst(class_basename($model) . "s");
+
         return [
-             url("/admin/{$baseClass}/") => ucfirst($baseClass),
-             url("/admin/{$baseClass}/" . $model->id) => $title,
-             '' => $action
+             url("/admin/{$baseSegment}/")              => $label,
+             url("/admin/{$baseSegment}/" . $model->id) => $title,
+             ''                                         => $action
         ];
     }
 }

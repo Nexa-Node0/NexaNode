@@ -31,6 +31,10 @@ class Post extends Model
     ];
 
 
+    public function adminBasePath(): string {
+        return 'blog/posts';
+    }
+
     public function user(){
         return $this->belongsTo(User::class)->role('author');
     }

@@ -74,24 +74,24 @@ class PostsTable
             ->recordActions([
                 ActionGroup::make([
                     EditAction::make(),
-                    DeleteAction::make()
+                    DeleteAction::make(),
+                    Action::make('send')
+                        ->label('Send To All Subscribers')
+                        ->icon('heroicon-o-paper-airplane')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading('Send Post')
+                        ->modalDescription('This will send the post to all subscribers')
+                        ->modalSubmitActionLabel('Yes, Send Now')
+                        ->action(function (Post $post){
+                            SendPostJob::dispatch($post);
+                            Notification::make()
+                                ->title('Post queued!')
+                                ->body('It will be sent to all users shortly')
+                                ->success()
+                                ->send();
+                    })
                 ]),
-                Action::make('send')
-                ->label('Send To All Subscribers')
-                ->icon('heroicon-o-paper-airplane')
-                ->color('success')
-                ->requiresConfirmation()
-                ->modalHeading('Send Post')
-                ->modalDescription('This will send the post to all subscribers')
-                ->modalSubmitActionLabel('Yes, Send Now')
-                ->action(function (Post $post){
-                    SendPostJob::dispatch($post);
-                    Notification::make()
-                        ->title('Post queued!')
-                        ->body('It will be sent to all users shortly')
-                        ->success()
-                        ->send();
-                })
             ])
 
             ->defaultSort('created_at', 'desc')
