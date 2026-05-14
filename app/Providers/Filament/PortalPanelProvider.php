@@ -25,7 +25,7 @@ class PortalPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-         $panel
+        $panel
             ->default()
             ->id('portal')
             ->path('portal')
@@ -44,8 +44,9 @@ class PortalPanelProvider extends BasePanelProvider
                 AuthUIEnhancerPlugin::make()
                     ->showEmptyPanelOnMobile()
                     ->formPanelPosition('left')
-                    ->formPanelWidth('40%')
+                    ->formPanelWidth('50%')
                     ->emptyPanelBackgroundImageOpacity('70%')
+                    ->emptyPanelBackgroundColor(['500' => '#0d1418'])
                     ->emptyPanelView('filament.pages.auth.portal-panel')
             ])
             ->widgets([
@@ -66,7 +67,7 @@ class PortalPanelProvider extends BasePanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
-        
+
         return $this->applyBrandSettings($panel);
     }
 }
