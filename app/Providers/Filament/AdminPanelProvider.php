@@ -2,11 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\NavigationOptions;
 use App\Filament\Widgets\AdminStatsWidget;
 use App\Filament\Widgets\InventoryStatsWidget;
 use App\Filament\Widgets\LowStockProductsWidget;
 use App\Filament\Widgets\RecentStockMovementsWidget;
+use App\Http\Middleware\BootstrapMailSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -15,19 +18,18 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\BootstrapMailSettings;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use Outerweb\Settings\Facades\Setting;
-use App\Enums\NavigationOptions;
-use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -64,13 +66,14 @@ class AdminPanelProvider extends PanelProvider
                     ]),
                 SettingsPlugin::make(),
                 AuthUIEnhancerPlugin::make()
-                        ->showEmptyPanelOnMobile(false)
-                        ->formPanelPosition('right')
-                        ->formPanelWidth('40%')
-                        ->emptyPanelBackgroundImageOpacity('70%')
-                        ->emptyPanelView('filament.pages.login-left-panel')
+                    ->showEmptyPanelOnMobile(false)
+                    ->formPanelPosition('right')
+                    ->formPanelWidth('50%')
+                    ->emptyPanelBackgroundImageOpacity('70%')
+                    ->emptyPanelBackgroundColor(['500' => '#0d1418'])
+                    ->emptyPanelView('filament.pages.login-left-panel')
             ])
-           
+
             ->colors([
                 'primary' => Color::Blue,
             ])
