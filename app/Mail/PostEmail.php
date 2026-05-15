@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Post;
 
-class PostEmail extends Mailable
+class PostEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
