@@ -16,6 +16,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
+use App\Enums\Settings\SEOEnum;
 use BackedEnum;
 use Override;
 use UnitEnum;
@@ -49,19 +50,19 @@ class SEOSettings extends Settings
                         ->description('These are the core meta tags that appear in search engine results.')
                         ->columns(3)
                         ->schema([
-                            TextInput::make('seo.meta_title')
+                            TextInput::make(SEOEnum::MetaTitle->value)
                                 ->label('Meta Title')
                                 ->required()
                                 ->maxLength(60)
                                 ->helperText('Recommended: 50–60 characters')
                                 ->columnSpan(2),
 
-                            TextInput::make('seo.meta_keywords')
+                            TextInput::make(SEOEnum::MetaKeywords->value)
                                 ->label('Meta Keywords')
                                 ->helperText('Comma-separated keywords')
                                 ->columnSpan(1),
 
-                            Textarea::make('seo.meta_description')
+                            Textarea::make(SEOEnum::MetaDescription->value)
                                 ->label('Meta Description')
                                 ->rows(3)
                                 ->maxLength(160)
@@ -73,24 +74,24 @@ class SEOSettings extends Settings
                         ->description('Control how search engines crawl and index your site.')
                         ->columns(3)
                         ->schema([
-                            Toggle::make('seo.index')
+                            Toggle::make(SEOEnum::Index->value)
                                 ->label('Allow Search Engine Indexing')
                                 ->default(true),
 
-                            Toggle::make('seo.follow')
+                            Toggle::make(SEOEnum::Follow->value)
                                 ->label('Allow Link Following')
                                 ->default(true),
 
-                            Toggle::make('seo.sitemap_enabled')
+                            Toggle::make(SEOEnum::SiteMapEnabled->value)
                                 ->label('Enable Sitemap'),
 
-                            TextInput::make('seo.sitemap_url')
+                            TextInput::make(SEOEnum::SiteMapURL->value)
                                 ->label('Sitemap URL')
                                 ->url()
                                 ->placeholder('https://yourdomain.com/sitemap.xml')
                                 ->columnSpan(2),
 
-                            TextInput::make('seo.canonical_url')
+                            TextInput::make(SEOEnum::CanonicalURL->value)
                                 ->label('Canonical URL')
                                 ->url()
                                 ->placeholder('https://yourdomain.com')
@@ -105,12 +106,12 @@ class SEOSettings extends Settings
                         ->description('Controls how your site appears when shared on Facebook, LinkedIn, and others.')
                         ->columns(3)
                         ->schema([
-                            TextInput::make('seo.og_title')
+                            TextInput::make(SEOEnum::OGTitle->value)
                                 ->label('OG Title')
                                 ->maxLength(95)
                                 ->columnSpan(2),
 
-                            Select::make('seo.og_type')
+                            Select::make(SEOEnum::OGType->value)
                                 ->label('OG Type')
                                 ->options([
                                     'website' => 'Website',
@@ -121,23 +122,23 @@ class SEOSettings extends Settings
                                 ->default('website')
                                 ->columnSpan(1),
 
-                            Textarea::make('seo.og_description')
+                            Textarea::make(SEOEnum::OGDescription->value)
                                 ->label('OG Description')
                                 ->rows(3)
                                 ->maxLength(200)
                                 ->columnSpanFull(),
 
-                            TextInput::make('seo.og_url')
+                            TextInput::make(SEOEnum::OGURL->value)
                                 ->label('OG URL')
                                 ->url()
                                 ->placeholder('https://yourdomain.com')
                                 ->columnSpan(2),
 
-                            TextInput::make('seo.og_site_name')
+                            TextInput::make(SEOEnum::OGSiteName->value)
                                 ->label('OG Site Name')
                                 ->columnSpan(1),
 
-                            FileUpload::make('seo.og_image')
+                            FileUpload::make(SEOEnum::OGImage->value)
                                 ->label('OG Image')
                                 ->image()
                                 ->directory('settings/seo')
@@ -154,7 +155,7 @@ class SEOSettings extends Settings
                         ->description('Controls how your site appears when shared on Twitter / X.')
                         ->columns(3)
                         ->schema([
-                            Select::make('seo.twitter_card')
+                            Select::make(SEOEnum::TwitterCard->value)
                                 ->label('Card Type')
                                 ->options([
                                     'summary'             => 'Summary',
@@ -165,28 +166,28 @@ class SEOSettings extends Settings
                                 ->default('summary_large_image')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.twitter_site')
+                            TextInput::make(SEOEnum::TwitterSite->value)
                                 ->label('Twitter Site Handle')
                                 ->placeholder('@yourhandle')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.twitter_creator')
+                            TextInput::make(SEOEnum::TwitterCreator->value)
                                 ->label('Twitter Creator Handle')
                                 ->placeholder('@yourhandle')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.twitter_title')
+                            TextInput::make(SEOEnum::TwitterTitle->value)
                                 ->label('Twitter Title')
                                 ->maxLength(70)
                                 ->columnSpan(2),
 
-                            Textarea::make('seo.twitter_description')
+                            Textarea::make(SEOEnum::TwitterDescription->value)
                                 ->label('Twitter Description')
                                 ->rows(3)
                                 ->maxLength(200)
                                 ->columnSpanFull(),
 
-                            FileUpload::make('seo.twitter_image')
+                            FileUpload::make(SEOEnum::TwitterImage->value)
                                 ->label('Twitter Image')
                                 ->image()
                                 ->directory('settings/seo')
@@ -203,17 +204,17 @@ class SEOSettings extends Settings
                         ->description('Connect your Google tracking and verification tools.')
                         ->columns(3)
                         ->schema([
-                            TextInput::make('seo.google_analytics_id')
+                            TextInput::make(SEOEnum::GoogleAnalyticsID->value)
                                 ->label('Google Analytics ID')
                                 ->placeholder('G-XXXXXXXXXX')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.google_tag_manager_id')
+                            TextInput::make(SEOEnum::GoogleTagManagerID->value)
                                 ->label('Google Tag Manager ID')
                                 ->placeholder('GTM-XXXXXXX')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.google_site_verification')
+                            TextInput::make(SEOEnum::GoogleSiteVerification->value)
                                 ->label('Google Site Verification')
                                 ->placeholder('Google verification meta value')
                                 ->columnSpan(1),
@@ -223,16 +224,16 @@ class SEOSettings extends Settings
                         ->description('Additional tracking and verification codes.')
                         ->columns(3)
                         ->schema([
-                            TextInput::make('seo.facebook_pixel_id')
+                            TextInput::make(SEOEnum::FacebookPixelID->value)
                                 ->label('Facebook Pixel ID')
                                 ->placeholder('XXXXXXXXXXXXXXXXXX')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.bing_site_verification')
+                            TextInput::make(SEOEnum::BingSiteVerification->value)
                                 ->label('Bing Site Verification')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.tiktok_pixel_id')
+                            TextInput::make(SEOEnum::TikTokPixelID->value)
                                 ->label('TikTok Pixel ID')
                                 ->columnSpan(1),
                         ]),
@@ -245,7 +246,7 @@ class SEOSettings extends Settings
                         ->description('Help search engines better understand your site content.')
                         ->columns(3)
                         ->schema([
-                            Select::make('seo.schema_type')
+                            Select::make(SEOEnum::SchemaType->value)
                                 ->label('Schema Type')
                                 ->options([
                                     'Organization'    => 'Organization',
@@ -257,31 +258,31 @@ class SEOSettings extends Settings
                                 ->default('Organization')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.schema_name')
+                            TextInput::make(SEOEnum::SchemaName->value)
                                 ->label('Organization / Site Name')
                                 ->columnSpan(2),
 
-                            TextInput::make('seo.schema_url')
+                            TextInput::make(SEOEnum::SchemaURL->value)
                                 ->label('Site URL')
                                 ->url()
                                 ->placeholder('https://yourdomain.com')
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.schema_email')
+                            TextInput::make(SEOEnum::SchemaEmail->value)
                                 ->label('Contact Email')
                                 ->email()
                                 ->columnSpan(1),
 
-                            TextInput::make('seo.schema_phone')
+                            TextInput::make(SEOEnum::SchemaPhone->value)
                                 ->label('Phone Number')
                                 ->columnSpan(1),
 
-                            Textarea::make('seo.schema_address')
+                            Textarea::make(SEOEnum::SchemaAddress->value)
                                 ->label('Address')
                                 ->rows(2)
                                 ->columnSpanFull(),
 
-                            FileUpload::make('seo.schema_logo')
+                            FileUpload::make(SEOEnum::SchemaLogo->value)
                                 ->label('Organization Logo')
                                 ->image()
                                 ->directory('settings/seo')
