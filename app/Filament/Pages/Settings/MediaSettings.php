@@ -12,10 +12,10 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
+use App\Enums\Settings\MediaEnum;
 use Override;
 use UnitEnum;
 
@@ -46,22 +46,22 @@ class MediaSettings extends Settings
                 Tabs\Tab::make('Basic Details')
                     ->icon(Heroicon::Bars3CenterLeft)
                     ->schema([
-                        TextInput::make('media.name')
+                        TextInput::make(MediaEnum::Name->value)
                             ->label('Brand')
                             ->required()
                             ->default('My App')
                             ->columnSpan(2)
                             ->placeholder('My Application'),
 
-                        TextInput::make('media.tagline')
+                        TextInput::make(MediaEnum::Tagline->value)
                             ->label('Tagline')
                             ->columnSpan(1),
 
-                        RichEditor::make('media.description')
+                        RichEditor::make(MediaEnum::Description->value)
                             ->label('Description')
                             ->columnSpanFull(),
 
-                        FileUpload::make('media.favicon')
+                        FileUpload::make(MediaEnum::Favicon->value)
                             ->label('Favicon')
                             ->required()
                             ->image()
@@ -75,11 +75,13 @@ class MediaSettings extends Settings
                                 '16:16'
                             ]),
                             
-                        FileUpload::make('media.lightmode_logo')
+                        FileUpload::make(MediaEnum::LightmodeLogo->value)
                             ->label('Light mode logo')
                             ->required()
                             ->image()
                             ->imageEditor()
+                            ->disk('public')
+                            ->directory('logos')
                             ->imageEditorAspectRatioOptions([
                                 null,
                                 '1:1',
@@ -87,11 +89,13 @@ class MediaSettings extends Settings
                                 '16:16'
                             ]),
 
-                            FileUpload::make('media.darkmode_logo')
+                            FileUpload::make(MediaEnum::DarkmodeLogo->value)
                             ->label('Darkmode mode logo')
                             ->required()
                             ->image()
                             ->imageEditor()
+                            ->disk('public')
+                            ->directory('logos')
                             ->imageEditorAspectRatioOptions([
                                 null,
                                 '1:1',
@@ -103,13 +107,13 @@ class MediaSettings extends Settings
                 Tabs\Tab::make('Upload Rules')
                     ->icon(Heroicon::ExclamationTriangle)
                     ->schema([
-                        TextInput::make('media.max_file_size')
+                        TextInput::make(MediaEnum::MaxFileSize->value)
                             ->label('Max File Size (KB)')
                             ->numeric(),
-                        TextInput::make('media.max_files')
+                        TextInput::make(MediaEnum::MaxFiles->value)
                             ->label('Max File Upload')
                             ->numeric(),
-                        Select::make('media.allowed_media_types')
+                        Select::make(MediaEnum::AllowMediaTypes->value)
                             ->label('Allowed Types')
                             ->multiple()
                             ->options([
@@ -125,17 +129,17 @@ class MediaSettings extends Settings
                 Tabs\Tab::make('Watermark')
                     ->icon(Heroicon::Camera)
                     ->schema([
-                        Toggle::make('media.watermark_enabled')
+                        Toggle::make(MediaEnum::WatermarkEnabled->value)
                             ->label('Enable Watermark'),
                         
-                        FileUpload::make('media.watermark_image')
+                        FileUpload::make(MediaEnum::WatermarkImage->value)
                             ->label('Watermark Image')
                             ->image()
                             ->imageEditor()
                             ->directory('watermark')
                             ->disk('public'),
                         
-                        Select::make('media.watermark_position')
+                        Select::make(MediaEnum::WatermarkPosition->value)
                             ->label('Watermark Position')
                             ->options([
                                 'top-left'     => 'Top Left',
@@ -146,7 +150,7 @@ class MediaSettings extends Settings
                             ])
                             ->default('bottom-right'),
 
-                        TextInput::make('media.watermark_opacity')
+                        TextInput::make(MediaEnum::WatermarkOpacity->value)
                             ->label('Opacity')
                             ->numeric()
                             ->minValue(1)

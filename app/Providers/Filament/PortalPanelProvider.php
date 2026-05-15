@@ -23,7 +23,7 @@ class PortalPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $panel
+        return $panel
             ->default()
             ->id('portal')
             ->path('portal')
@@ -66,6 +66,6 @@ class PortalPanelProvider extends BasePanelProvider
                 Authenticate::class,
             ]);
 
-        return $this->applyBrandSettings($panel);
+        // return $this->applyBrandSettings($panel);
     }
 }

@@ -1,7 +1,5 @@
 <div class="h-full w-full relative flex items-end" id="login-bg">
     <img src="{{ asset('images/logos/NEXALOGO.png') }}" alt="" class="absolute top-5 left-5 w-30 z-10">
-
-
     <div class=" w-3/4 h-50 flex flex-col z-10">
         <p class="text-4xl font-bold mb-5 text-white">Building the next generation of connected digital experiences.</p>
         <p class="text-sm font-light text-gray-300 mb-5">Web Design & Development Company Based in the Philippines</p>

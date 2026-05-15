@@ -25,18 +25,23 @@ use App\Http\Middleware\BootstrapMailSettings;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use App\Enums\NavigationOptions;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
+use Outerweb\Settings\Facades\Setting;
+use Illuminate\Support\Facades\Storage;
 
 class AdminPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $panel
+     
+       $panel
             ->id('admin')
             ->path('admin')
-            ->brandLogoHeight('80px')
             ->authGuard('web')
             ->navigationGroups(NavigationOptions::getNavigations())
             ->login()
+            ->brandName(Setting::get('media.name'))
+            ->brandLogo(Storage::url(Setting::get('media.darkmode_logo')))
+            ->brandLogoHeight('80px')
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->gridColumns([
@@ -52,14 +57,10 @@ class AdminPanelProvider extends BasePanelProvider
                 AuthUIEnhancerPlugin::make()
                     ->showEmptyPanelOnMobile(false)
                     ->formPanelPosition('right')
-                    ->formPanelWidth('50%')
+                    ->formPanelWidth('40%')
                     ->emptyPanelBackgroundImageOpacity('70%')
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
-<<<<<<< HEAD
                     ->emptyPanelView('filament.pages.auth.admin-panel')
-=======
-                    ->emptyPanelView('filament.pages.auth.portal-panel')
->>>>>>> bcccf3ffa9d786521c12cd4d7daeeb91357cf4b3
             ])
 
             ->colors([
@@ -98,6 +99,6 @@ class AdminPanelProvider extends BasePanelProvider
                 Authenticate::class,
             ]);
 
-        return $this->applyBrandSettings($panel);
+        return $this->applySettings($panel);
     }
 }

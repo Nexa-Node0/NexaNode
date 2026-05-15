@@ -1,4 +1,4 @@
-<div class=" h-full w-full relative flex items-end " id="login-bg">
+<div class=" h-full w-full relative flex items-end p-10 " id="login-bg">
 
     <img src="{{ asset('images/logos/NEXALOGO.png') }}" alt="" class="absolute top-5 left-5 w-30 z-10">
 
@@ -14,8 +14,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>

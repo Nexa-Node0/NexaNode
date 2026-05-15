@@ -6,4 +6,11 @@
 
 .custom-left-panel-view {
     min-height: 100vh;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.custom-auth-empty-panel {
+    padding: 0px;
 }

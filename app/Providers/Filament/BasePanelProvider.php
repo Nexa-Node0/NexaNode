@@ -2,35 +2,28 @@
 
 namespace App\Providers\Filament;
 
-use App\Services\BrandSettingsService;
+use App\Services\MediaSettingsService;
 use Filament\Panel;
 use Filament\PanelProvider;
-
+use App\Enums\Settings\MediaEnum;
 abstract class BasePanelProvider extends PanelProvider 
 {
 
-    protected function applyBrandSettings(Panel $panel): Panel 
-    {
-        $settings = app(BrandSettingsService::class)->resolve();
 
-        if($settings['brand_name']){
-            $panel->brandName($settings['brand_name']);
-        }
-
-         if ($settings['brand_logo']) {
-            $panel->brandLogo($settings['brand_logo']);
-        }
- 
-        if ($settings['dark_mode_logo']) {
-            $panel->darkModeBrandLogo($settings['dark_mode_logo']);
-        }
- 
-        if ($settings['favicon']) {
-            $panel->favicon($settings['favicon']);
-        }
-
-        return $panel;
-
+    protected function applySettings(Panel $panel): Panel {
+        return $this->appyMediaSetting($panel);
     }
 
+    protected function appyMediaSetting(Panel $panel): Panel 
+    {
+        $media = app(MediaSettingsService::class)->resolve();   
+
+        $panel->favicon($media[MediaEnum::Favicon->value]);
+        $panel->brandName($media[MediaEnum::Name->value]);
+        $panel->brandLogo($media[MediaEnum::LightmodeLogo->value]);
+        $panel->darkModeBrandLogo($media[MediaEnum::DarkmodeLogo->value]);
+        
+
+        return $panel;
+    }
 }
