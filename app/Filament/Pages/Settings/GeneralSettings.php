@@ -17,6 +17,7 @@ use App\Enums\NavigationOptions;
 use App\Enums\NavigationLabelSettings;
 use Filament\Forms\Components\Toggle;
 use Illuminate\Contracts\Support\Htmlable;
+use App\Enums\GeneralEnum;
 use Override;
 use UnitEnum;
 
@@ -53,19 +54,19 @@ class GeneralSettings extends Settings
                                     ->description('Basic information about your brand and site.')
                                     ->columns(3)
                                     ->schema([
-                                        TextInput::make('general.tagline')
+                                        TextInput::make(GeneralEnum::Tagline->value)
                                             ->label('Tagline')
                                             ->hint('A short catchy phrase for your brand')
                                             ->placeholder('Building the future, one line at a time.')
                                             ->columnSpan(2),
 
-                                        TextInput::make('general.copyright_text')
+                                        TextInput::make(GeneralEnum::CopyrightText->value)
                                             ->label('Copyright Text')
                                             ->placeholder('© 2025 My App. All rights reserved.')
                                             ->hint('Displayed in your site footer')
                                             ->columnSpan(1),
 
-                                        Textarea::make('general.site_description')
+                                        Textarea::make(GeneralEnum::SiteDescription->value)
                                             ->label('Site Description')
                                             ->rows(3)
                                             ->hint('Brief description of what your site is about')
@@ -80,28 +81,28 @@ class GeneralSettings extends Settings
                                     ->description('Public-facing contact details for your site.')
                                     ->columns(3)
                                     ->schema([
-                                        TextInput::make('general.phone')
+                                        TextInput::make(GeneralEnum::Phone->value)
                                             ->label('Phone Number')
                                             ->tel()
                                             ->hint('Primary contact number')
                                             ->placeholder('+1 (555) 000-0000')
                                             ->columnSpan(1),
 
-                                        TextInput::make('general.support_email')
+                                        TextInput::make(GeneralEnum::SupportedEmail->value)
                                             ->label('Support Email')
                                             ->email()
                                             ->hint('Dedicated support email address')
                                             ->placeholder('support@yourdomain.com')
                                             ->columnSpan(1),
 
-                                        TextInput::make('general.website_url')
+                                        TextInput::make(GeneralEnum::WebsiteURL->value)
                                             ->label('Website URL')
                                             ->url()
                                             ->hint('Your public-facing website')
                                             ->placeholder('https://yourdomain.com')
                                             ->columnSpan(1),
 
-                                        Textarea::make('general.address')
+                                        Textarea::make(GeneralEnum::Address->value)
                                             ->label('Business Address')
                                             ->rows(3)
                                             ->hint('Your physical or mailing address')
@@ -116,7 +117,7 @@ class GeneralSettings extends Settings
                                     ->description('Configure your timezone, formats, and locale.')
                                     ->columns(3)
                                     ->schema([
-                                        Select::make('general.timezone')
+                                        Select::make(GeneralEnum::Timezone->value)
                                             ->label('Timezone')
                                             ->options(
                                                 collect(timezone_identifiers_list())
@@ -126,7 +127,7 @@ class GeneralSettings extends Settings
                                             ->default('UTC')
                                             ->columnSpan(1),
 
-                                        Select::make('general.date_format')
+                                        Select::make(GeneralEnum::DateFormat->value)
                                             ->label('Date Format')
                                             ->options([
                                                 'Y-m-d'  => '2025-01-31',
@@ -137,7 +138,7 @@ class GeneralSettings extends Settings
                                             ->default('Y-m-d')
                                             ->columnSpan(1),
 
-                                        Select::make('general.time_format')
+                                        Select::make(GeneralEnum::TimeFormat->value)
                                             ->label('Time Format')
                                             ->options([
                                                 'H:i'   => '24-hour (14:30)',
@@ -151,7 +152,7 @@ class GeneralSettings extends Settings
                                     ->description('Set your default language and currency.')
                                     ->columns(3)
                                     ->schema([
-                                        Select::make('general.language')
+                                        Select::make(GeneralEnum::Language->value)
                                             ->label('Default Language')
                                             ->options([
                                                 'en'  => 'English',
@@ -167,7 +168,7 @@ class GeneralSettings extends Settings
                                             ->default('en')
                                             ->columnSpan(1),
 
-                                        Select::make('general.currency')
+                                        Select::make(GeneralEnum::Currency->value)
                                             ->label('Default Currency')
                                             ->options([
                                                 'USD' => 'US Dollar (USD)',
@@ -183,7 +184,7 @@ class GeneralSettings extends Settings
                                             ->default('USD')
                                             ->columnSpan(1),
 
-                                        Select::make('general.currency_position')
+                                        Select::make(GeneralEnum::CurrencyPosition->value)
                                             ->label('Currency Symbol Position')
                                             ->options([
                                                 'before' => 'Before amount ($ 100)',
@@ -201,12 +202,12 @@ class GeneralSettings extends Settings
                                     ->description('Enable or disable features across your site.')
                                     ->columns(3)
                                     ->schema([
-                                        Toggle::make('general.maintenance_mode')
+                                        Toggle::make(GeneralEnum::MaintenanceMode->value)
                                             ->label('Maintenance Mode')
                                             ->hint('Temporarily disable your site for visitors')
                                             ->columnSpan(1),
 
-                                        Toggle::make('general.registration_enabled')
+                                        Toggle::make(GeneralEnum::RegistrationEnabled->value)
                                             ->label('Allow User Registration')
                                             ->hint('Let visitors create an account')
                                             ->default(true)
