@@ -25,22 +25,35 @@ use App\Http\Middleware\BootstrapMailSettings;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use App\Enums\NavigationOptions;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
-use Outerweb\Settings\Facades\Setting;
-use Illuminate\Support\Facades\Storage;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
+use Filament\Auth\MultiFactor\Email\EmailAuthentication;
+use Awcodes\Gravatar\GravatarProvider;
+use Awcodes\Gravatar\GravatarPlugin;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use App\Filament\Pages\Auth\Login;
 
 class AdminPanelProvider extends BasePanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-     
-       $panel
+
+        $panel
             ->id('admin')
             ->path('admin')
             ->authGuard('web')
             ->navigationGroups(NavigationOptions::getNavigations())
-            ->login()
-            ->brandName(Setting::get('media.name'))
-            ->brandLogo(Storage::url(Setting::get('media.darkmode_logo')))
+            ->login(Login::class)
+            ->emailChangeVerification()
+            ->passwordReset()
+            ->profile()
+            ->multiFactorAuthentication([
+                AppAuthentication::make()
+                    ->recoverable()
+                    ->recoveryCodeCount(10),
+
+                EmailAuthentication::make()
+            ])
+            ->defaultAvatarProvider(GravatarProvider::class)
             ->brandLogoHeight('80px')
             ->plugins([
                 FilamentShieldPlugin::make()
@@ -60,7 +73,22 @@ class AdminPanelProvider extends BasePanelProvider
                     ->formPanelWidth('40%')
                     ->emptyPanelBackgroundImageOpacity('70%')
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
-                    ->emptyPanelView('filament.pages.auth.admin-panel')
+                    ->emptyPanelView('filament.pages.auth.admin-panel'),
+
+
+                FilamentEditProfilePlugin::make()
+                    ->shouldShowAvatarForm(
+                        value: true,
+                        directory: 'avatars',
+                        rules: 'mimes:jpeg,png|max:1024',
+
+                    ),
+
+                GravatarPlugin::make()
+                    ->default('identicon')
+                    ->size(200)
+                    ->rating('pg')
+
             ])
 
             ->colors([

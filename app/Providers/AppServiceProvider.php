@@ -4,12 +4,16 @@ namespace App\Providers;
 use App\Models\StockMovement;
 use App\Observers\StockMovementObserver;
 use Illuminate\Support\ServiceProvider;
-
+use App\Traits\HasMailSettings;
+use App\Traits\HasCaptchaSettings;
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
+    use HasMailSettings;
+    use HasCaptchaSettings;
+
     public function register(): void
     {
         //
@@ -21,5 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         StockMovement::observe(StockMovementObserver::class);
+        $this->bootstrapMailConfig();
+        $this->bootstrapCaptchaConfig();
     }
 }

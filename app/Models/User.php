@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,12 +15,24 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\Email\Contracts\HasEmailAuthentication;
+use Filament\Auth\MultiFactor\Email\Concerns\InteractsWithEmailAuthentication;
+use Filament\Models\Contracts\HasAvatar;
+use Illuminate\Support\Facades\Storage;
+use Override;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasEmailAuthentication, HasAvatar, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-
+    use InteractsWithAppAuthentication;
+    use InteractsWithAppAuthenticationRecovery;
+    use InteractsWithEmailAuthentication;
     use HasRoles;
     use HasPanelShield;
 
@@ -33,6 +46,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'email_verified_at',
+        'avatar_url',
     ];
 
     /**
@@ -66,7 +80,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return match ($panel->getId()) {
             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
-            
+
             default => false
         };
         //relations
@@ -82,16 +96,17 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(Address::class);
     }
 
-    public function posts(){
+    public function posts()
+    {
         return $this->hasMany(Post::class, 'user_id');
     }
 
-    public function project(): HasMany//same as handledproject
+    public function project(): HasMany //same as handledproject
     {
         return $this->hasMany(Project::class, 'supervisor_id');
     }
 
-    public function handledProjects(): HasMany//same as project better naming
+    public function handledProjects(): HasMany //same as project better naming
     {
         return $this->hasMany(Project::class, 'supervisor_id');
     }
@@ -103,21 +118,13 @@ class User extends Authenticatable implements FilamentUser
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class,'assigned_to');
+        return $this->hasMany(Task::class, 'assigned_to');
     }
 
-    // //Tenants Project
-    // public function projects(){
-    //     return $this->belongsToMany(Project::class);
-    // }
-
-    // public function getTenants(Panel $panel): Collection
-    // {
-    //     return $this->projects;
-    // }
-
-    // public function canAccessTenant(Model $tenant): bool
-    // {
-    //     return $this->projects()->whereKey($tenant)->exists();
-    // }
+    #[Override]
+    public function getFilamentAvatarUrl(): ?string
+    {
+        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
+        return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
+    }
 }

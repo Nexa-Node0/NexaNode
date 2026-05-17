@@ -25,6 +25,6 @@ trait HasMailSettings
         ]);
 
         app()->forgetInstance('mail.manager');
-        app()->forgetInstance('mailer');
+        app()->forgetInstance('mailer');  
     }
 }
