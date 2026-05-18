@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Services\SkuGeneratorService;
@@ -25,16 +24,17 @@ class Product extends Model
         'low_stock_threshold',
         'image',
         'category_id',
+        'brand_id',
         'created_by',
     ];
 
     protected $casts = [
-        'quantity' => 'integer',
-        'price' => 'decimal:2',
+        'quantity'            => 'integer',
+        'price'               => 'decimal:2',
         'low_stock_threshold' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
+        'deleted_at'          => 'datetime',
     ];
 
     /**
@@ -57,6 +57,15 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
+
+    /**
+     * Get the brand this product belongs to.
+     */
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(ProductBrand::class, 'brand_id');
     }
 
     /**
@@ -86,6 +95,6 @@ class Product extends Model
     #[Override]
     public function getRouteKeyName()
     {
-        return 'SKU';
+        return 'sku';
     }
 }

@@ -104,8 +104,11 @@ class ProductBrandResource extends Resource
             ->recordActions([
                 Action::make('visit')
                     ->icon(Heroicon::Link)
+                    ->hiddenLabel()
+                    ->tooltip('Visit Website')
                     ->visible(fn($record): bool => $record->website !== null)
-                    ->url(fn($record) => $record->website),
+                    ->url(fn($record) => $record->website)
+                    ->size('lg'),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

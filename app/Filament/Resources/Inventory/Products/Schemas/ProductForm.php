@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Filament\Resources\Inventory\Products\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ProductForm
@@ -33,13 +32,28 @@ class ProductForm
                         TextInput::make('sku')
                             ->maxLength(8)
                             ->label('SKU')
-                            ->hint('Leave blank to auto-generate')
+                            ->hint('Leave this field empty to auto-generate.')
                             ->disabled()
                             ->dehydrated(),
+                        TextInput::make('quantity')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(0)
+                            ->default(0)
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->label('Current Quantity')
+                            ->hint('Managed through stock movements'),
                         Select::make('category_id')
                             ->relationship('category', 'name')
                             ->required()
                             ->label('Category')
+                            ->searchable()
+                            ->preload(),
+                        Select::make('brand_id')
+                            ->relationship('brand', 'name')
+                            ->required()
+                            ->label('Brand')
                             ->searchable()
                             ->preload(),
                         TextInput::make('price')
@@ -55,15 +69,6 @@ class ProductForm
                             ->minValue(0)
                             ->default(5)
                             ->label('Low Stock Threshold'),
-                        TextInput::make('quantity')
-                            ->numeric()
-                            ->integer()
-                            ->minValue(0)
-                            ->default(0)
-                            ->disabled()
-                            ->dehydrated(false)
-                            ->label('Current Quantity')
-                            ->hint('Managed through stock movements'),
                     ])->columns(2),
 
                 Section::make('Media')
