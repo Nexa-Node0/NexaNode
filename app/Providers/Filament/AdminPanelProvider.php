@@ -25,11 +25,9 @@ use App\Http\Middleware\BootstrapMailSettings;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use App\Enums\NavigationOptions;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
-use Illuminate\Validation\Rules\Password;
 use Awcodes\Gravatar\GravatarProvider;
 use Awcodes\Gravatar\GravatarPlugin;
 use App\Filament\Pages\Auth\Login;
-use Filament\Support\Icons\Heroicon;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends BasePanelProvider
@@ -41,6 +39,7 @@ class AdminPanelProvider extends BasePanelProvider
             ->id('admin')
             ->path('admin')
             ->authGuard('web')
+            ->sidebarCollapsibleOnDesktop()
             ->navigationGroups(NavigationOptions::getNavigations())
             ->login(Login::class)
             ->emailChangeVerification()
@@ -78,11 +77,11 @@ class AdminPanelProvider extends BasePanelProvider
                         userMenuLabel: 'My Profile',
                         hasAvatars: true,
                         slug: 'my-profile'
+
                     )
-                    ->passwordUpdateRules(
-                        rules: [Password::default()->mixedCase()->uncompromised(3)],
-                        requiresCurrentPassword: true,
-                    )
+                    ->myProfileComponents([
+                        'update_password' => \App\Livewire\CustomUpdatePassword::class
+                    ])
                     ->enableSanctumTokens()
                     ->enableTwoFactorAuthentication()
                     ->enableBrowserSessions()

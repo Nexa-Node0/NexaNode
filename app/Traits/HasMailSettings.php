@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Traits;
+
 use Illuminate\Support\Facades\Config;
 
 trait HasMailSettings
 {
-   protected function bootstrapMailConfig(): void
+    protected function bootstrapMailConfig(): void
     {
         Config::set('mail.default', setting('mail.mailer') ?: config('mail.default'));
 
@@ -25,6 +26,6 @@ trait HasMailSettings
         ]);
 
         app()->forgetInstance('mail.manager');
-        app()->forgetInstance('mailer');  
+        app()->forgetInstance('mailer');
     }
 }
