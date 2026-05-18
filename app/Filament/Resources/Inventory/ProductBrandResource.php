@@ -97,6 +97,11 @@ class ProductBrandResource extends Resource
                 TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(),
+                TextColumn::make('products_count')
+                    ->label('Products')
+                    ->counts('products')
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
                 //

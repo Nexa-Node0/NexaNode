@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Inventory\StockMovements\Pages;
 
 use App\Filament\Resources\Inventory\StockMovementResource;
@@ -20,7 +19,7 @@ class ListStockMovements extends ListRecords
     {
         return [
             \App\Filament\Widgets\RecentStockMovementsWidget::class,
-            \App\Filament\Widgets\LowStockProductsWidget::class
+            \App\Filament\Widgets\LowStockProductsWidget::class,
         ];
     }
 }
