@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 class Product extends Model
 {
@@ -80,5 +81,11 @@ class Product extends Model
     public function isLowStock(): bool
     {
         return $this->quantity <= $this->low_stock_threshold;
+    }
+
+    #[Override]
+    public function getRouteKeyName()
+    {
+        return 'SKU';
     }
 }
