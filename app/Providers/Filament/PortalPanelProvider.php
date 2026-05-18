@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class PortalPanelProvider extends BasePanelProvider
 {
@@ -45,7 +46,10 @@ class PortalPanelProvider extends BasePanelProvider
                     ->formPanelWidth('50%')
                     ->emptyPanelBackgroundImageOpacity('70%')
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
-                    ->emptyPanelView('filament.pages.auth.portal-panel')
+                    ->emptyPanelView('filament.pages.auth.portal-panel'),
+                BreezyCore::make()
+                    ->myProfile()
+                    ->avatarUploadComponent(fn($fileUpload) => $fileUpload->disableLabel())
             ])
             ->widgets([
                 AccountWidget::class,

@@ -15,24 +15,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
-use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
-use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
-use Filament\Auth\MultiFactor\Email\Contracts\HasEmailAuthentication;
-use Filament\Auth\MultiFactor\Email\Concerns\InteractsWithEmailAuthentication;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Support\Facades\Storage;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Jeffgreco13\FilamentBreezy\Concerns\Plugin\HasPasskeys;
 use Override;
 
-class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasEmailAuthentication, HasAvatar, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-    use InteractsWithAppAuthentication;
-    use InteractsWithAppAuthenticationRecovery;
-    use InteractsWithEmailAuthentication;
+    use TwoFactorAuthenticatable;
+    use HasApiTokens;
+    use HasPasskeys;
     use HasRoles;
     use HasPanelShield;
 
@@ -124,7 +121,6 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
     #[Override]
     public function getFilamentAvatarUrl(): ?string
     {
-        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
-        return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
+        return $this->avatar_url ? Storage::url($this->avatar_url) : null;
     }
 }

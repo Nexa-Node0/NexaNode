@@ -25,12 +25,12 @@ use App\Http\Middleware\BootstrapMailSettings;
 use Outerweb\FilamentSettings\SettingsPlugin;
 use App\Enums\NavigationOptions;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
-use Filament\Auth\MultiFactor\App\AppAuthentication;
-use Filament\Auth\MultiFactor\Email\EmailAuthentication;
+use Illuminate\Validation\Rules\Password;
 use Awcodes\Gravatar\GravatarProvider;
 use Awcodes\Gravatar\GravatarPlugin;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use App\Filament\Pages\Auth\Login;
+use Filament\Support\Icons\Heroicon;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends BasePanelProvider
 {
@@ -45,14 +45,6 @@ class AdminPanelProvider extends BasePanelProvider
             ->login(Login::class)
             ->emailChangeVerification()
             ->passwordReset()
-            ->profile()
-            ->multiFactorAuthentication([
-                AppAuthentication::make()
-                    ->recoverable()
-                    ->recoveryCodeCount(10),
-
-                EmailAuthentication::make()
-            ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->brandLogoHeight('80px')
             ->plugins([
@@ -75,20 +67,26 @@ class AdminPanelProvider extends BasePanelProvider
                     ->emptyPanelBackgroundColor(['500' => '#0d1418'])
                     ->emptyPanelView('filament.pages.auth.admin-panel'),
 
-
-                FilamentEditProfilePlugin::make()
-                    ->shouldShowAvatarForm(
-                        value: true,
-                        directory: 'avatars',
-                        rules: 'mimes:jpeg,png|max:1024',
-
-                    ),
-
                 GravatarPlugin::make()
                     ->default('identicon')
                     ->size(200)
-                    ->rating('pg')
+                    ->rating('pg'),
 
+                BreezyCore::make()
+                    ->myProfile(
+                        shouldRegisterUserMenu: true,
+                        userMenuLabel: 'My Profile',
+                        hasAvatars: true,
+                        slug: 'my-profile'
+                    )
+                    ->passwordUpdateRules(
+                        rules: [Password::default()->mixedCase()->uncompromised(3)],
+                        requiresCurrentPassword: true,
+                    )
+                    ->enableSanctumTokens()
+                    ->enableTwoFactorAuthentication()
+                    ->enableBrowserSessions()
+                    ->enablePasskeys()
             ])
 
             ->colors([
