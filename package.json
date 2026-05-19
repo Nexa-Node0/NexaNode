@@ -17,6 +17,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "daisyui": "^5.5.19"
+        "daisyui": "^5.5.19",
+        "puppeteer": "^25.0.4"
     }
 }

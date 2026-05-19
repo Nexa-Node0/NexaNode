@@ -3,6 +3,7 @@ namespace App\Filament\Resources\Inventory;
 
 use App\Enums\NavigationOptions;
 use App\Filament\Resources\Inventory\ProductBrands\Pages\ManageProductBrands;
+use App\Helper\FilamentBrowsershotModalHelper;
 use App\Models\ProductBrand;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -19,8 +20,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use function Laravel\Prompts\textarea;
 use Override;
+use Spatie\Browsershot\Browsershot;
 use UnitEnum;
 
 class ProductBrandResource extends Resource
@@ -114,6 +115,25 @@ class ProductBrandResource extends Resource
                     ->visible(fn($record): bool => $record->website !== null)
                     ->url(fn($record) => $record->website)
                     ->size('lg'),
+                Action::make('download_pdf')
+                    ->label('PDF Customization')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->schema(fn(Schema $schema): Schema => FilamentBrowsershotModalHelper::getModal($schema))
+                    ->action(function ($record) {
+                        $html = view('pdf.invoice', ['record' => $record])->render();
+
+                        $pdf = Browsershot::html($html)
+                            ->format('A4')
+                            ->margins(10, 10, 10, 10) // top, right, bottom, left in mm
+                            ->waitUntilNetworkIdle()  // waits for fonts to load
+                            ->showBackground()
+                            ->pdf();
+
+                        return response()->streamDownload(
+                            fn() => print($pdf),
+                            "invoice-{$record->id}.pdf"
+                        );
+                    }),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
