@@ -1,5 +1,7 @@
 <x-filament::section
     :aside="true"
+    :icon="'heroicon-s-lock-closed'"
+    :collapsible="true"
     :heading="__('filament-breezy::default.profile.password.heading')"
     :description="__('filament-breezy::default.profile.password.subheading')">
     <form wire:submit.prevent="submit" class="space-y-6">

@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Providers;
 
 use App\Models\StockMovement;
 use App\Observers\StockMovementObserver;
+use App\Services\SEOService;
 use Illuminate\Support\ServiceProvider;
 use App\Traits\HasMailSettings;
 use App\Traits\HasCaptchaSettings;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -27,5 +30,8 @@ class AppServiceProvider extends ServiceProvider
         StockMovement::observe(StockMovementObserver::class);
         $this->bootstrapMailConfig();
         $this->bootstrapCaptchaConfig();
+
+        // SEO
+        $this->app->singleton(SEOService::class);
     }
 }

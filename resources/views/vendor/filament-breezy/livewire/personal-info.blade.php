@@ -1,4 +1,9 @@
-<x-filament::section :aside="true" :heading="__('filament-breezy::default.profile.personal_info.heading')" :description="__('filament-breezy::default.profile.personal_info.subheading')">
+<x-filament::section
+    :aside="true"
+    :icon="'heroicon-o-user'"
+    :collapsible="true"
+    :heading="__('filament-breezy::default.profile.personal_info.heading')"
+    :description="__('filament-breezy::default.profile.personal_info.subheading')">
     <form wire:submit.prevent="submit" class="space-y-6">
 
         {{ $this->form }}

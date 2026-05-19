@@ -80,7 +80,8 @@ class AdminPanelProvider extends BasePanelProvider
 
                     )
                     ->myProfileComponents([
-                        'update_password' => \App\Livewire\CustomUpdatePassword::class
+                        'update_password' => \App\Livewire\CustomUpdatePassword::class,
+                        \App\Livewire\DeleteAccount::class
                     ])
                     ->enableSanctumTokens()
                     ->enableTwoFactorAuthentication()

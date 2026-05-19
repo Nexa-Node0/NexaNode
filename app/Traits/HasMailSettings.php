@@ -17,6 +17,7 @@ trait HasMailSettings
             'encryption' => setting('mail.encryption') ?: config('mail.mailers.smtp.encryption'),
             'username'   => setting('mail.username')   ?: config('mail.mailers.smtp.username'),
             'password'   => setting('mail.password')   ?: config('mail.mailers.smtp.password'),
+            'name'       => setting('main.from_address') ?: config('mail.from.name'),
             'timeout'    => null,
         ]);
 

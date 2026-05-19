@@ -37,7 +37,7 @@ class UserResource extends Resource
         return [
             'information' => Users\RelationManagers\EmployeesRelationManager::class,
             'address'     => Users\RelationManagers\AddressRelationManager::class,
-        ]; 
+        ];
     }
 
     #[Override]
