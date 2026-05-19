@@ -1,3 +1,4 @@
+@use('App\Enums\Settings\MediaEnum')
 <!doctype html>
 <html lang="en">
 
@@ -259,6 +260,57 @@
             border-top: 1px solid currentColor;
             padding-top: 4px;
         }
+
+        /* ── Watermark ── */
+        .watermark {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 75%;
+        }
+
+        .watermark img {
+            width: 100%;
+        }
+
+        /* Position variants */
+        .watermark.center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .watermark.top-left {
+            top: 20px;
+            left: 20px;
+            width: 35%;
+            /* transform: rotate(-45deg); */
+        }
+
+        .watermark.top-right {
+            top: 20px;
+            right: 20px;
+            left: auto;
+            width: 35%;
+            /* transform: rotate(45deg); */
+        }
+
+        .watermark.bottom-left {
+            bottom: 20px;
+            top: auto;
+            left: 20px;
+            width: 35%;
+            /* transform: rotate(45deg); */
+        }
+
+        .watermark.bottom-right {
+            bottom: 20px;
+            top: auto;
+            right: 20px;
+            left: auto;
+            width: 35%;
+            /* transform: rotate(-45deg); */
+        }
     </style>
     <link rel="stylesheet" href="assets/css/app.css" />
 </head>
@@ -277,15 +329,15 @@
                     <h1 class="invoice-title">Invoice</h1>
                     <div class="invoice-meta-row">
                         <p class="label">Invoice no#</p>
-                        <p>{{$invoice['invoice_number'] }}</p>
+                        <p>{{ $invoice['invoice_number'] }}</p>
                     </div>
                     <div class="invoice-meta-row">
                         <p class="label">Invoice Date:</p>
-                        <p>{{$invoice['invoice_date'] }}</p>
+                        <p>{{ $invoice['invoice_date'] }}</p>
                     </div>
                     <div class="invoice-meta-row">
                         <p class="label">Due Date:</p>
-                        <p>{{$invoice['invoice_due'] }}</p>
+                        <p>{{ $invoice['invoice_due'] }}</p>
                     </div>
                 </div>
             </div>
@@ -295,26 +347,26 @@
         <!-- Invoice Info -->
         <div class="invoice-info">
             <div class="from-block">
-                <p class="company-name">{{$company_brand}}</p>
-                <p>{{$invoice['company_email'] }}</p>
-                <p>Contact Number: {{$invoice['company_phone'] }}</p>
-                <p>{{$invoice['company_website'] }}</p>
-                <p>{{$invoice['company_address'] }}</p>
+                <p class="company-name">{{ $company_brand }}</p>
+                <p>{{ $invoice['company_email'] }}</p>
+                <p>Contact Number: {{ $invoice['company_phone'] }}</p>
+                <p>{{ $invoice['company_website'] }}</p>
+                <p>{{ $invoice['company_address'] }}</p>
             </div>
 
             <div class="bill-block">
-                <p class="client-name">{{$invoice['client_name'] }}</p>
-                <p>{{$invoice['client_email'] }}</p>
-                <p>Contact Number: {{$invoice['client_phone'] }}</p>
-                <p>{{$invoice['client_website'] }}</p>
-                <p>{{$invoice['client_address'] }}</p>
+                <p class="client-name">{{ $invoice['client_name'] }}</p>
+                <p>{{ $invoice['client_email'] }}</p>
+                <p>Contact Number: {{ $invoice['client_phone'] }}</p>
+                <p>{{ $invoice['client_website'] }}</p>
+                <p>{{ $invoice['client_address'] }}</p>
             </div>
         </div>
 
         <div class="ship-to">
             <p>Ship to:</p>
-            <p class="ship-name">{{$invoice['shipment_address'] }}</p>
-            <p>Tracking Number: {{$invoice['shipment_tracking_number'] }}</p>
+            <p class="ship-name">{{ $invoice['shipment_address'] }}</p>
+            <p>Tracking Number: {{ $invoice['shipment_tracking_number'] }}</p>
         </div>
         <!-- /Invoice Info -->
 
@@ -491,18 +543,18 @@
                 </div>
                 <div class="totals-row highlight">
                     <p class="label">Due Date:</p>
-                    <p>₱{{$invoice['due_penalty'] }}</p>
+                    <p>₱{{ $invoice['due_penalty'] }}</p>
                 </div>
             </div>
         </div>
         <!-- /Payment Info -->
 
-        @if(!empty($invoice['note']))
+        @if (!empty($invoice['note']))
             <!-- /Payment Info -->
             <div class="notes">
                 <h2>Notes:</h2>
                 <p>
-                    {{$invoice['note'] }}
+                    {{ $invoice['note'] }}
                 </p>
             </div>
             <!-- /Payment Info -->
@@ -520,6 +572,14 @@
             </div>
         </div>
         <!-- /Signatures -->
+
+        @if (setting(MediaEnum::WatermarkEnabled->value, false))
+            <div class="watermark {{ setting(MediaEnum::WatermarkPosition->value, 'center') }}"
+                style="opacity: {{ setting(MediaEnum::WatermarkOpacity->value, 20) }}%;">
+                <img src="{{ Storage::disk('public')->path(setting(MediaEnum::WatermarkImage->value)) }}"
+                    alt="{{ $company_brand }}" />
+            </div>
+        @endif
     </div>
     <!-- /Invoice wrapper -->
 </body>
