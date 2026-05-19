@@ -17,6 +17,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use App\Enums\Settings\SEOEnum;
 use BackedEnum;
+use Filament\Forms\Components\TagsInput;
 use Override;
 use UnitEnum;
 
@@ -56,7 +57,7 @@ class SEOSettings extends Settings
                                     ->helperText('Recommended: 50–60 characters')
                                     ->columnSpan(2),
 
-                                TextInput::make(SEOEnum::MetaKeywords->value)
+                                TagsInput::make(SEOEnum::MetaKeywords->value)
                                     ->label('Meta Keywords')
                                     ->helperText('Comma-separated keywords')
                                     ->columnSpan(1),

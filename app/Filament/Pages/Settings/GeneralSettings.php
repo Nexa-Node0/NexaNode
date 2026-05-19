@@ -17,13 +17,13 @@ use App\Enums\NavigationOptions;
 use App\Enums\NavigationLabelSettings;
 use Filament\Forms\Components\Toggle;
 use Illuminate\Contracts\Support\Htmlable;
-use App\Enums\GeneralEnum;
+use App\Enums\Settings\GeneralEnum;
 use Override;
 use UnitEnum;
 
 class GeneralSettings extends Settings
 {
-    protected static ?string $navigationLabel =  NavigationLabelSettings::General->value;  
+    protected static ?string $navigationLabel =  NavigationLabelSettings::General->value;
     protected static string|UnitEnum|null $navigationGroup = NavigationOptions::Settings;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAmericas;
 
@@ -40,7 +40,7 @@ class GeneralSettings extends Settings
     }
 
     public function form(Schema $schema): Schema
-       {
+    {
         return $schema
             ->components([
                 Tabs::make()
