@@ -11,10 +11,10 @@ class FilamentBrowsershotHelper
     private FileFormatEnum $format = FileFormatEnum::A4;
     private float $width           = 0;
     private float $height          = 0;
-    private float $margin_tp       = 0;
-    private float $margin_bt       = 0;
-    private float $margin_rt       = 0;
-    private float $margin_lt       = 0;
+    private float $margin_tp       = 5;
+    private float $margin_bt       = 5;
+    private float $margin_rt       = 5;
+    private float $margin_lt       = 5;
     private bool $landscape        = false;
     private float $scale           = 1;
     private bool $background       = true;
@@ -86,14 +86,17 @@ class FilamentBrowsershotHelper
     public function pdf(string $view, string $filename = 'document.pdf')
     {
         $html = View::make($view, array_merge([
-            'table_data' => $this->table_data,
-            'company_logo' => $this->company_logo,
+            'table_data'    => $this->table_data,
+            'company_logo'  => $this->company_logo,
             'company_brand' => $this->company_brand,
-        ], $this->invoice_data))->render();
+            'invoice'       => $this->invoice_data,
+        ]))->render();
 
         $browsershot = Browsershot::html($html)
-            ->scale($this->scale)
-            ->showBackground($this->background);
+            ->scale($this->scale);
+
+        if($this->background)
+            $browsershot->showBackground();            
 
         // custom paper size takes priority over format
         if ($this->width && $this->height) {
@@ -163,6 +166,7 @@ class FilamentBrowsershotHelper
             'client_address'           => $data['client_address'] ?? null,
             'shipment_address'         => $data['shipment_address'] ?? null,
             'shipment_tracking_number' => $data['shipment_tracking_number'] ?? null,
+            'note'                     => $data['note'] ?? null,
         ];
 
         return $this;

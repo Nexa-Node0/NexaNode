@@ -118,20 +118,12 @@ class ProductBrandResource extends Resource
                 Action::make('download_pdf')
                     ->label('PDF')
                     ->icon('heroicon-o-document-arrow-down')
-                    ->form(fn(Form $form) => FilamentBrowsershotModalHelper::getModal($form))
+                    ->schema(fn(Schema $schema) => FilamentBrowsershotModalHelper::getModal($schema))
                     ->action(function ($record, array $data) {
-                        // Merge table data with invoice data
-                        $allData = array_merge($data, ['table_items' => $record->items ?? []]);
-                        
-                        $pdf = (new FilamentBrowsershotHelper($allData))
+                        // dd($data);
+                        return (new FilamentBrowsershotHelper([]))
                             ->fromData($data)
                             ->pdf('pdf.invoice', "invoice-{$record->id}.pdf");
-                        
-                        // Store PDF temporarily and return download
-                        $path = storage_path("app/public/temp/invoice-{$record->id}.pdf");
-                        file_put_contents($path, $pdf->getContent());
-                        
-                        return response()->download($path)->deleteFileAfterSend(true);
                     }),
                 EditAction::make(),
                 DeleteAction::make(),

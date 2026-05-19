@@ -269,7 +269,7 @@
         <!-- Header -->
         <div class="invoice-header">
             <div class="logo-wrapper">
-                <img src="{{ Storage::url($company_logo) }}" alt="{{ $company_brand }}"
+                <img src="{{ Storage::disk('public')->path($company_logo) }}" alt="{{ $company_brand }} Logo"
                     onerror="this.classList.add('broken')" />
             </div>
             <div class="header-info">
@@ -277,15 +277,15 @@
                     <h1 class="invoice-title">Invoice</h1>
                     <div class="invoice-meta-row">
                         <p class="label">Invoice no#</p>
-                        <p>1237</p>
+                        <p>{{$invoice['invoice_number'] }}</p>
                     </div>
                     <div class="invoice-meta-row">
                         <p class="label">Invoice Date:</p>
-                        <p>69/69/6699</p>
+                        <p>{{$invoice['invoice_date'] }}</p>
                     </div>
                     <div class="invoice-meta-row">
                         <p class="label">Due Date:</p>
-                        <p>69/69/6699</p>
+                        <p>{{$invoice['invoice_due'] }}</p>
                     </div>
                 </div>
             </div>
@@ -295,26 +295,26 @@
         <!-- Invoice Info -->
         <div class="invoice-info">
             <div class="from-block">
-                <p class="company-name">NexaNode Company</p>
-                <p>nexanode.org@gmail.com</p>
-                <p>Contact Number: 09669696969</p>
-                <p>www.nexanode.org</p>
-                <p>Pangasinan</p>
+                <p class="company-name">{{$company_brand}}</p>
+                <p>{{$invoice['company_email'] }}</p>
+                <p>Contact Number: {{$invoice['company_phone'] }}</p>
+                <p>{{$invoice['company_website'] }}</p>
+                <p>{{$invoice['company_address'] }}</p>
             </div>
 
             <div class="bill-block">
-                <p class="client-name">NexaNode Client</p>
-                <p>nexanode.client@gmail.com</p>
-                <p>Contact Number: 6767676767</p>
-                <p>www.nexanodeclient.org</p>
-                <p>Pangasinan</p>
+                <p class="client-name">{{$invoice['client_name'] }}</p>
+                <p>{{$invoice['client_email'] }}</p>
+                <p>Contact Number: {{$invoice['client_phone'] }}</p>
+                <p>{{$invoice['client_website'] }}</p>
+                <p>{{$invoice['client_address'] }}</p>
             </div>
         </div>
 
         <div class="ship-to">
             <p>Ship to:</p>
-            <p class="ship-name">North Korea Pangasinan North Luzon 2442</p>
-            <p>Tracking Number: #69696696969</p>
+            <p class="ship-name">{{$invoice['shipment_address'] }}</p>
+            <p>Tracking Number: {{$invoice['shipment_tracking_number'] }}</p>
         </div>
         <!-- /Invoice Info -->
 
@@ -491,26 +491,22 @@
                 </div>
                 <div class="totals-row highlight">
                     <p class="label">Due Date:</p>
-                    <p>₱0.00</p>
+                    <p>₱{{$invoice['due_penalty'] }}</p>
                 </div>
             </div>
         </div>
         <!-- /Payment Info -->
 
-        <!-- /Payment Info -->
-        <div class="notes">
-            <h2>Notes:</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Aliquam distinctio molestias nisi magnam itaque. Consectetur
-                explicabo sint blanditiis excepturi minus veritatis, quam
-                dolorum animi sunt optio quisquam minima quod in aliquam
-                amet eius? Nemo nostrum perferendis illo necessitatibus
-                praesentium. Illum fugiat tenetur vel, unde cumque totam
-                molestias maiores incidunt ab.
-            </p>
-        </div>
-        <!-- /Payment Info -->
+        @if(!empty($invoice['note']))
+            <!-- /Payment Info -->
+            <div class="notes">
+                <h2>Notes:</h2>
+                <p>
+                    {{$invoice['note'] }}
+                </p>
+            </div>
+            <!-- /Payment Info -->
+        @endif
 
         <!-- Signatures -->
         <div class="signatures">
