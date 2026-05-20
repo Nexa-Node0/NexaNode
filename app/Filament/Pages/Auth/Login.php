@@ -5,7 +5,11 @@ namespace App\Filament\Pages\Auth;
 use Filament\Auth\Pages\Login as BaseLogin;
 use DiogoGPinto\AuthUIEnhancer\Pages\Auth\Concerns\HasCustomLayout;
 use AbanoubNassem\FilamentGRecaptchaField\Forms\Components\GRecaptcha;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
+use Filament\Facades\Filament;
 use Filament\Schemas\Schema;
+use Filament\Notifications\Notification;
+use Illuminate\Validation\ValidationException;
 use Override;
 
 class Login extends BaseLogin
@@ -33,5 +37,42 @@ class Login extends BaseLogin
             'email'     => $data['email'],
             'password'  => $data['password']
         ];
+    }
+
+    #[Override]
+    public function authenticate(): ?LoginResponse
+    {
+        $data = $this->form->getState();
+
+
+        if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
+            throw ValidationException::withMessages([
+                'data.email' => __('filament-panels::pages/auth/login.messages.failed'),
+            ]);
+        }
+
+        $user = Filament::auth()->user();
+
+        if (!$user->is_active) {
+            Filament::auth()->logout();
+            session()->invalidate();
+            session()->regenerateToken();
+
+            Notification::make()
+                ->title('Account Deactivated')
+                ->body('Your account has been deactivated. Please contact support.')
+                ->danger()
+                ->persistent()
+                ->send();
+
+            // This make the page expired i dont know why... :'<
+            // throw ValidationException::withMessages([
+            //     'data.email' => 'Your account has been deactivated. Please contact support.'
+            // ]);
+        }
+
+        session()->regenerate();
+
+        return app(LoginResponse::class);
     }
 }

@@ -57,7 +57,7 @@ class DepartmentResource extends Resource
     #[Override]
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('is_active',true)->count();
+        return static::getModel()::where('is_active', true)->count();
     }
 
     public static function getPages(): array

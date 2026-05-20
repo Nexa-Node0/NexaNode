@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\HR\Users\Tables;
 
 use App\Models\User;
@@ -6,9 +7,12 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 // use NunoMaduro\Collision\Adapters\Phpunit\State;
@@ -24,30 +28,46 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
+
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable()
                     ->placeholder('Unverified')
                     ->color('success'),
 
+                TextColumn::make('position.name')
+                    ->badge(),
+
                 SelectColumn::make('role')
                     ->label('Role')
                     ->selectablePlaceholder(false)
-                    ->options(fn () => Role::query()->pluck('name', 'id')->toArray())
+                    ->options(fn() => Role::query()->pluck('name', 'id')->toArray())
                     ->searchable()
-                    ->getStateUsing(fn ($record) => $record->roles->first()?->id)
+                    ->getStateUsing(fn($record) => $record->roles->first()?->id)
                     ->updateStateUsing(function ($record, $state) {
-                       $role = Role::find($state);
-                        if($role){
+                        $role = Role::find($state);
+                        if ($role) {
                             $record->syncRoles([$role]);
                             Notification::make()
                                 ->title('Role has been updated')
                                 ->body('User role has been updated successfully')
                                 ->success()
                                 ->send();
-                                }
+                        }
                     }),
 
+
+                ToggleColumn::make('is_active')
+                    ->afterStateUpdated(function ($record, $state) {
+                        $newState = $state ? 'activated' : 'deactivated';
+                        Notification::make('account_active_status')
+                            ->title('Account Status')
+                            ->body("{$record->name} account is now $newState")
+                            ->iconColor($state ? 'success' : 'warning')
+                            ->icon($state ? Heroicon::CheckCircle : Heroicon::ExclamationTriangle)
+                            ->sendToDatabase($record)
+                            ->send();
+                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

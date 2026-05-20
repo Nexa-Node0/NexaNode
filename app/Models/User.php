@@ -17,6 +17,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\HasAvatar;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -44,6 +45,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         'password',
         'email_verified_at',
         'avatar_url',
+        'is_active',
     ];
 
     /**
@@ -75,6 +77,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
 
     public function canAccessPanel(Panel $panel): bool
     {
+        // return (bool) !$this->is_active;
+
         return match ($panel->getId()) {
             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
 
@@ -83,17 +87,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         //relations
         //has
     }
-    public function employee()
+    public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
     }
 
-    public function address()
+    public function address(): HasOne
     {
         return $this->hasOne(Address::class);
     }
 
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'user_id');
     }
@@ -116,6 +120,18 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'assigned_to');
+    }
+
+    public function position()
+    {
+        return $this->hasOneThrough(
+            \App\Models\Position::class,
+            \App\Models\UserPosition::class,
+            'user_id',
+            'id',
+            'id',
+            'position_id'
+        );
     }
 
     #[Override]

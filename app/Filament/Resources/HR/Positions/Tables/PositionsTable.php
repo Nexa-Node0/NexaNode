@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\HR\Positions\Tables;
 
+use App\Models\Department;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Support\Icons\Heroicon;
@@ -15,7 +15,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use App\Models\Position;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 
 class PositionsTable
 {
@@ -24,59 +26,54 @@ class PositionsTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Split::make([
-                    Stack::make([
-                        TextColumn::make('name')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('department.name')
-                            ->searchable()
-                            ->sortable(),
-                    ]),
-                    TextColumn::make('code')
-                        ->searchable()
-                        ->sortable(),
-                    Stack::make([
-                        TextColumn::make('type')
-                            ->searchable()
-                            ->sortable(),
-                    ]),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('code')
+                    ->searchable()
+                    ->sortable(),
 
-                    Stack::make([
-                        ToggleColumn::make('is_active')
-                            ->afterStateUpdated(function ($record, $state) {
-                                $newStatus = $state ? 'Activated' : 'Disabled';
-                                Notification::make('position_status')
-                                    ->iconColor($state ? 'success' : 'warning')
-                                    ->icon($state ? Heroicon::CheckCircle : Heroicon::ExclamationTriangle)
-                                    ->title("{$record->name} is now $newStatus")
-                                    ->body('Position has been updated')
-                                    ->send();
-                            })
-                    ]),
-                    SelectColumn::make('reports_to')
-                        ->label('Reports to')
-                        ->selectablePlaceholder(false)
-                        ->searchableOptions()
-                        ->searchable()
-                        ->columnSpanFull()
-                        ->options(
-                            fn() => Position::where('is_active', true)
-                                ->pluck('name', 'id')
-                                ->toArray()
-                        )
-                        ->afterStateUpdated(function ($record, $state) {
-                            Notification::make('reports_to_updated')
-                                ->icon(Heroicon::CheckCircle)
-                                ->iconColor('success')
-                                ->title("{$record->name} is now under {$record->supervisor->name}")
-                                ->body('Position has been updated')
-                                ->send();
-                        }),
-                ]),
+                TextColumn::make('type')
+                    ->searchable()
+                    ->sortable(),
 
+                SelectColumn::make('department_id')
+                    ->label('Department')
+                    ->selectablePlaceholder(false)
+                    ->searchableOptions()
+                    ->searchable()
+                    ->sortable()
+                    ->options(fn() =>  Department::pluck('name', 'id')->toArray()),
 
+                SelectColumn::make('reports_to')
+                    ->label('Reports to')
+                    ->selectablePlaceholder(false)
+                    ->searchableOptions()
+                    ->searchable()
+                    ->options(
+                        fn() => Position::where('is_active', true)
+                            ->pluck('name', 'id')
+                            ->toArray()
+                    )
+                    ->afterStateUpdated(function ($record, $state) {
+                        Notification::make('reports_to_updated')
+                            ->icon(Heroicon::CheckCircle)
+                            ->iconColor('success')
+                            ->title("{$record->name} will now reports to {$record->supervisor->name}")
+                            ->body('Position has been updated')
+                            ->send();
+                    }),
 
+                ToggleColumn::make('is_active')
+                    ->afterStateUpdated(function ($record, $state) {
+                        $newStatus = $state ? 'Activated' : 'Disabled';
+                        Notification::make('position_status')
+                            ->iconColor($state ? 'success' : 'warning')
+                            ->icon($state ? Heroicon::CheckCircle : Heroicon::ExclamationTriangle)
+                            ->title("{$record->name} is now $newStatus")
+                            ->body('Position has been updated')
+                            ->send();
+                    }),
             ])
             ->filters([
                 SelectFilter::make('type')
@@ -88,10 +85,18 @@ class PositionsTable
                 SelectFilter::make('department')
                     ->relationship('department', 'name')
                     ->searchable()
-                    ->preload()
+                    ->preload(),
+
+                TernaryFilter::make('is_active')
+                    ->label('Active Status')
+                    ->default(true)
+
             ])
             ->recordActions([
-                EditAction::make(),
+                // 
+                ActionGroup::make([
+                    EditAction::make(),
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
