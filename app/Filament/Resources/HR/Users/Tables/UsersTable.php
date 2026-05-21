@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\HR\Users\Tables;
 
+use App\Models\Position;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -35,8 +36,31 @@ class UsersTable
                     ->placeholder('Unverified')
                     ->color('success'),
 
-                TextColumn::make('position.name')
-                    ->badge(),
+                // TextColumn::make('position.name')
+                //     ->badge(),
+
+                SelectColumn::make('position.name')
+                    ->label('Position')
+                    ->selectablePlaceholder(false)
+                    ->options(fn() => Position::query()->pluck('name', 'id')->toArray())
+                    ->searchable()
+                    ->searchableOptions()
+                    ->getStateUsing(fn($record) => $record->position?->id)
+                    ->updateStateUsing(function ($record, $state) {
+                        if ($state) {
+                            \App\Models\UserPosition::updateOrCreate([
+                                'user_id' => $record->id,
+                                'position_id' => $state
+                            ]);
+                        }
+                        $name = $record->name;
+                        Notification::make()
+                            ->title('Position has been updated')
+                            ->body("$name position has been changed")
+                            ->success()
+                            ->icon(Heroicon::CheckBadge)
+                            ->send();
+                    }),
 
                 SelectColumn::make('role')
                     ->label('Role')

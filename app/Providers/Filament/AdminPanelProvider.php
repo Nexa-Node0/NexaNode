@@ -31,6 +31,7 @@ use App\Filament\Pages\Auth\Login;
 use Filament\View\PanelsRenderHook;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Illuminate\Support\Facades\Blade;
+use \App\Filament\Plugins\EnvironmentIndicatorPlugin;
 
 class AdminPanelProvider extends BasePanelProvider
 {
@@ -53,7 +54,7 @@ class AdminPanelProvider extends BasePanelProvider
             )
             ->brandLogoHeight('80px')
             ->plugins([
-                \App\Filament\Plugins\EnvironmentIndicatorPlugin::make(),
+                EnvironmentIndicatorPlugin::make(),
                 FilamentShieldPlugin::make()
                     ->gridColumns([
                         'default' => 1,

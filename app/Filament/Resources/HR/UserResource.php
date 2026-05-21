@@ -35,7 +35,6 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            'information' => Users\RelationManagers\EmployeesRelationManager::class,
             'address'     => Users\RelationManagers\AddressRelationManager::class,
         ];
     }
