@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Inventory;
 
-use App\Filament\Resources\Inventory\ProductCategories\Pages\CreateProductCategory;
-use App\Filament\Resources\Inventory\ProductCategories\Pages\EditProductCategory;
+// use App\Filament\Resources\Inventory\ProductCategories\Pages\CreateProductCategory;
+// use App\Filament\Resources\Inventory\ProductCategories\Pages\EditProductCategory;
 use App\Filament\Resources\Inventory\ProductCategories\Pages\ListProductCategories;
 use App\Filament\Resources\Inventory\ProductCategories\Schemas\ProductCategoryForm;
 use App\Filament\Resources\Inventory\ProductCategories\Tables\ProductCategoriesTable;
@@ -53,8 +53,8 @@ class ProductCategoryResource extends Resource
     {
         return [
             'index' => ListProductCategories::route('/'),
-            'create' => CreateProductCategory::route('/create'),
-            'edit' => EditProductCategory::route('/{record}/edit'),
+            // 'create' => CreateProductCategory::route('/create'),
+            // 'edit' => EditProductCategory::route('/{record}/edit'),
         ];
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Services\SkuGeneratorService;
@@ -8,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 class Product extends Model
 {
@@ -24,16 +24,17 @@ class Product extends Model
         'low_stock_threshold',
         'image',
         'category_id',
+        'brand_id',
         'created_by',
     ];
 
     protected $casts = [
-        'quantity' => 'integer',
-        'price' => 'decimal:2',
+        'quantity'            => 'integer',
+        'price'               => 'decimal:2',
         'low_stock_threshold' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
+        'deleted_at'          => 'datetime',
     ];
 
     /**
@@ -59,6 +60,15 @@ class Product extends Model
     }
 
     /**
+     * Get the brand this product belongs to.
+     */
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(ProductBrand::class, 'brand_id');
+    }
+
+    /**
      * Get the user who created this product.
      */
     public function creator(): BelongsTo
@@ -80,5 +90,11 @@ class Product extends Model
     public function isLowStock(): bool
     {
         return $this->quantity <= $this->low_stock_threshold;
+    }
+
+    #[Override]
+    public function getRouteKeyName()
+    {
+        return 'sku';
     }
 }

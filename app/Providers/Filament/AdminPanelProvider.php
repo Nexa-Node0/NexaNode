@@ -53,6 +53,7 @@ class AdminPanelProvider extends BasePanelProvider
             )
             ->brandLogoHeight('80px')
             ->plugins([
+                \App\Filament\Plugins\EnvironmentIndicatorPlugin::make(),
                 FilamentShieldPlugin::make()
                     ->gridColumns([
                         'default' => 1,

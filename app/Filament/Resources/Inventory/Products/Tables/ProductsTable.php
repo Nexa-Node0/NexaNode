@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Filament\Resources\Inventory\Products\Tables;
 
-use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ProductsTable
@@ -12,30 +13,44 @@ class ProductsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->groups([
+                'brand.name',
+                'category.name',
+                'creator.name',
+                'low_stock_threshold',
+            ])
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
                 ImageColumn::make('image')
                     ->label('Image')
-                    ->circular(),
+                    ->circular()
+                    ->toggleable(),
                 TextColumn::make('name')
                     ->label('Product Name')
-                    ->searchable()
+                    ->searchable(isIndividual: true)
                     ->sortable(),
                 TextColumn::make('sku')
                     ->label('SKU')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('category.name')
                     ->label('Category')
-                    ->searchable()
+                    ->searchable(isIndividual: true)
                     ->sortable(),
+                ImageColumn::make('brand.logo')
+                    ->disk('public')
+                    ->placeholder(fn($record) => $record->brand->name)
+                    ->tooltip(fn($record) => $record->brand->name),
                 TextColumn::make('quantity')
                     ->label('Stock')
                     ->sortable()
                     ->badge()
-                    ->color(fn (int $state, $record): string => $record->isLowStock() ? 'danger' : 'success'),
+                    ->color(fn(int $state, $record): string => $record->isLowStock() ? 'danger' : 'success'),
                 TextColumn::make('low_stock_threshold')
                     ->label('Low Stock Level')
                     ->sortable(),
@@ -46,14 +61,39 @@ class ProductsTable
                 TextColumn::make('creator.name')
                     ->label('Created By')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable()
+                    ->color(fn($state) => $state == auth()->user()->name ? 'info' : 'success')
+                    ->tooltip(fn($state) => $state == auth()->user()->name ? 'You' : $state),
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime('M d, Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(true),
             ])
             ->filters([
                 //
+                SelectFilter::make('brand.name')
+                    ->multiple()
+                    ->relationship('brand', 'name'),
+                SelectFilter::make('category.name')
+                    ->multiple()
+                    ->relationship('category', 'name'),
+                Filter::make('low_stock_threshold')
+                    ->schema([
+                        TextInput::make('low_stock_threshold')
+                            ->label('Low Stock Level')
+                            ->numeric(),
+                    ])
+                    ->query(function ($query, array $data) {
+
+                        return $query->when(
+                            filled($data['low_stock_threshold'] ?? null),
+                            fn($q) => $q->where('low_stock_threshold', $data['low_stock_threshold'])
+                        );
+
+                    }),
             ])
             ->actions([
                 //

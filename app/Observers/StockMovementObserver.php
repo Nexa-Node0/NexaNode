@@ -73,7 +73,7 @@ class StockMovementObserver
         $product->decrement('quantity', $quantityChange);
     }
 
-    
+
     public function restored(StockMovement $stockMovement): void
     {
         $product = $stockMovement->product;
