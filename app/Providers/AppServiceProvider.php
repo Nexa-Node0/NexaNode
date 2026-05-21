@@ -1,15 +1,16 @@
 <?php
-
 namespace App\Providers;
 
 use App\Models\ProductBrand;
+use App\Models\ProductPossession;
 use App\Models\StockMovement;
 use App\Observers\ProductBrandObserver;
+use App\Observers\ProductPossessionObserver;
 use App\Observers\StockMovementObserver;
 use App\Services\SEOService;
-use Illuminate\Support\ServiceProvider;
-use App\Traits\HasMailSettings;
 use App\Traits\HasCaptchaSettings;
+use App\Traits\HasMailSettings;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     {
         StockMovement::observe(StockMovementObserver::class);
         ProductBrand::observe(ProductBrandObserver::class);
+        ProductPossession::observe(ProductPossessionObserver::class);
         $this->bootstrapMailConfig();
         $this->bootstrapCaptchaConfig();
 
