@@ -65,10 +65,14 @@ class Login extends BaseLogin
                 ->persistent()
                 ->send();
 
-            // This make the page expired i dont know why... :'<
-            // throw ValidationException::withMessages([
-            //     'data.email' => 'Your account has been deactivated. Please contact support.'
-            // ]);
+            /* 
+            * Adding error validation label below the email.
+            * This making the page expired
+            * 
+            * throw ValidationException::withMessages([
+            *    'data.email' => 'Your account has been deactivated. Please contact support.'
+            * ]);
+            */
         }
 
         session()->regenerate();
