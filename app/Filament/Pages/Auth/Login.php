@@ -1,14 +1,12 @@
 <?php
-
 namespace App\Filament\Pages\Auth;
 
-use Filament\Auth\Pages\Login as BaseLogin;
 use DiogoGPinto\AuthUIEnhancer\Pages\Auth\Concerns\HasCustomLayout;
-use AbanoubNassem\FilamentGRecaptchaField\Forms\Components\GRecaptcha;
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
+use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Facades\Filament;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
 use Override;
 
@@ -24,9 +22,9 @@ class Login extends BaseLogin
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
                 $this->getRememberFormComponent(),
-                GRecaptcha::make('captcha')
-                    ->hiddenLabel()
-                    ->required()
+                // GRecaptcha::make('captcha')
+                //     ->hiddenLabel()
+                //     ->required()
             ]);
     }
 
@@ -34,8 +32,8 @@ class Login extends BaseLogin
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'email'     => $data['email'],
-            'password'  => $data['password']
+            'email'    => $data['email'],
+            'password' => $data['password'],
         ];
     }
 
@@ -43,7 +41,6 @@ class Login extends BaseLogin
     public function authenticate(): ?LoginResponse
     {
         $data = $this->form->getState();
-
 
         if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
             throw ValidationException::withMessages([
@@ -53,7 +50,7 @@ class Login extends BaseLogin
 
         $user = Filament::auth()->user();
 
-        if (!$user->is_active) {
+        if (! $user->is_active) {
             Filament::auth()->logout();
             session()->invalidate();
             session()->regenerateToken();
@@ -65,10 +62,10 @@ class Login extends BaseLogin
                 ->persistent()
                 ->send();
 
-            /* 
+            /*
             * Adding error validation label below the email.
             * This making the page expired
-            * 
+            *
             * throw ValidationException::withMessages([
             *    'data.email' => 'Your account has been deactivated. Please contact support.'
             * ]);

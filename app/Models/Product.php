@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Override;
 
 class Product extends Model
@@ -96,5 +97,10 @@ class Product extends Model
     public function getRouteKeyName()
     {
         return 'sku';
+    }
+
+    public function getDisplayImageAttribute()
+    {
+        return Storage::disk('local')->temporaryUrl($this->image, now()->addMinutes(5));
     }
 }
