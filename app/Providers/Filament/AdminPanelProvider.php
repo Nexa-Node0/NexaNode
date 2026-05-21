@@ -28,7 +28,9 @@ use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Awcodes\Gravatar\GravatarProvider;
 use Awcodes\Gravatar\GravatarPlugin;
 use App\Filament\Pages\Auth\Login;
+use Filament\View\PanelsRenderHook;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
+use Illuminate\Support\Facades\Blade;
 
 class AdminPanelProvider extends BasePanelProvider
 {
@@ -45,6 +47,10 @@ class AdminPanelProvider extends BasePanelProvider
             ->emailChangeVerification()
             ->passwordReset()
             ->defaultAvatarProvider(GravatarProvider::class)
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn(): \Illuminate\Contracts\View\View => view('filament.components.user-menu-navbar')
+            )
             ->brandLogoHeight('80px')
             ->plugins([
                 FilamentShieldPlugin::make()
