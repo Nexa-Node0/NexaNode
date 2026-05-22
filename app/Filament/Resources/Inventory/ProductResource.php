@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\Inventory;
 
 use App\Enums\NavigationOptions;
@@ -42,7 +41,7 @@ class ProductResource extends Resource
     }
 
     #[Override]
-    public static function getNavigationBadgeColor(): string|array|null
+    public static function getNavigationBadgeColor(): string | array | null
     {
         return 'danger';
     }
@@ -58,11 +57,12 @@ class ProductResource extends Resource
     {
         return [
             //
+            Products\RelationManagers\ProductPosessionsRelationManager::class,
         ];
     }
 
     #[Override]
-    public static function getNavigationGroup(): string|UnitEnum|null
+    public static function getNavigationGroup(): string | UnitEnum | null
     {
         return NavigationOptions::Inventory->getLabel();
     }
@@ -70,9 +70,9 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListProducts::route('/'),
+            'index'  => ListProducts::route('/'),
             'create' => CreateProduct::route('/create'),
-            'edit' => EditProduct::route('/{record}/edit'),
+            'edit'   => EditProduct::route('/{record}/edit'),
         ];
     }
 }

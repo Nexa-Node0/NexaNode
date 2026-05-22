@@ -10,7 +10,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -137,6 +136,16 @@ class ProductsTable
                                 ->sendToDatabase(User::find($member['original_owner']));
                         }
                     }),
+
+                Action::make('possessions')
+                    ->label('View Item Owners')
+                    ->modalHeading('Item Owners')
+                    ->modalContent(fn($record) => view(
+                        'filament.modals.possessions-table',
+                        ['record' => $record]
+                    ))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
             ])
             ->bulkActions([
                 //
