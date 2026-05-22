@@ -2,6 +2,7 @@
 namespace App\Filament\Pages;
 
 use App\Enums\NavigationOptions;
+use App\Enums\ProductStatusEnum;
 use App\Models\ProductCategory;
 use BackedEnum;
 use Filament\Pages\Page;
@@ -18,7 +19,7 @@ class ProjectPosessionInventory extends Page
 
     protected string $view = 'filament.pages.project-posession-inventory';
 
-    protected static ?string $navigationLabel                         = 'Possessions';
+    protected static ?string $navigationLabel                         = 'Your Items';
     protected static string|BackedEnum|null $navigationIcon       = Heroicon::Briefcase;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedBriefcase;
 
@@ -64,6 +65,7 @@ class ProjectPosessionInventory extends Page
                         ->orWhereHas('brand', fn($q) => $q->where('name', 'like', '%' . $this->searchedWord . '%'))
                 )
             )
+            ->where('status', '!=', ProductStatusEnum::Returned->value)
             ->latest()
             ->get() ?? collect();
     }

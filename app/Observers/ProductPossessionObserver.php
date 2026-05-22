@@ -3,6 +3,7 @@ namespace App\Observers;
 
 use App\Enums\ProductStatusEnum;
 use App\Models\ProductPossession;
+use Filament\Notifications\Notification;
 
 class ProductPossessionObserver
 {
@@ -20,10 +21,17 @@ class ProductPossessionObserver
 
     public function updating(ProductPossession $productPossession): void
     {
-        if ($productPossession->isDirty('current_owner')) {
+        if ($productPossession->isDirty('current_owner')) { // ← likely current_owner_id not current_owner
             $productPossession->transferred_date = now()->toDate();
+            if ($productPossession->status == ProductStatusEnum::Returned) {
+                $productPossession->status = ProductStatusEnum::Active;
+            }
+            Notification::make()
+                ->title('Item Acquired')
+                ->body($productPossession->product->name . ' Has Been Passed to you')
+                ->color('success')
+                ->sendToDatabase($productPossession->currentOwner); // ← use the relation
         }
-
         if ($productPossession->isDirty('status') &&
             $productPossession->status === ProductStatusEnum::Returned
         ) {
@@ -33,10 +41,13 @@ class ProductPossessionObserver
 
     public function updated(ProductPossession $productPossession): void
     {
-        if ($productPossession->wasChanged('status') &&
-            $productPossession->status === ProductStatusEnum::Returned
-        ) {
-            $productPossession->product()->increment('quantity');
+        if ($productPossession->wasChanged('status')) {
+            if ($productPossession->status === ProductStatusEnum::Returned) {
+                $productPossession->product()->increment('quantity'); // returned → back in stock
+            } else {
+                $productPossession->product()->decrement('quantity'); // re-deployed → out of stock
+            }
         }
     }
+
 }

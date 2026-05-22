@@ -26,7 +26,7 @@ enum ProductStatusEnum: string {
     public static function options(): array
     {
         return collect(self::cases())->mapWithKeys(
-            fn($item) => [$item->label() => $item->value]
+            fn($item) => [$item->value => $item->label()]
         )->toArray();
     }
 

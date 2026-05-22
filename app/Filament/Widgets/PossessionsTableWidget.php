@@ -3,7 +3,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\Inventory\Products\RelationManagers\ProductPosessionsRelationManager;
+use App\Filament\Resources\ProductPossessions\Tables\ProductPossessionsTable;
 use App\Models\Product;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -23,6 +23,6 @@ class PossessionsTableWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
-        return ProductPosessionsRelationManager::getTableContents($table);
+        return ProductPossessionsTable::getTableContents($table);
     }
 }
