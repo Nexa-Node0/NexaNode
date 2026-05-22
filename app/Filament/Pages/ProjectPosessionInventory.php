@@ -12,13 +12,14 @@ use UnitEnum;
 class ProjectPosessionInventory extends Page
 {
     public $possessions           = [];
-    public ?int $selectedCategory = null; // ✅ filter state
-    protected string $view        = 'filament.pages.project-posession-inventory';
+    public ?int $selectedCategory = null;
+    public string $activeTab      = 'grid';
+    public string $searchedWord   = '';
 
-    protected static ?string $navigationLabel = 'Possessions';
+    protected string $view = 'filament.pages.project-posession-inventory';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Briefcase;
-
+    protected static ?string $navigationLabel                         = 'Possessions';
+    protected static string|BackedEnum|null $navigationIcon       = Heroicon::Briefcase;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedBriefcase;
 
     #[Override]
@@ -32,9 +33,19 @@ class ProjectPosessionInventory extends Page
         $this->loadPossessions();
     }
 
-    public function updatedSelectedCategory(): void// ✅ auto-fires when select changes
+    public function updatedSelectedCategory(): void
     {
         $this->loadPossessions();
+    }
+
+    public function updatedSearchedWord(): void// ✅ auto-fires on search input
+    {
+        $this->loadPossessions();
+    }
+
+    public function setTab(string $tab): void
+    {
+        $this->activeTab = $tab;
     }
 
     private function loadPossessions(): void
@@ -46,11 +57,18 @@ class ProjectPosessionInventory extends Page
                 $this->selectedCategory,
                 fn($q) => $q->whereHas('product', fn($q) => $q->where('category_id', $this->selectedCategory))
             )
+            ->when(
+                filled($this->searchedWord), // ✅ search across product name & brand
+                fn($q) => $q->whereHas('product', fn($q) => $q
+                        ->where('name', 'like', '%' . $this->searchedWord . '%')
+                        ->orWhereHas('brand', fn($q) => $q->where('name', 'like', '%' . $this->searchedWord . '%'))
+                )
+            )
             ->latest()
             ->get() ?? collect();
     }
 
-    public function getCategoryOptions(): array// ✅ options for the select
+    public function getCategoryOptions(): array
     {
         return ProductCategory::query()
             ->pluck('name', 'id')

@@ -103,4 +103,9 @@ class Product extends Model
     {
         return Storage::disk('local')->temporaryUrl($this->image, now()->addMinutes(5));
     }
+
+    public function deployedItems(): HasMany
+    {
+        return $this->hasMany(ProductPossession::class);
+    }
 }
