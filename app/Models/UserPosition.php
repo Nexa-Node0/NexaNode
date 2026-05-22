@@ -15,4 +15,8 @@ class UserPosition extends Model
         'user_id',
         'position_id',
     ];
+
+    // public function myPosition(): HasMany{
+    //     return $this->hasMany()
+    // }
 }

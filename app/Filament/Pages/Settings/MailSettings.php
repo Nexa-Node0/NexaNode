@@ -9,7 +9,6 @@ use Filament\Support\Icons\Heroicon;
 use BackedEnum;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -36,7 +35,14 @@ class MailSettings extends Settings
         return NavigationLabelSettings::Mail->getSubHeader();
     }
 
-   public function form(Schema $schema): Schema
+    #[Override]
+    public static function canAccess(): bool
+    {
+        $user = filament()->auth()->user();
+        return $user instanceof \App\Models\User && $user->can('view_settings');
+    }
+
+    public function form(Schema $schema): Schema
     {
         return $schema->components([
             Tabs::make()->columnSpanFull()->tabs([
@@ -89,5 +95,4 @@ class MailSettings extends Settings
             ]),
         ]);
     }
-   
 }

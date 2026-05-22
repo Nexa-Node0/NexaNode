@@ -36,9 +36,6 @@ class UsersTable
                     ->placeholder('Unverified')
                     ->color('success'),
 
-                // TextColumn::make('position.name')
-                //     ->badge(),
-
                 SelectColumn::make('position.name')
                     ->label('Position')
                     ->selectablePlaceholder(false)
@@ -48,18 +45,21 @@ class UsersTable
                     ->getStateUsing(fn($record) => $record->position?->id)
                     ->updateStateUsing(function ($record, $state) {
                         if ($state) {
-                            \App\Models\UserPosition::updateOrCreate([
-                                'user_id' => $record->id,
-                                'position_id' => $state
-                            ]);
+                            \App\Models\UserPosition::where('user_id', $record->id)->delete(); // <- delete the record first
+                            \App\Models\UserPosition::updateOrCreate(
+                                ['user_id' => $record->id],    // ← find by this
+                                ['position_id' => $state]      // ← update/create with this
+                            );
+
+
+                            Notification::make()
+                                ->title('Position has been updated')
+                                ->body("New position has been assigned to {$record->name}")
+                                ->success()
+                                ->sendToDatabase(User::find($record->id))
+                                ->icon(Heroicon::CheckBadge)
+                                ->send();
                         }
-                        $name = $record->name;
-                        Notification::make()
-                            ->title('Position has been updated')
-                            ->body("$name position has been changed")
-                            ->success()
-                            ->icon(Heroicon::CheckBadge)
-                            ->send();
                     }),
 
                 SelectColumn::make('role')
@@ -79,7 +79,6 @@ class UsersTable
                                 ->send();
                         }
                     }),
-
 
                 ToggleColumn::make('is_active')
                     ->afterStateUpdated(function ($record, $state) {

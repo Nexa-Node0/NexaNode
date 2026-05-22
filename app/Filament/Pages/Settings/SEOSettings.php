@@ -27,6 +27,14 @@ class SEOSettings extends Settings
     protected static string|UnitEnum|null $navigationGroup = NavigationOptions::Settings;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::MagnifyingGlass;
 
+
+    #[Override]
+    public static function canAccess(): bool
+    {
+        $user = filament()->auth()->user();
+        return $user instanceof \App\Models\User && $user->can('view_settings');
+    }
+
     #[Override]
     public function getTitle(): string|Htmlable
     {

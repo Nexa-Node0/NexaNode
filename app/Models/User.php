@@ -18,6 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Storage;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -122,7 +123,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         return $this->hasMany(Task::class, 'assigned_to');
     }
 
-    public function position()
+    public function position(): HasOneThrough
     {
         return $this->hasOneThrough(
             \App\Models\Position::class,
@@ -133,6 +134,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
             'position_id'
         );
     }
+
+
 
     #[Override]
     public function getFilamentAvatarUrl(): ?string

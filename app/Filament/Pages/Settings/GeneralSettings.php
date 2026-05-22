@@ -39,6 +39,13 @@ class GeneralSettings extends Settings
         return NavigationLabelSettings::General->getSubHeader();
     }
 
+    #[Override]
+    public static function canAccess(): bool
+    {
+        $user = filament()->auth()->user();
+        return $user instanceof \App\Models\User && $user->can('view_settings');
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema
@@ -46,7 +53,6 @@ class GeneralSettings extends Settings
                 Tabs::make()
                     ->columnSpanFull()
                     ->tabs([
-
                         Tab::make('Identity')
                             ->icon('heroicon-o-identification')
                             ->schema([

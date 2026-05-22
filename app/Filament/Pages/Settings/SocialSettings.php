@@ -23,7 +23,7 @@ class SocialSettings extends Settings
     protected static string|UnitEnum|null $navigationGroup = NavigationOptions::Settings;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Share;
 
-    
+
     #[Override]
     public function getTitle(): string|Htmlable
     {
@@ -36,8 +36,15 @@ class SocialSettings extends Settings
         return NavigationLabelSettings::Social->getSubHeader();
     }
 
+    #[Override]
+    public static function canAccess(): bool
+    {
+        $user = filament()->auth()->user();
+        return $user instanceof \App\Models\User && $user->can('view_settings');
+    }
 
-     public function form(Schema $schema): Schema
+
+    public function form(Schema $schema): Schema
     {
         return $schema->components([
             Tabs::make()->columnSpanFull()->tabs([

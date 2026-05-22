@@ -29,7 +29,7 @@ class PostResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Post';
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
@@ -83,17 +83,17 @@ class PostResource extends Resource
         $postedThisMonth = static::getModel()::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->count();
-        
+
         $postedLastMonth = static::getModel()::whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
             ->count();
-        
+
         $diff = $postedThisMonth - $postedLastMonth;
         $isIncreased = $diff >= 0;
 
-        return $isIncreased ? 'success' : 'warning';   
+        return $isIncreased ? 'success' : 'warning';
     }
-    
+
 
     public static function getPages(): array
     {

@@ -39,6 +39,7 @@ class PostForm
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
+                            ->visible(fn() => auth()->user()->hasRole('admin'))
                             ->placeholder('None (top-level-category)'),
 
                         Forms\Components\Select::make('post_category_id')

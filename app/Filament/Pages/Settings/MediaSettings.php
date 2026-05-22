@@ -21,7 +21,7 @@ use UnitEnum;
 
 class MediaSettings extends Settings
 {
-    
+
     protected static ?string $navigationLabel = NavigationLabelSettings::Media->value;
     protected static string|UnitEnum|null $navigationGroup = NavigationOptions::Settings;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Photo;
@@ -36,6 +36,12 @@ class MediaSettings extends Settings
     public function getSubheading(): string|Htmlable|null
     {
         return NavigationLabelSettings::Media->getSubHeader();
+    }
+    #[Override]
+    public static function canAccess(): bool
+    {
+        $user = filament()->auth()->user();
+        return $user instanceof \App\Models\User && $user->can('view_settings');
     }
 
     #[Override]
@@ -74,7 +80,7 @@ class MediaSettings extends Settings
                                 '4:4',
                                 '16:16'
                             ]),
-                            
+
                         FileUpload::make(MediaEnum::LightmodeLogo->value)
                             ->label('Light mode logo')
                             ->required()
@@ -89,7 +95,7 @@ class MediaSettings extends Settings
                                 '16:16'
                             ]),
 
-                            FileUpload::make(MediaEnum::DarkmodeLogo->value)
+                        FileUpload::make(MediaEnum::DarkmodeLogo->value)
                             ->label('Darkmode mode logo')
                             ->required()
                             ->image()
@@ -102,7 +108,7 @@ class MediaSettings extends Settings
                                 '4:4',
                                 '16:16'
                             ]),
-                ])->columns(3),
+                    ])->columns(3),
 
                 Tabs\Tab::make('Upload Rules')
                     ->icon(Heroicon::ExclamationTriangle)
@@ -124,21 +130,21 @@ class MediaSettings extends Settings
                                 'image/svg+xml'   => 'SVG',
                                 'application/pdf' => 'PDF',
                             ])
-                ])->columns(3),
-                
+                    ])->columns(3),
+
                 Tabs\Tab::make('Watermark')
                     ->icon(Heroicon::Camera)
                     ->schema([
                         Toggle::make(MediaEnum::WatermarkEnabled->value)
                             ->label('Enable Watermark'),
-                        
+
                         FileUpload::make(MediaEnum::WatermarkImage->value)
                             ->label('Watermark Image')
                             ->image()
                             ->imageEditor()
                             ->directory('watermark')
                             ->disk('public'),
-                        
+
                         Select::make(MediaEnum::WatermarkPosition->value)
                             ->label('Watermark Position')
                             ->options([
@@ -160,5 +166,4 @@ class MediaSettings extends Settings
             ])
         ]);
     }
-
 }
