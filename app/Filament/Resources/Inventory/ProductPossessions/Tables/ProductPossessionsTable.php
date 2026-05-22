@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 
 class ProductPossessionsTable
@@ -80,6 +81,19 @@ class ProductPossessionsTable
         ];
     }
 
+    private static function formulateGroups(): array
+    {
+        return [
+            Group::make('originalOwner.name')
+                ->label('Original Owner'),
+            Group::make('currentOwner.name')
+                ->label('Current Owner'),
+            Group::make('status')
+                ->label('Status')
+                ->getTitleFromRecordUsing(fn($record) => $record->status->label()),
+        ];
+    }
+
     private static function registerAdditionalColumns(array $columns)
     {
         array_splice($columns, 2, 0, [
@@ -108,19 +122,31 @@ class ProductPossessionsTable
         return $actions;
     }
 
+    private static function registerAdditionalgGroups(array $groups)
+    {
+        array_splice($groups, 0, 0, [
+            Group::make('product.category.name')
+                ->label('Category'),
+        ]);
+        return $groups;
+    }
+
     private static function getExpandedTable(Table $table, bool $choice = true)
     {
         //original columns
         $columns = self::formulateTableColumns();
         $filters = self::formulateFilters();
         $actions = self::formulateActions();
+        $groups  = self::formulateGroups();
         if ($choice) {
             $columns = self::registerAdditionalColumns($columns);
             $filters = self::registerAdditionalFilters($filters);
             $actions = self::registerAdditionalActions($actions);
+            $groups  = self::registerAdditionalgGroups($groups);
         }
 
         return $table
+            ->groups($groups)
             ->columns($columns)
             ->filters($filters)
             ->actions($actions);
