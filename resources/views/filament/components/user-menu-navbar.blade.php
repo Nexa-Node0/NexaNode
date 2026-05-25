@@ -5,7 +5,7 @@
         </p>
         <hr class="m-0 p-0 border-gray-400 dark::border-gray-100">
         <p class="text-xs text-gray-400 dark:text-gray-100">
-            {{ auth()->user()->position->name }}
+            {{ auth()->user()->position?->name }}
         </p>
     </div>
 </div>

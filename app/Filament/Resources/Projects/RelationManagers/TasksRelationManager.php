@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Projects\RelationManagers;
 
 use App\Enums\Priority;
@@ -64,6 +65,7 @@ class TasksRelationManager extends RelationManager
                             );
                         }
                     )
+                    ->visible(fn() => auth()->user()->can('ViewAny:Task'))
                     ->selectablePlaceholder(false),
 
                 Select::make('status')
@@ -165,7 +167,7 @@ class TasksRelationManager extends RelationManager
                             ->searchable()
                             ->multiple()
                             ->options(fn() => ProjectStatus::options())
-                        // ->live()
+                            // ->live()
                             ->selectablePlaceholder(false),
                     ])
                     ->query(function ($query, array $data) {
@@ -242,15 +244,29 @@ class TasksRelationManager extends RelationManager
                 $user    = auth()->user();
                 $project = $livewire->getOwnerRecord();
 
-                if (! $user?->hasRole('super_admin') && $user->id != $project->supervisor_id) {
-                    $query->where('assigned_to', $user->id);
+                // Admin: sees everything including soft-deleted
+                if ($user->can('ViewAny:Task')) {
+                    $query->withoutGlobalScopes([SoftDeletingScope::class]);
+                    return;
                 }
 
-                if ($user->hasRole('super_admin')) {
-                    $query->withoutGlobalScopes([
-                        SoftDeletingScope::class,
-                    ]);
-                }
+                // Supervisor of this project: sees all tasks under it
+                if ($user->id === $project->supervisor_id) return;
+
+                // Everyone else (junior dev, etc): only their assigned tasks
+                $query->where('assigned_to', fn($q) => $q->where('user_id', $user->id));
+                // dd($query, $user);
+                /*
+                    if (! $user?->can('view_any_task') && $user->id != $project->supervisor_id) {
+                        $query->where('assigned_to', $user->id);
+                    }
+
+                    if ($user->can('view_any_task')) {
+                        $query->withoutGlobalScopes([
+                            SoftDeletingScope::class,
+                        ]);
+                    }
+                */
             });
     }
     public function isReadOnly(): bool

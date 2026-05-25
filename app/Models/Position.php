@@ -13,6 +13,7 @@ class Position extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'code',
         'level',
         'type',
@@ -20,7 +21,12 @@ class Position extends Model
         'department_id',
         'reports_to',
         'is_active',
-        'description'
+        'description',
+        'permissions',
+    ];
+
+    protected $casts = [
+        'permissions' => 'array'
     ];
 
 

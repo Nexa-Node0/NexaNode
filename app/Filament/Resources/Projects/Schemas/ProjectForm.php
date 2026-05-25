@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\Projects\Schemas;
 
 use App\Enums\TechStacksEnum;
@@ -42,7 +43,8 @@ class ProjectForm
                                     ->trim()
                                     ->regex('/^[a-zA-Z0-9]+$/')
                                     ->validationMessages(['regex' => 'The code must only contain letters and numbers without white spaces'])
-                                    ->suffixAction(Action::make('generate_code')
+                                    ->suffixAction(
+                                        Action::make('generate_code')
                                             ->icon(Heroicon::ArrowPathRoundedSquare)
                                             ->tooltip('Generate unique code')
                                             ->action(function (callable $set) { // <-- logic goes HERE inside ->action()
@@ -162,7 +164,7 @@ class ProjectForm
                             ]),
 
                         //functions that only available in create
-                         ...($operation === 'create' ? [
+                        ...($operation === 'create' ? [
                             Tab::make('Details')
                                 ->schema([
                                     Section::make()

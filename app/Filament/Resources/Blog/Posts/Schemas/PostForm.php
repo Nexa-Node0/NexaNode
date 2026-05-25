@@ -39,7 +39,10 @@ class PostForm
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
-                            ->visible(fn() => auth()->user()->hasRole('admin'))
+                            ->visible(function () {
+                                $user = filament()->auth()->user();
+                                return $user instanceof \App\Models\User && $user->hasRole('admin');
+                            })
                             ->placeholder('None (top-level-category)'),
 
                         Forms\Components\Select::make('post_category_id')
@@ -99,6 +102,11 @@ class PostForm
                         Forms\Components\Select::make('status')
                             ->options(PostStatus::options())
                             ->default(PostStatus::Archived->value)
+                            ->visible(function () {
+                                $user =  filament()->auth();
+                                return $user instanceof \App\Models\User && $user->hasRole('admin');
+                            }),
+
                     ]),
             ]);
     }

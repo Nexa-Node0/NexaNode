@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Filament\Resources;
 
 use App\Models\Task;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
+use Override;
 
 class TaskResource extends Resource
 {
@@ -13,6 +16,19 @@ class TaskResource extends Resource
     {
         return false;
     }
+
+
+    // #[Override]
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     $user = auth()->user();
+
+    //     if ($user->can('view_any_task')) {
+    //         return Task::query();
+    //     }
+
+    //     return Task::query()->where('assigned_to', $user->id);
+    // }
 
     protected static bool $shouldRegisterNavigation = false;
 }

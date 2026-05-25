@@ -9,8 +9,11 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Set;
+use App\Models\Position;
+use Illuminate\Support\Str;
 
 
 class PositionForm
@@ -36,6 +39,7 @@ class PositionForm
                                     ->map(fn($word) => strtoupper($word[0]))
                                     ->implode('');
                                 $set('code', $code);
+                                $set('slug', Str::slug($state ?? ''));
                             }),
                         TextInput::make('code')
                             ->required()
@@ -43,6 +47,13 @@ class PositionForm
                             ->hintIcon('heroicon-m-question-mark-circle')
                             ->hintIconTooltip('This code is automatically generated from the position name.')
                             ->unique(ignoreRecord: true),
+
+                        TextInput::make('slug')
+                            ->required()
+                            ->disabled()
+                            ->dehydrated()
+                            ->unique(ignoreRecord: true)
+                            ->columnSpanFull(),
 
                         TextInput::make('max_headcount')
                             ->required()
@@ -87,19 +98,39 @@ class PositionForm
 
                         Select::make('reports_to')
                             ->label('Reports to')
-                            ->relationship('supervisor', 'name')
+                            ->selectablePlaceholder(false)
                             ->searchable()
                             ->preload()
+                            ->options(
+                                fn() => Position::all()->pluck('name', 'id')
+                            )
                             ->helperText('Select the position this role directly reports to.'),
 
                         Textarea::make('description')
                             ->rows(5)
                             ->columnSpanFull()
-                            ->placeholder('Desribe the responsibilities and scope of this position')
-
-
+                            ->placeholder('Desribe the responsibilities and scope of this position'),
                     ])
-                    ->columns(2)
+                    ->columns(2),
+
+                Section::make('Role Permission')
+                    ->columnSpanFull()
+                    ->icon(Heroicon::ShieldCheck)
+                    ->description('permission granted for this role')
+                    ->collapsible()
+                    ->components([
+                        CheckboxList::make('permissions')
+                            ->label('Permissions')
+                            ->options(
+                                \Spatie\Permission\Models\Permission::all()
+                                    ->pluck('name', 'name')
+                                    ->toArray()
+                            )
+                            ->columns(3)
+                            ->searchable()
+                            ->bulkToggleable()
+                    ])
+
             ]);
     }
 }

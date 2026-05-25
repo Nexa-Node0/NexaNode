@@ -39,11 +39,6 @@ class UserResource extends Resource
         ];
     }
 
-    #[Override]
-    public static function getNavigationGroup(): string|UnitEnum|null
-    {
-        return NavigationOptions::HR->getLabel();
-    }
 
     public static function getPages(): array
     {

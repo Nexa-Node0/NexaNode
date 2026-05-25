@@ -10,6 +10,10 @@ use App\Services\SEOService;
 use Illuminate\Support\ServiceProvider;
 use App\Traits\HasMailSettings;
 use App\Traits\HasCaptchaSettings;
+use App\Observers\PositionObserver;
+use App\Models\Position;
+use App\Models\UserPosition;
+use App\Observers\UserPositionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
     {
         StockMovement::observe(StockMovementObserver::class);
         ProductBrand::observe(ProductBrandObserver::class);
+        Position::observe(PositionObserver::class);
+
         $this->bootstrapMailConfig();
         $this->bootstrapCaptchaConfig();
 

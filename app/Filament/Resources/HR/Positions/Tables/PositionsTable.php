@@ -64,6 +64,13 @@ class PositionsTable
                             ->send();
                     }),
 
+                TextColumn::make('permissions')
+                    ->label('Permissions Count')
+                    ->getStateUsing(
+                        fn($record) =>
+                        count($record->permissions ?? []) . ' permissions'
+                    ),
+
                 ToggleColumn::make('is_active')
                     ->afterStateUpdated(function ($record, $state) {
                         $newStatus = $state ? 'Activated' : 'Disabled';

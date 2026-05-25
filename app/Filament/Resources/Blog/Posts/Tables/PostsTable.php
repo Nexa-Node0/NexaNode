@@ -17,6 +17,7 @@ use Filament\Tables;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Filters\SelectFilter;
 use App\Enums\PostStatus;
+
 class PostsTable
 {
     public static function configure(Table $table): Table
@@ -33,7 +34,7 @@ class PostsTable
                     ->searchable()
                     ->sortable()
                     ->weight(FontWeight::Bold),
-                
+
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Author')
                     ->searchable()
@@ -46,6 +47,8 @@ class PostsTable
                     ->date('M d, Y')
                     ->color('gray'),
 
+
+
                 Tables\Columns\SelectColumn::make('status')
                     ->options(PostStatus::options())
                     ->selectablePlaceholder(false)
@@ -57,6 +60,12 @@ class PostsTable
                             ->body('Record updated successfully to ' . $state)
                             ->send();
                     }),
+
+
+                Tables\Columns\TextColumn::make('users_count')
+                    ->counts('users')
+                    ->label('Users'),
+
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -75,6 +84,21 @@ class PostsTable
                 ActionGroup::make([
                     EditAction::make(),
                     DeleteAction::make(),
+                    Action::make('duplicate')
+                        ->label('Duplicate')
+                        ->icon(Heroicon::DocumentDuplicate)
+                        ->requiresConfirmation()
+                        ->modalHeading('Duplicate Post')
+                        ->modalDescription('This will create a draft copy of this post.')
+                        ->action(function (Post $record) {
+                            $clone = $record->replicate();
+                            $clone->title = $record->title . ' (Copy)';
+                            $clone->slug = str($record->slug . '-' . uniqid())->slug();
+                            $clone->status = PostStatus::Draft->value;
+                            $clone->published_date = null;
+                            $clone->save();
+                        })
+                        ->successNotificationTitle('Post Duplicated Successfully'),
                     Action::make('send')
                         ->label('Send To All Subscribers')
                         ->icon('heroicon-o-paper-airplane')
@@ -82,15 +106,19 @@ class PostsTable
                         ->requiresConfirmation()
                         ->modalHeading('Send Post')
                         ->modalDescription('This will send the post to all subscribers')
+                        ->visible(function () {
+                            $user = filament()->auth()->user();
+                            return $user instanceof \App\Models\User && $user->hasRole('admin');
+                        })
                         ->modalSubmitActionLabel('Yes, Send Now')
-                        ->action(function (Post $post){
+                        ->action(function (Post $post) {
                             SendPostJob::dispatch($post);
                             Notification::make()
                                 ->title('Post queued!')
                                 ->body('It will be sent to all users shortly')
                                 ->success()
                                 ->send();
-                    })
+                        })
                 ]),
             ])
 

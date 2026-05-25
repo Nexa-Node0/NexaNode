@@ -44,22 +44,45 @@ class UsersTable
                     ->searchableOptions()
                     ->getStateUsing(fn($record) => $record->position?->id)
                     ->updateStateUsing(function ($record, $state) {
-                        if ($state) {
-                            \App\Models\UserPosition::where('user_id', $record->id)->delete(); // <- delete the record first
-                            \App\Models\UserPosition::updateOrCreate(
-                                ['user_id' => $record->id],    // ← find by this
-                                ['position_id' => $state]      // ← update/create with this
-                            );
+                        if (!$state) return;
 
+                        // ✅ Always work with a fresh record to avoid stale cache issues
+                        $freshRecord = \App\Models\User::find($record->id);
 
-                            Notification::make()
-                                ->title('Position has been updated')
-                                ->body("New position has been assigned to {$record->name}")
-                                ->success()
-                                ->sendToDatabase(User::find($record->id))
-                                ->icon(Heroicon::CheckBadge)
-                                ->send();
-                        }
+                        if (!$freshRecord) return;
+
+                        $newPosition = Position::find($state);
+
+                        if (!$newPosition) return;
+
+                        // ✅ Remove ALL current roles before assigning the new one
+                        $freshRecord->syncRoles([]);
+
+                        // ✅ Delete old UserPosition and create new one
+                        \App\Models\UserPosition::where('user_id', $freshRecord->id)->delete();
+                        \App\Models\UserPosition::create([
+                            'user_id'     => $freshRecord->id,
+                            'position_id' => $state,
+                        ]);
+
+                        // ✅ Find or create the role matching the new position's slug
+                        $role = Role::firstOrCreate(
+                            ['name' => $newPosition->slug],
+                            ['guard_name' => 'web']
+                        );
+
+                        $freshRecord->assignRole($role);
+
+                        // ✅ Refresh the original $record so Filament re-renders correctly
+                        $record->refresh();
+
+                        Notification::make()
+                            ->title('Position has been updated')
+                            ->body("{$newPosition->name} has been assigned to {$freshRecord->name}")
+                            ->success()
+                            ->sendToDatabase(User::find($freshRecord->id))
+                            ->icon(Heroicon::CheckBadge)
+                            ->send();
                     }),
 
                 SelectColumn::make('role')

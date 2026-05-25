@@ -11,6 +11,7 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Role;
@@ -78,16 +79,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // return (bool) !$this->is_active;
-
         return match ($panel->getId()) {
             'admin' => $this->hasAnyRole(Role::all()->pluck('name')->toArray()),
 
             default => false
         };
-        //relations
-        //has
     }
+
     public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);

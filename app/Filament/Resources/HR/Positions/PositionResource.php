@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\HR\Positions;
 
+use App\Enums\NavigationOptions;
 use App\Filament\Resources\HR\Positions\Pages\CreatePosition;
 use App\Filament\Resources\HR\Positions\Pages\EditPosition;
 use App\Filament\Resources\HR\Positions\Pages\ListPositions;
@@ -13,12 +14,14 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use App\Models\Position;
 use BackedEnum;
+use Override;
+use UnitEnum;
 
 class PositionResource extends Resource
 {
     protected static ?string $model = Position::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowUpLeft;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -41,12 +44,18 @@ class PositionResource extends Resource
         ];
     }
 
+    #[Override]
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        return NavigationOptions::HR->getLabel();
+    }
+
 
     public static function getPages(): array
     {
         return [
             'index' => ListPositions::route('/'),
-            // 'create' => CreatePosition::route('/create'),
+            'create' => CreatePosition::route('/create'),
             'edit' => EditPosition::route('/{record}/edit'),
         ];
     }
