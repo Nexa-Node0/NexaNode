@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class TaskPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:Task');
@@ -67,9 +67,8 @@ class TaskPolicy
         return $authUser->can('Reorder:Task');
     }
 
-    public function export(AuthUser $authUser, Task $task): bool
+    public function manage(AuthUser $authUser, Task $task): bool
     {
-        return $authUser->can('Export:Task');
+        return $authUser->can('Manage:Task');
     }
-
 }

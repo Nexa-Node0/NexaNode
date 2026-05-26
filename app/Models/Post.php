@@ -39,7 +39,7 @@ class Post extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->role('author');
+        return $this->belongsTo(User::class);
     }
 
     public function category()
@@ -64,6 +64,6 @@ class Post extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'id');
     }
 }

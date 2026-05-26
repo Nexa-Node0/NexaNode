@@ -61,11 +61,6 @@ class PostsTable
                             ->send();
                     }),
 
-
-                Tables\Columns\TextColumn::make('users_count')
-                    ->counts('users')
-                    ->label('Users'),
-
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -107,7 +102,8 @@ class PostsTable
                         ->modalHeading('Send Post')
                         ->modalDescription('This will send the post to all subscribers')
                         ->visible(function () {
-                            $user = filament()->auth()->user();
+                            $user = filament()->auth()?->user();
+
                             return $user instanceof \App\Models\User && $user->hasRole('admin');
                         })
                         ->modalSubmitActionLabel('Yes, Send Now')

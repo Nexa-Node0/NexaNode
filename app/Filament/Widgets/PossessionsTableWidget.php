@@ -11,11 +11,15 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PossessionsTableWidget extends BaseWidget
 {
-    public int $productId;
+    public ?int $productId = null;
 
     protected function getTableQuery(): Builder
     {
-        return Product::find($this->productId)
+        if (!$this->productId) {
+            return Product::query()->whereRaw('1 = 0');
+        }
+
+        return Product::findOrFail($this->productId)
             ->deployedItems()
             ->with('product', 'product.category', 'originalOwner', 'currentOwner')
             ->getQuery();

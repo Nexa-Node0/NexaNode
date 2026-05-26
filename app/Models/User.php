@@ -98,7 +98,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
 
     public function posts(): HasMany
     {
-        return $this->hasMany(Post::class, 'user_id');
+        return $this->hasMany(Post::class);
     }
 
     public function project(): HasMany //same as handledproject
