@@ -67,4 +67,9 @@ class TaskPolicy
         return $authUser->can('Reorder:Task');
     }
 
+    public function export(AuthUser $authUser, Task $task): bool
+    {
+        return $authUser->can('Export:Task');
+    }
+
 }

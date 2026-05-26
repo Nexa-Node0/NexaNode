@@ -65,7 +65,11 @@ class TasksRelationManager extends RelationManager
                             );
                         }
                     )
-                    ->visible(fn() => auth()->user()->can('ViewAny:Task'))
+                    // ->visible(fn() => auth()->user()->can('ViewAny:Task'))
+                    ->visible(function () {
+                        $user = filament()->auth()->user();
+                        return $user instanceof \App\Models\User && $user->can('ViewAny:Task');
+                    })
                     ->selectablePlaceholder(false),
 
                 Select::make('status')
@@ -92,8 +96,8 @@ class TasksRelationManager extends RelationManager
 
                 TextColumn::make('user.name')
                     ->label('Assigned to')
-                    ->formatStateUsing(fn($state) => $state == auth()->user()->name ? 'You: ' . $state : $state)
-                    ->color(fn($state) => $state == auth()->user()->name ? 'success' : 'info')
+                    ->formatStateUsing(fn($state) => $state == filament()->auth()->user()->name ? 'You: ' . $state : $state)
+                    ->color(fn($state) => $state == filament()->auth()->user()->name ? 'success' : 'info')
                     ->sortable(),
 
                 TextColumn::make('due_date')
@@ -143,9 +147,9 @@ class TasksRelationManager extends RelationManager
             ->filters([
                 TrashedFilter::make()
                     ->visible(function (): bool {
-                        $user = auth()->user();
+                        $user = filament()->auth()->user();
 
-                        return $user->can('ForceDelete:Task') || $user->can('Restore:Task');
+                        return $user instanceof \App\Models\User && ($user->can('ForceDelete:Task') || $user->can('Restore:Task'));
                     }),
                 Filter::make('priority')
                     ->schema([
@@ -241,11 +245,11 @@ class TasksRelationManager extends RelationManager
                 ]),
             ])
             ->modifyQueryUsing(function (Builder $query, $livewire) {
-                $user    = auth()->user();
+                $user    = filament()->auth()->user();
                 $project = $livewire->getOwnerRecord();
 
                 // Admin: sees everything including soft-deleted
-                if ($user->can('ViewAny:Task')) {
+                if ($user instanceof \App\Models\User && $user->can('ViewAny:Task')) {
                     $query->withoutGlobalScopes([SoftDeletingScope::class]);
                     return;
                 }

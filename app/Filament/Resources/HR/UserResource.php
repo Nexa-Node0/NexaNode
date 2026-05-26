@@ -20,7 +20,7 @@ use UnitEnum;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Users;
     protected static ?string $recordTitleAttribute = 'name';
     public static function form(Schema $schema): Schema
     {
@@ -38,7 +38,6 @@ class UserResource extends Resource
             'address'     => Users\RelationManagers\AddressRelationManager::class,
         ];
     }
-
 
     public static function getPages(): array
     {

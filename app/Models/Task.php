@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Enums\Priority;
@@ -38,7 +39,8 @@ class Task extends Model
     ];
 
     //booted for auto slug and completed at
-    use HasFactory;protected static function booted()
+    use HasFactory;
+    protected static function booted()
     {
         static::creating(function ($task) {
             $task->slug = self::generateSlug($task->title, $task->project_id);
@@ -72,7 +74,7 @@ class Task extends Model
         while (
             Task::where(function ($query) use ($projectId, $slug) {
                 $query->where('project_id', $projectId)
-                ->where('slug', $slug);
+                    ->where('slug', $slug);
             })
             ->when($ignoredId, fn($q) => $q->where('id', '!=', $ignoredId))
             ->exists()

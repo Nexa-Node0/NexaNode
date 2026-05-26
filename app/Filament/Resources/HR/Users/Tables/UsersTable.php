@@ -85,23 +85,23 @@ class UsersTable
                             ->send();
                     }),
 
-                SelectColumn::make('role')
-                    ->label('Role')
-                    ->selectablePlaceholder(false)
-                    ->options(fn() => Role::query()->pluck('name', 'id')->toArray())
-                    ->searchable()
-                    ->getStateUsing(fn($record) => $record->roles->first()?->id)
-                    ->updateStateUsing(function ($record, $state) {
-                        $role = Role::find($state);
-                        if ($role) {
-                            $record->syncRoles([$role]);
-                            Notification::make()
-                                ->title('Role has been updated')
-                                ->body('User role has been updated successfully')
-                                ->success()
-                                ->send();
-                        }
-                    }),
+                // SelectColumn::make('role')
+                //     ->label('Role')
+                //     ->selectablePlaceholder(false)
+                //     ->options(fn() => Role::query()->pluck('name', 'id')->toArray())
+                //     ->searchable()
+                //     ->getStateUsing(fn($record) => $record->roles->first()?->id)
+                //     ->updateStateUsing(function ($record, $state) {
+                //         $role = Role::find($state);
+                //         if ($role) {
+                //             $record->syncRoles([$role]);
+                //             Notification::make()
+                //                 ->title('Role has been updated')
+                //                 ->body('User role has been updated successfully')
+                //                 ->success()
+                //                 ->send();
+                //         }
+                //     }),
 
                 ToggleColumn::make('is_active')
                     ->afterStateUpdated(function ($record, $state) {

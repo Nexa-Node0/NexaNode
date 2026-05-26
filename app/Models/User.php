@@ -133,7 +133,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         );
     }
 
+    public function isSupervisor(): bool
+    {
+        return $this->supervisedProjects()->exists();
+    }
 
+    public function supervisedProjects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'supervisor_id');
+    }
 
     #[Override]
     public function getFilamentAvatarUrl(): ?string
