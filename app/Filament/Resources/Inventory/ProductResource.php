@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Filament\Resources\Inventory;
 
+use App\Enums\NavigationOptions;
 use App\Filament\Resources\Inventory\Products\Pages\CreateProduct;
 use App\Filament\Resources\Inventory\Products\Pages\EditProduct;
 use App\Filament\Resources\Inventory\Products\Pages\ListProducts;
@@ -13,7 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use App\Enums\NavigationOptions;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\DB;
 use Override;
 use UnitEnum;
 
@@ -31,6 +32,22 @@ class ProductResource extends Resource
         return ProductForm::configure($schema);
     }
 
+    #[Override]
+    public static function getNavigationBadge(): ?string
+    {
+        $total = Product::where('quantity', '<', 0)->sum(DB::raw('ABS(quantity)'));
+
+        return $total > 0 ? (string) $total : null;
+    }
+
+    #[Override]
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'danger';
+    }
+
+    protected static string|Htmlable|null $navigationBadgeTooltip = 'Number of Negative Stocks';
+
     public static function table(Table $table): Table
     {
         return ProductsTable::configure($table);
@@ -40,11 +57,12 @@ class ProductResource extends Resource
     {
         return [
             //
+            Products\RelationManagers\ProductPosessionsRelationManager::class,
         ];
     }
 
     #[Override]
-    public static function getNavigationGroup(): string|UnitEnum|null
+    public static function getNavigationGroup(): string | UnitEnum | null
     {
         return NavigationOptions::Inventory->getLabel();
     }
@@ -52,9 +70,9 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListProducts::route('/'),
+            'index'  => ListProducts::route('/'),
             'create' => CreateProduct::route('/create'),
-            'edit' => EditProduct::route('/{record}/edit'),
+            'edit'   => EditProduct::route('/{record}/edit'),
         ];
     }
 }

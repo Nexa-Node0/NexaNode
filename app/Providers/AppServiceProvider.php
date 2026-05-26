@@ -3,13 +3,15 @@
 namespace App\Providers;
 
 use App\Models\ProductBrand;
+use App\Models\ProductPossession;
 use App\Models\StockMovement;
 use App\Observers\ProductBrandObserver;
+use App\Observers\ProductPossessionObserver;
 use App\Observers\StockMovementObserver;
 use App\Services\SEOService;
-use Illuminate\Support\ServiceProvider;
-use App\Traits\HasMailSettings;
 use App\Traits\HasCaptchaSettings;
+use App\Traits\HasMailSettings;
+use Illuminate\Support\ServiceProvider;
 use App\Observers\PositionObserver;
 use App\Models\Position;
 use App\Models\UserPosition;
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         ProductBrand::observe(ProductBrandObserver::class);
         Position::observe(PositionObserver::class);
 
+        ProductPossession::observe(ProductPossessionObserver::class);
         $this->bootstrapMailConfig();
         $this->bootstrapCaptchaConfig();
 

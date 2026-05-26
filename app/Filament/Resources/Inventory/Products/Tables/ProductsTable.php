@@ -1,7 +1,15 @@
 <?php
 namespace App\Filament\Resources\Inventory\Products\Tables;
 
+use App\Models\Product;
+use App\Models\ProductPossession;
+use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -97,6 +105,47 @@ class ProductsTable
             ])
             ->actions([
                 //
+
+                Action::make('deploy_products')
+                    ->label('Deploy')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->form(fn(Product $record) => [
+                        Repeater::make('members')
+                            ->schema([
+                                Select::make('original_owner')
+                                    ->label('Assign To')
+                                    ->options(User::query()->pluck('name', 'id')->toArray())
+                                    ->required(),
+                                MarkdownEditor::make('notes'),
+                            ])
+                            ->columns(2)
+                            ->minItems(1)
+                            ->maxItems(fn() => $record->quantity),
+                    ])
+                    ->action(function (array $data, Product $record): void {
+                        foreach ($data['members'] as $member) {
+                            ProductPossession::create([
+                                'product_id'     => $record->id,
+                                'original_owner' => $member['original_owner'],
+                                'notes'          => $member['notes'],
+                            ]);
+
+                            Notification::make()
+                                ->title('New Product Assigned')
+                                ->body($member['notes'] ?? '')
+                                ->sendToDatabase(User::find($member['original_owner']));
+                        }
+                    }),
+
+                Action::make('possessions')
+                    ->label('View Item Owners')
+                    ->modalHeading('Item Owners')
+                    ->modalContent(fn($record) => view(
+                        'filament.modals.possessions-table',
+                        ['record' => $record]
+                    ))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
             ])
             ->bulkActions([
                 //

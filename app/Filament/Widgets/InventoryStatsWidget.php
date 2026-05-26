@@ -1,12 +1,10 @@
 <?php
-
 namespace App\Filament\Widgets;
 
 use App\Models\Product;
 use App\Models\StockMovement;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 
 class InventoryStatsWidget extends BaseWidget
@@ -15,9 +13,9 @@ class InventoryStatsWidget extends BaseWidget
     {
         $totalProducts = Product::count();
         $lowStockCount = Product::whereColumn('quantity', '<=', 'low_stock_threshold')->count();
-        $totalValue = Product::sum(
-            DB::raw('quantity * price')
-        ) ?? 0;
+        $totalValue    = Product::all()->sum(
+            fn($product) => ($product->quantity + $product->deployedItems()->count()) * $product->price
+        );
         $thisMonthMovements = StockMovement::whereBetween('created_at', [
             now()->startOfMonth(),
             now()->endOfMonth(),
