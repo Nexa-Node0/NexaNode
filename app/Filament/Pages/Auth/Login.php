@@ -24,9 +24,9 @@ class Login extends BaseLogin
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
                 $this->getRememberFormComponent(),
-                GRecaptcha::make('captcha')
-                    ->hiddenLabel()
-                    ->required()
+                // GRecaptcha::make('captcha')
+                //     ->hiddenLabel()
+                //     ->required()
             ]);
     }
 

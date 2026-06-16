@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class TaskPolicy
 {
     use HandlesAuthorization;
-
+    
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:Task');
@@ -71,4 +71,5 @@ class TaskPolicy
     {
         return $authUser->can('Manage:Task');
     }
+
 }

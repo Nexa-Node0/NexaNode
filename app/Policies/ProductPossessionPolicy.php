@@ -11,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class ProductPossessionPolicy
 {
     use HandlesAuthorization;
-
+    
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:ProductPossession');
@@ -66,4 +66,5 @@ class ProductPossessionPolicy
     {
         return $authUser->can('Reorder:ProductPossession');
     }
+
 }
