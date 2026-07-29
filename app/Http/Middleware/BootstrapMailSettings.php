@@ -14,12 +14,12 @@ class BootstrapMailSettings
      *
      * @param  Closure(Request): (Response)  $next
      */
-     use HasMailSettings;
+    use HasMailSettings;
 
     public function handle(Request $request, Closure $next): Response
     {
-        
-        $this->bootstrapMailConfig();
+
+        // $this->bootstrapMailConfig();
         return $next($request);
     }
 }

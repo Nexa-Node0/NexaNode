@@ -67,9 +67,4 @@ class TaskPolicy
         return $authUser->can('Reorder:Task');
     }
 
-    public function manage(AuthUser $authUser, Task $task): bool
-    {
-        return $authUser->can('Manage:Task');
-    }
-
 }

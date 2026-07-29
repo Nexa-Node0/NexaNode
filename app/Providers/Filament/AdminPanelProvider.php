@@ -65,7 +65,14 @@ class AdminPanelProvider extends BasePanelProvider
                         'default' => 1,
                         'lg' => 2
                     ]),
-                SettingsPlugin::make(),
+                SettingsPlugin::make()
+                    ->pages([
+                        \App\Filament\Pages\Settings\GeneralSettings::class,
+                        \App\Filament\Pages\Settings\MailSettings::class,
+                        \App\Filament\Pages\Settings\MediaSettings::class,
+                        \App\Filament\Pages\Settings\SEOSettings::class,
+                        \App\Filament\Pages\Settings\SocialSettings::class,
+                    ]),
                 AuthUIEnhancerPlugin::make()
                     ->showEmptyPanelOnMobile(false)
                     ->formPanelPosition('right')
